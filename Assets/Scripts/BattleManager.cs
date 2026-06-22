@@ -21,6 +21,8 @@ public class BattleManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+
+        Debug.Log("BattleManager initialized.");
     }
 
     public void OnCardPlayed(CardSO cardData)
