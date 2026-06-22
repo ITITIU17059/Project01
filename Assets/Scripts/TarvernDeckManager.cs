@@ -1,0 +1,44 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public class TarvernDeckManager : MonoBehaviour
+{
+    public List<CardSO> allCards = new();
+
+    private void Start()
+    {
+        CardSO[] cards = Resources.LoadAll<CardSO>("CardSO");
+        allCards.AddRange(cards);
+        ShuffleDeck();
+    }
+
+    public void DrawCard(HandManager handManager)
+    {
+        // Nếu hết sạch bài trong bộ bài rút -> Người chơi Thua (Theo luật Regicide)
+        if (allCards.Count == 0)
+        {
+            Debug.LogWarning("Bộ bài rút đã cạn sạch! Bạn đã thua trận.");
+            return;
+        }
+
+        // Luôn bốc lá bài nằm ở trên cùng (vị trí số 0)
+        CardSO nextCard = allCards[0];
+
+        // Xóa ngay lập tức lá đó khỏi bộ bài rút
+        allCards.RemoveAt(0);
+
+        // Thêm vào tay người chơi
+        handManager.AddCardToHand(nextCard);
+    }
+
+    public void ShuffleDeck()
+    {
+        for (int i = 0; i < allCards.Count; i++)
+        {
+            int randomIndex = Random.Range(0, allCards.Count);
+            CardSO temp = allCards[i];
+            allCards[i] = allCards[randomIndex];
+            allCards[randomIndex] = temp;
+        }
+    }
+}
