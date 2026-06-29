@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TarvernDeckManager : MonoBehaviour
 {
     public List<CardSO> allCards = new();
+    [SerializeField] private HandManager handManager;
 
     private void Start()
     {
         CardSO[] cards = Resources.LoadAll<CardSO>("CardSO");
         allCards.AddRange(cards);
         ShuffleDeck();
+        StartCoroutine(AddCardFromFirst());
     }
 
     public void DrawCard(HandManager handManager)
@@ -39,6 +42,15 @@ public class TarvernDeckManager : MonoBehaviour
             CardSO temp = allCards[i];
             allCards[i] = allCards[randomIndex];
             allCards[randomIndex] = temp;
+        }
+    }
+
+    public IEnumerator AddCardFromFirst(float duration = 0.2f)
+    {
+        for (int i = 0; i < handManager.maxHandSize; i++)
+        {
+            yield return new WaitForSeconds(duration);
+            DrawCard(handManager);
         }
     }
 }

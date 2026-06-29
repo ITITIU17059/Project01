@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine.Splines;
 using DG.Tweening;
+using System;
 public class HandManager : MonoBehaviour
 {
-    [SerializeField] private int maxHandSize;
+    public int maxHandSize;
     [SerializeField] private int spacingValue;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private SplineContainer splineContainer;
     [SerializeField] private Transform cardSpawnPoint;
 
     [SerializeField] private Transform playPreviewArea;
+    private int totalCardValue;
 
     private List<GameObject> handCards = new();
     public List<GameObject> selectedCards = new();
@@ -19,6 +21,7 @@ public class HandManager : MonoBehaviour
     void Start()
     {
         spacingValue = Mathf.Max(maxHandSize, spacingValue);
+        totalCardValue = 0;
     }
 
     // Update is called once per frame
@@ -31,8 +34,31 @@ public class HandManager : MonoBehaviour
     {
         if (handCards.Contains(cardObject))
         {
+            var cardObjectValue = cardObject.GetComponent<CardDisplay>().cardScriptableObject.value;
+            if (selectedCards.Count != 0)
+            {
+                foreach (var card in selectedCards)
+                {
+                    var cardValue = card.GetComponent<CardDisplay>().cardScriptableObject.value;
+                    if (cardObjectValue == 1) break;
+                    if (cardValue != cardObjectValue || totalCardValue + cardObjectValue > 10)
+                    {
+                        print("Card can phai co cung value hoac di cung voi la Ace");
+                        // Ép kích thước bài về chuẩn ngay khi vừa được chọn
+                        cardObject.transform.DOKill();
+                        cardObject.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutCubic);
+                        if (cardObject.TryGetComponent<CardInteraction>(out var interact))
+                        {
+                            interact.HandleDeselect();
+                        }
+                        return;
+                    }
+                }
+            }
+
             handCards.Remove(cardObject);
             selectedCards.Add(cardObject);
+            totalCardValue += cardObjectValue;
 
             // Ép kích thước bài về chuẩn ngay khi vừa được chọn
             cardObject.transform.DOKill();
@@ -54,8 +80,10 @@ public class HandManager : MonoBehaviour
     {
         if (selectedCards.Contains(cardObject))
         {
+            var cardObjectValue = cardObject.GetComponent<CardDisplay>().cardScriptableObject.value;
             selectedCards.Remove(cardObject);
             handCards.Add(cardObject);
+            totalCardValue -= cardObjectValue;
 
             if (cardObject.TryGetComponent<CardInteraction>(out var interact))
             {
