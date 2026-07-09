@@ -1,26 +1,193 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance { get; private set; }
+    public BattleState CurrentState { get; private set; }
 
     [Header("References")]
     [SerializeField] private TarvernDeckManager deckManager;
     [SerializeField] private HandManager handManager;
+    [SerializeField] private Button drawButton;
+    [SerializeField] private Button confirmButton;
 
     [Header("Spawn Points Setup")]
     [SerializeField] private Transform tavernSpawnPoint;   // Kéo ô TavernSpawnPoint từ Hierarchy vào đây
-    [SerializeField] private Transform graveyardSpawnPoint; // Kéo ô GraveyardSpawnPoint từ Hierarchy vào đây
+    public Transform graveyardSpawnPoint; // Kéo ô GraveyardSpawnPoint từ Hierarchy vào đây
 
     [Header("Stats")]
     public int currentShield = 0;
-    public int bossHealth = 40;
+    [SerializeField] private BossSO currentBoss;
+    public int bossHealth;
+
+    public int bossAttack;
+
+    private void Start()
+    {
+        bossHealth = currentBoss.hp;
+        bossAttack = currentBoss.atk;
+        ChangeState(BattleState.StartBattle);
+    }
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
+
+    public void ChangeState(BattleState newState)
+    {
+        CurrentState = newState;
+
+        switch (CurrentState)
+        {
+            case BattleState.StartBattle:
+                StartBattle();
+                break;
+
+            case BattleState.PlayerTurn:
+                StartPlayerTurn();
+                break;
+
+            case BattleState.BossTurn:
+                StartBossTurn();
+                break;
+
+            case BattleState.ResolveAttack:
+                ResolveBossAttack();
+                break;
+
+            case BattleState.CheckBattle:
+                CheckBattle();
+                break;
+
+            case BattleState.Victory:
+                Victory();
+                break;
+
+            case BattleState.Defeat:
+                Defeat();
+                break;
+        }
+    }
+
+    private void StartBattle()
+    {
+        currentShield = 0;
+
+        StartCoroutine(deckManager.AddCardFromFirst());
+    }
+
+    private void StartPlayerTurn()
+    {
+        Debug.Log("===== PLAYER TURN =====");
+
+        deckManager.DrawCard(handManager);
+        confirmButton.interactable = true;
+    }
+
+    public void ConfirmPlayCards()
+    {
+        if (CurrentState != BattleState.PlayerTurn)
+            return;
+
+        if (handManager == null)
+            return;
+
+        if (handManager.selectedCards.Count == 0)
+            return;
+
+        ResolveSelectedCards();
+    }
+
+    private void ResolveSelectedCards()
+    {
+        foreach (GameObject cardObject in handManager.selectedCards)
+        {
+            if (cardObject.TryGetComponent<CardDisplay>(out var display))
+            {
+                OnCardPlayed(display.cardScriptableObject);
+            }
+        }
+
+        foreach (GameObject cardObject in handManager.selectedCards)
+        {
+            if (cardObject.TryGetComponent<CardDisplay>(out var display))
+            {
+                GraveyardManager.Instance.AddToGraveyard(display.cardScriptableObject);
+            }
+
+            CardFXManager.Instance.PlayAnimateToGraveyardFX(
+                cardObject,
+                graveyardSpawnPoint
+            );
+        }
+
+        handManager.ClearSelection();
+
+        ChangeState(BattleState.CheckBattle);
+    }
+
+    private void CheckBattle()
+    {
+        confirmButton.interactable = false;
+        if (bossHealth <= 0)
+        {
+            ChangeState(BattleState.Victory);
+            return;
+        }
+
+        ChangeState(BattleState.BossTurn);
+    }
+
+    private void StartBossTurn()
+    {
+        Debug.Log("Boss Attack");
+
+        ChangeState(BattleState.ResolveAttack);
+    }
+
+    private void ResolveBossAttack()
+    {
+        int damage = Mathf.Max(0, bossAttack - currentShield);
+
+        currentShield = 0;
+
+        if (damage == 0)
+        {
+            FinishDiscard(true);
+            return;
+        }
+
+        handManager.StartDiscardPhase(damage);
+    }
+
+    public void FinishDiscard(bool success)
+    {
+        if (success)
+            ChangeState(BattleState.PlayerTurn);
+        else
+            ChangeState(BattleState.Defeat);
+    }
+
+    private void Victory()
+    {
+        Debug.Log("Victory");
+    }
+
+    private void Defeat()
+    {
+        Debug.Log("Defeat");
+    }
+
+    public void EndTurn()
+    {
+        if (CurrentState != BattleState.PlayerTurn)
+            return;
+
+        ChangeState(BattleState.BossTurn);
     }
 
     public void OnCardPlayed(CardSO cardData)
@@ -51,10 +218,12 @@ public class BattleManager : MonoBehaviour
     private void AttackBoss(int damage)
     {
         bossHealth -= damage;
-        Debug.Log($"Tấn công Boss! Máu Boss còn lại: {bossHealth}");
-        if (bossHealth <= 0) Debug.Log("Boss đã bị đánh bại!");
-    }
 
+        if (bossHealth < 0)
+            bossHealth = 0;
+
+        Debug.Log("Boss HP: " + bossHealth);
+    }
     private void AddShield(int value)
     {
         currentShield += value;
@@ -89,37 +258,7 @@ public class BattleManager : MonoBehaviour
             graveyardSpawnPoint,
             tavernSpawnPoint
         );
-    }
 
-    public void ConfirmPlayCards()
-    {
-        if (handManager == null || handManager.selectedCards.Count == 0) return;
-
-        // Bước 1: Tính toán logic hiệu ứng trước
-        foreach (GameObject cardObject in handManager.selectedCards)
-        {
-            if (cardObject.TryGetComponent<CardDisplay>(out var display) && display.cardScriptableObject != null)
-            {
-                OnCardPlayed(display.cardScriptableObject);
-            }
-        }
-
-        // Bước 2: Nạp dữ liệu vào mộ và kích hoạt hoạt ảnh biến mất tiêu biến bài
-        int index = 0;
-        foreach (GameObject cardObject in handManager.selectedCards)
-        {
-            if (cardObject.TryGetComponent<CardDisplay>(out var display) && display.cardScriptableObject != null)
-            {
-                if (GraveyardManager.Instance) GraveyardManager.Instance.AddToGraveyard(display.cardScriptableObject);
-            }
-
-            if (CardFXManager.Instance)
-            {
-                CardFXManager.Instance.PlayAnimateToGraveyardFX(cardObject, graveyardSpawnPoint);
-            }
-            index++;
-        }
-
-        handManager.selectedCards.Clear();
+        deckManager.ShuffleDeck();
     }
 }

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TarvernDeckManager : MonoBehaviour
 {
     public List<CardSO> allCards = new();
+    [SerializeField] private HandManager handManager;
 
     private void Start()
     {
@@ -17,9 +19,11 @@ public class TarvernDeckManager : MonoBehaviour
         // Nếu hết sạch bài trong bộ bài rút -> Người chơi Thua (Theo luật Regicide)
         if (allCards.Count == 0)
         {
-            Debug.LogWarning("Bộ bài rút đã cạn sạch! Bạn đã thua trận.");
+            BattleManager.Instance.ChangeState(BattleState.Defeat);
             return;
         }
+
+        if (handManager.handCards.Count == handManager.maxHandSize) return;
 
         // Luôn bốc lá bài nằm ở trên cùng (vị trí số 0)
         CardSO nextCard = allCards[0];
@@ -40,5 +44,16 @@ public class TarvernDeckManager : MonoBehaviour
             allCards[i] = allCards[randomIndex];
             allCards[randomIndex] = temp;
         }
+    }
+
+    public IEnumerator AddCardFromFirst(float duration = 0.3f)
+    {
+        for (int i = 0; i < handManager.maxHandSize; i++)
+        {
+            yield return new WaitForSeconds(duration);
+            DrawCard(handManager);
+        }
+
+        BattleManager.Instance.ChangeState(BattleState.PlayerTurn);
     }
 }
