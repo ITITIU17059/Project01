@@ -12,6 +12,7 @@ public class BossSO : ScriptableObject
         Spades
     }
     public string bossName;
+    public Sprite cardSprite;
 
     public Suit suit;
 

@@ -19,15 +19,23 @@ public class BattleManager : MonoBehaviour
 
     [Header("Stats")]
     public int currentShield = 0;
-    [SerializeField] private BossSO currentBoss;
+    [SerializeField] private List<BossSO> jackBosses;
+    [SerializeField] private List<BossSO> queenBosses;
+    [SerializeField] private List<BossSO> kingBosses;
+
+    private Queue<BossSO> bossQueue = new();
+
+    [SerializeField] private BossDisplay bossDisplay;
+
+    private int currentBossIndex = 0;
+
+    private BossSO currentBoss;
     public int bossHealth;
 
     public int bossAttack;
 
     private void Start()
     {
-        bossHealth = currentBoss.hp;
-        bossAttack = currentBoss.atk;
         ChangeState(BattleState.StartBattle);
     }
 
@@ -73,11 +81,63 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private void CreateBossQueue()
+    {
+        bossQueue.Clear();
+
+        List<BossSO> j = new List<BossSO>(jackBosses);
+        List<BossSO> q = new List<BossSO>(queenBosses);
+        List<BossSO> k = new List<BossSO>(kingBosses);
+
+        Shuffle(j);
+        Shuffle(q);
+        Shuffle(k);
+
+        foreach (var boss in j)
+            bossQueue.Enqueue(boss);
+
+        foreach (var boss in q)
+            bossQueue.Enqueue(boss);
+
+        foreach (var boss in k)
+            bossQueue.Enqueue(boss);
+    }
+
+    private void Shuffle(List<BossSO> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int random = Random.Range(0, i + 1);
+
+            (list[i], list[random]) = (list[random], list[i]);
+        }
+    }
+
     private void StartBattle()
     {
         currentShield = 0;
 
+        CreateBossQueue();
+
+        LoadNextBoss();
+
         StartCoroutine(deckManager.AddCardFromFirst());
+    }
+
+    private void LoadNextBoss()
+    {
+        if (bossQueue.Count == 0)
+        {
+            ChangeState(BattleState.Victory);
+            return;
+        }
+
+        currentBoss = bossQueue.Dequeue();
+
+        bossHealth = currentBoss.hp;
+        bossAttack = currentBoss.atk;
+
+        bossDisplay.Setup(currentBoss);
     }
 
     private void StartPlayerTurn()
@@ -135,7 +195,10 @@ public class BattleManager : MonoBehaviour
         confirmButton.interactable = false;
         if (bossHealth <= 0)
         {
-            ChangeState(BattleState.Victory);
+            LoadNextBoss();
+
+            ChangeState(BattleState.PlayerTurn);
+
             return;
         }
 
@@ -221,6 +284,8 @@ public class BattleManager : MonoBehaviour
 
         if (bossHealth < 0)
             bossHealth = 0;
+
+        bossDisplay.UpdateHP(bossHealth);
 
         Debug.Log("Boss HP: " + bossHealth);
     }
