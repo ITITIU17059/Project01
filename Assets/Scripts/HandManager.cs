@@ -5,16 +5,19 @@ using DG.Tweening;
 using System;
 public class HandManager : MonoBehaviour
 {
-    public int maxHandSize;
+    public int maxHandSize = 8;
     [SerializeField] private int spacingValue;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private SplineContainer splineContainer;
     [SerializeField] private Transform cardSpawnPoint;
+    private bool isDiscardMode = false;
+    private int discardTarget = 0;
+    private int discardCurrent = 0;
 
     [SerializeField] private Transform playPreviewArea;
     private int totalCardValue;
 
-    private List<GameObject> handCards = new();
+    [NonSerialized] public List<GameObject> handCards = new();
     public List<GameObject> selectedCards = new();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,28 +35,28 @@ public class HandManager : MonoBehaviour
 
     public void SelectCard(GameObject cardObject)
     {
+        if (isDiscardMode)
+        {
+            SelectDiscardCard(cardObject);
+            return;
+        }
+
         if (handCards.Contains(cardObject))
         {
             var cardObjectValue = cardObject.GetComponent<CardDisplay>().cardScriptableObject.value;
-            if (selectedCards.Count != 0)
+            if (!CanSelectCard(cardObjectValue))
             {
-                foreach (var card in selectedCards)
+                Debug.Log("Card phải cùng value (Ace được phép đi kèm)");
+
+                cardObject.transform.DOKill();
+                cardObject.transform.DOScale(Vector3.one, 0.2f)
+                                    .SetEase(Ease.OutCubic);
+                if (cardObject.TryGetComponent<CardInteraction>(out var interact))
                 {
-                    var cardValue = card.GetComponent<CardDisplay>().cardScriptableObject.value;
-                    if (cardObjectValue == 1) break;
-                    if (cardValue != cardObjectValue || totalCardValue + cardObjectValue > 10)
-                    {
-                        print("Card can phai co cung value hoac di cung voi la Ace");
-                        // Ép kích thước bài về chuẩn ngay khi vừa được chọn
-                        cardObject.transform.DOKill();
-                        cardObject.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutCubic);
-                        if (cardObject.TryGetComponent<CardInteraction>(out var interact))
-                        {
-                            interact.HandleDeselect();
-                        }
-                        return;
-                    }
+                    interact.HandleDeselect();
                 }
+
+                return;
             }
 
             handCards.Remove(cardObject);
@@ -78,22 +81,27 @@ public class HandManager : MonoBehaviour
     // Hàm trả bài từ vùng chờ về lại trên tay (Nếu người chơi đổi ý click hủy)
     public void DeselectCard(GameObject cardObject)
     {
+        if (isDiscardMode)
+        {
+            DeselectDiscardCard(cardObject);
+            return;
+        }
+
         if (selectedCards.Contains(cardObject))
         {
-            var cardObjectValue = cardObject.GetComponent<CardDisplay>().cardScriptableObject.value;
+            var cardObjectValue = cardObject.GetComponent<CardDisplay>()
+                                            .cardScriptableObject.value;
+
             selectedCards.Remove(cardObject);
             handCards.Add(cardObject);
+
             totalCardValue -= cardObjectValue;
 
             if (cardObject.TryGetComponent<CardInteraction>(out var interact))
-            {
                 interact.HandleDeselect();
-            }
 
             if (cardObject.TryGetComponent<CardDisplay>(out var display))
-            {
                 display.SetSortingOrder(10 + handCards.Count);
-            }
 
             RearrangeSelectedCards();
             RepositionAllCards(null);
@@ -199,5 +207,156 @@ public class HandManager : MonoBehaviour
                 interaction.MoveTo(localPos, rotation, 0.2f);
             }
         }
+    }
+
+    public void StartDiscardPhase(int targetValue)
+    {
+        isDiscardMode = true;
+
+        discardTarget = targetValue;
+        discardCurrent = 0;
+
+        selectedCards.Clear();
+        totalCardValue = 0;
+
+        Debug.Log("Discard Target = " + targetValue);
+
+        int total = 0;
+
+        foreach (GameObject card in handCards)
+        {
+            total += card.GetComponent<CardDisplay>()
+                         .cardScriptableObject.value;
+        }
+
+        if (total < targetValue)
+        {
+            BattleManager.Instance.FinishDiscard(false);
+            return;
+        }
+    }
+
+    private void SelectDiscardCard(GameObject cardObject)
+    {
+        if (selectedCards.Contains(cardObject))
+            return;
+
+        handCards.Remove(cardObject);
+        selectedCards.Add(cardObject);
+
+        int value = cardObject.GetComponent<CardDisplay>()
+                              .cardScriptableObject.value;
+
+        discardCurrent += value;
+
+        //     confirmDiscardButton.interactable =
+        // discardCurrent >= discardTarget;
+
+        RearrangeSelectedCards();
+
+        Debug.Log($"Discard = {discardCurrent}/{discardTarget}");
+
+        if (discardCurrent >= discardTarget)
+        {
+            FinishDiscard();
+        }
+    }
+
+    private void DeselectDiscardCard(GameObject cardObject)
+    {
+        if (!selectedCards.Contains(cardObject))
+            return;
+
+        selectedCards.Remove(cardObject);
+        handCards.Add(cardObject);
+
+        int value = cardObject.GetComponent<CardDisplay>()
+                              .cardScriptableObject.value;
+
+        discardCurrent -= value;
+
+        if (discardCurrent < 0)
+            discardCurrent = 0;
+
+        if (cardObject.TryGetComponent<CardInteraction>(out var interact))
+            interact.HandleDeselect();
+
+        if (cardObject.TryGetComponent<CardDisplay>(out var display))
+            display.SetSortingOrder(10 + handCards.Count);
+
+        RearrangeSelectedCards();
+        RepositionAllCards(null);
+
+        Debug.Log($"Discard = {discardCurrent}/{discardTarget}");
+    }
+
+    private void FinishDiscard()
+    {
+        foreach (GameObject card in selectedCards)
+        {
+            CardSO so = card.GetComponent<CardDisplay>().cardScriptableObject;
+
+            GraveyardManager.Instance.AddToGraveyard(so);
+
+            CardFXManager.Instance.PlayAnimateToGraveyardFX(
+                card,
+                BattleManager.Instance.graveyardSpawnPoint
+            );
+        }
+
+        selectedCards = new List<GameObject>();
+
+        selectedCards.Clear();
+        totalCardValue = 0;
+
+        discardCurrent = 0;
+        discardTarget = 0;
+
+        isDiscardMode = false;
+
+        RepositionAllCards(null);
+
+        BattleManager.Instance.FinishDiscard(true);
+    }
+
+    private bool CanSelectCard(int newValue)
+    {
+        int mainValue = -1;
+
+        foreach (GameObject card in selectedCards)
+        {
+            int value = card.GetComponent<CardDisplay>()
+                            .cardScriptableObject.value;
+
+            if (value != 1)
+            {
+                mainValue = value;
+                break;
+            }
+        }
+
+        // Ace luôn được phép
+        if (newValue == 1)
+            return true;
+
+        int total = 0;
+
+        foreach (GameObject card in selectedCards)
+        {
+            total += card.GetComponent<CardDisplay>()
+                         .cardScriptableObject.value;
+        }
+
+        if (mainValue == -1)
+            return total + newValue <= 10;
+
+        return newValue == mainValue &&
+               total + newValue <= 10;
+    }
+
+    public void ClearSelection()
+    {
+        selectedCards.Clear();
+        totalCardValue = 0;
     }
 }

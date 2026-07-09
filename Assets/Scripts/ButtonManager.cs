@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ButtonManager : MonoBehaviour
 {
     [SerializeField] private Image image;
+    public Button button;
     public void onImageHover()
     {
         image.color = Color.grey;
