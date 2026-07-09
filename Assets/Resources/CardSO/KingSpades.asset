@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
-  m_Name: KingHearts
+  m_Name: KingSpades
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
   bossName: King
-  cardSprite: {fileID: 6361563533758199770, guid: df2f17f1fa2edb64abe949aafd1e8f6f, type: 3}
-  suit: 1
+  cardSprite: {fileID: -419935416126996855, guid: d4ee5c2f87b550b428f8e258fb6ce1f8, type: 3}
+  suit: 4
   hp: 40
   atk: 20
