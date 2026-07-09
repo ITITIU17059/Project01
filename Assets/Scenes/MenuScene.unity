@@ -836,6 +836,24 @@ MonoBehaviour:
   - groupId: Click
     clips:
     - {fileID: 8300000, guid: 474f75af10972544cb6916748077375d, type: 3}
+  - groupId: CardHover
+    clips:
+    - {fileID: 8300000, guid: c95dc8092cc9ba9458f921c74ec27a0e, type: 3}
+  - groupId: CardDraw
+    clips:
+    - {fileID: 8300000, guid: 4094896db25a288499474ba3f9829af4, type: 3}
+  - groupId: CardPlay
+    clips:
+    - {fileID: 8300000, guid: af4e78b8e380dce46b2cca86df7c4c91, type: 3}
+  - groupId: CardSelect
+    clips:
+    - {fileID: 8300000, guid: b6fdb3f0035f06640bac204497a22c7d, type: 3}
+  - groupId: HealCard
+    clips:
+    - {fileID: 8300000, guid: b659be169e382d2438eb5505f3978863, type: 3}
+  - groupId: CardGraveyard
+    clips:
+    - {fileID: 8300000, guid: 21902d7c0263a47458dc59e0e6259d70, type: 3}
 --- !u!114 &474076272
 MonoBehaviour:
   m_ObjectHideFlags: 0

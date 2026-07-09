@@ -412,7 +412,7 @@ Transform:
   m_GameObject: {fileID: 281016440}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000030517578, y: 0, z: 0}
+  m_LocalPosition: {x: -269.09995, y: -104.49999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -420,7 +420,7 @@ Transform:
   - {fileID: 2043109573}
   - {fileID: 1520275538}
   - {fileID: 1525621445}
-  m_Father: {fileID: 2129701499}
+  m_Father: {fileID: 2091500579}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &281016442
 MonoBehaviour:
@@ -1032,7 +1032,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &555454037
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1231,6 +1231,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &716438368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 716438369}
+  - component: {fileID: 716438370}
+  m_Layer: 0
+  m_Name: _BossFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &716438369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716438368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 959529420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &716438370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716438368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef1226886511c4f4f8a47889004402b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossFXManager
 --- !u!1 &741122706
 GameObject:
   m_ObjectHideFlags: 0
@@ -1387,6 +1431,8 @@ Transform:
   - {fileID: 1258661170}
   - {fileID: 1763176874}
   - {fileID: 1036221538}
+  - {fileID: 1043961772}
+  - {fileID: 716438369}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1036221537
@@ -1435,6 +1481,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardFXManager
   visualCardPrefab: {fileID: 3419911141167198513, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
   canvasTransform: {fileID: 0}
+--- !u!1 &1043961771
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1043961772}
+  - component: {fileID: 1043961773}
+  m_Layer: 0
+  m_Name: _BossManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1043961772
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043961771}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 959529420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1043961773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043961771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5293f2e9f76b4ea77c964fb32b53a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossManager
+  jackBosses:
+  - {fileID: 11400000, guid: 3d0a1175f56a0464ea7e8b617a050831, type: 2}
+  - {fileID: 11400000, guid: cba4bba90d2f0a142b8e7d2077aa080e, type: 2}
+  - {fileID: 11400000, guid: 756a7248267062d4ab6c5e58b759a715, type: 2}
+  - {fileID: 11400000, guid: 70129339dff0b0d499137229d7cad05d, type: 2}
+  queenBosses:
+  - {fileID: 11400000, guid: 6ea88403135e7bd478ce29141276d3ff, type: 2}
+  - {fileID: 11400000, guid: 839522c3cf5c45b4c835a540363d6e20, type: 2}
+  - {fileID: 11400000, guid: bb04d18bb639bd945b58ef03c2c4b262, type: 2}
+  - {fileID: 11400000, guid: 5166597121aae164c9a65f36cd85ea4e, type: 2}
+  kingBosses:
+  - {fileID: 11400000, guid: ff4c123f4570e524a85ef59fff852628, type: 2}
+  - {fileID: 11400000, guid: bac3790c86e24744dbeba7efaab5fa2a, type: 2}
+  - {fileID: 11400000, guid: eb0d479eb9892aa4d9dce1fe61c043d0, type: 2}
+  - {fileID: 11400000, guid: 353bd01e09f0586429e4bc904cabf53b, type: 2}
+  bossDisplay: {fileID: 281016442}
 --- !u!1 &1061128433
 GameObject:
   m_ObjectHideFlags: 0
@@ -2187,29 +2293,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BattleManager
   deckManager: {fileID: 354856821}
   handManager: {fileID: 44184947}
-  drawButton: {fileID: 555454038}
   confirmButton: {fileID: 1550560571}
   tavernSpawnPoint: {fileID: 741122707}
   graveyardSpawnPoint: {fileID: 1061128434}
   currentShield: 0
-  jackBosses:
-  - {fileID: 11400000, guid: 3d0a1175f56a0464ea7e8b617a050831, type: 2}
-  - {fileID: 11400000, guid: cba4bba90d2f0a142b8e7d2077aa080e, type: 2}
-  - {fileID: 11400000, guid: 756a7248267062d4ab6c5e58b759a715, type: 2}
-  - {fileID: 11400000, guid: 70129339dff0b0d499137229d7cad05d, type: 2}
-  queenBosses:
-  - {fileID: 11400000, guid: 6ea88403135e7bd478ce29141276d3ff, type: 2}
-  - {fileID: 11400000, guid: 839522c3cf5c45b4c835a540363d6e20, type: 2}
-  - {fileID: 11400000, guid: bb04d18bb639bd945b58ef03c2c4b262, type: 2}
-  - {fileID: 11400000, guid: 5166597121aae164c9a65f36cd85ea4e, type: 2}
-  kingBosses:
-  - {fileID: 11400000, guid: ff4c123f4570e524a85ef59fff852628, type: 2}
-  - {fileID: 11400000, guid: bac3790c86e24744dbeba7efaab5fa2a, type: 2}
-  - {fileID: 11400000, guid: eb0d479eb9892aa4d9dce1fe61c043d0, type: 2}
-  - {fileID: 11400000, guid: 353bd01e09f0586429e4bc904cabf53b, type: 2}
-  bossDisplay: {fileID: 281016442}
-  bossHealth: 40
-  bossAttack: 0
 --- !u!4 &1763176874
 Transform:
   m_ObjectHideFlags: 0
@@ -2506,6 +2593,7 @@ RectTransform:
   - {fileID: 403569432}
   - {fileID: 2129701499}
   - {fileID: 1550560574}
+  - {fileID: 281016441}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2681,7 +2769,6 @@ Transform:
   m_Children:
   - {fileID: 1061128434}
   - {fileID: 803779285}
-  - {fileID: 281016441}
   m_Father: {fileID: 2091500579}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807

@@ -61,6 +61,7 @@ public class HandManager : MonoBehaviour
 
             handCards.Remove(cardObject);
             selectedCards.Add(cardObject);
+            SoundManager.instance?.PlaySound2D("CardSelect");
             totalCardValue += cardObjectValue;
 
             // Ép kích thước bài về chuẩn ngay khi vừa được chọn
@@ -94,6 +95,7 @@ public class HandManager : MonoBehaviour
 
             selectedCards.Remove(cardObject);
             handCards.Add(cardObject);
+            SoundManager.instance?.PlaySound2D("CardSelect");
 
             totalCardValue -= cardObjectValue;
 
@@ -141,6 +143,7 @@ public class HandManager : MonoBehaviour
         if (handCards.Count >= maxHandSize) return;
 
         GameObject newCard = Instantiate(cardPrefab, cardSpawnPoint.position, cardSpawnPoint.rotation);
+        SoundManager.instance?.PlaySound2D("CardDraw");
         handCards.Add(newCard);
 
         newCard.GetComponent<CardDisplay>().cardScriptableObject = cardData;

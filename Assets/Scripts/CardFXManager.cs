@@ -28,6 +28,7 @@ public class CardFXManager : MonoBehaviour
             return;
         }
 
+        SoundManager.instance?.PlaySound2D("HealCard");
         StartCoroutine(HealDeckRoutine(healedCards, graveyardSpawn.position, tavernSpawn.position, tavernSpawn));
     }
 
@@ -110,6 +111,7 @@ public class CardFXManager : MonoBehaviour
 
     public void PlayAnimateToGraveyardFX(GameObject cardObject, Transform graveyardSpawn)
     {
+        SoundManager.instance?.PlaySound2D("CardGraveyard");
         if (cardObject == null) return;
 
         cardObject.transform.DOKill();

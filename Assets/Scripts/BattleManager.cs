@@ -154,6 +154,7 @@ public class BattleManager : MonoBehaviour
         if (handManager.selectedCards.Count == 0)
             return;
 
+        SoundManager.instance?.PlaySound2D("CardPlay");
         ResolveSelectedCards();
     }
 

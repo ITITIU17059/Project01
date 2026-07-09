@@ -79,6 +79,11 @@ public class BossManager : MonoBehaviour
 
         bossDisplay.Setup(CurrentBoss);
 
+        if (!string.IsNullOrEmpty(CurrentBoss.bossName))
+        {
+            SoundManager.instance?.PlaySound2D(CurrentBoss.bossName);
+        }
+
         if (BossFXManager.Instance)
             BossFXManager.Instance.PlaySpawnFX(bossDisplay.transform);
 
