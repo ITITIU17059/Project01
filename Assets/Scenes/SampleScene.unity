@@ -279,6 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TarvernDeckManager
   allCards: []
+  handManager: {fileID: 44184947}
 --- !u!4 &354856822
 Transform:
   m_ObjectHideFlags: 0
