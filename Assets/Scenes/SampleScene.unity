@@ -2736,11 +2736,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BattleManager
   deckManager: {fileID: 354856821}
   handManager: {fileID: 44184947}
+  drawButton: {fileID: 555454038}
   confirmButton: {fileID: 1550560571}
   tavernSpawnPoint: {fileID: 741122707}
   graveyardSpawnPoint: {fileID: 1061128434}
   playerHitPoint: {fileID: 1763423282}
   currentShield: 0
+  currentBoss: {fileID: 11400000, guid: eb0d479eb9892aa4d9dce1fe61c043d0, type: 2}
+  bossHealth: 40
+  bossAttack: 0
 --- !u!4 &1763176874
 Transform:
   m_ObjectHideFlags: 0

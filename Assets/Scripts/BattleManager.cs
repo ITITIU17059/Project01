@@ -97,6 +97,75 @@ public class BattleManager : MonoBehaviour
         confirmButton.interactable = true;
     }
 
+    public void ConfirmPlayCards()
+    {
+        if (CurrentState != BattleState.PlayerTurn)
+            return;
+
+        if (handManager == null)
+            return;
+
+        if (handManager.selectedCards.Count == 0)
+            return;
+
+        List<CardSO> selectedCards = new();
+
+        foreach (GameObject cardObject in handManager.selectedCards)
+        {
+            if (cardObject.TryGetComponent<CardDisplay>(out var display))
+            {
+                selectedCards.Add(display.cardScriptableObject);
+            }
+        }
+
+        if (!IsValidCombo(selectedCards))
+        {
+            Debug.Log("Invalid Combo!");
+            return;
+        }
+
+        ResolveSelectedCards();
+    }
+
+    private void ResolveSelectedCards()
+    {
+        foreach (GameObject cardObject in handManager.selectedCards)
+        {
+            if (cardObject.TryGetComponent<CardDisplay>(out var display))
+            {
+                OnCardPlayed(display.cardScriptableObject);
+            }
+        }
+
+        foreach (GameObject cardObject in handManager.selectedCards)
+        {
+            if (cardObject.TryGetComponent<CardDisplay>(out var display))
+            {
+                GraveyardManager.Instance.AddToGraveyard(display.cardScriptableObject);
+            }
+
+            CardFXManager.Instance.PlayAnimateToGraveyardFX(
+                cardObject,
+                graveyardSpawnPoint
+            );
+        }
+
+        handManager.ClearSelection();
+
+        ChangeState(BattleState.CheckBattle);
+    }
+
+    private void CheckBattle()
+    {
+        confirmButton.interactable = false;
+        if (bossHealth <= 0)
+        {
+            ChangeState(BattleState.Victory);
+            return;
+        }
+
+        ChangeState(BattleState.BossTurn);
+    }
     private void StartBossTurn()
     {
         TurnUIController.Instance.ShowEnemyTurn();
@@ -336,6 +405,66 @@ public class BattleManager : MonoBehaviour
         );
 
         deckManager.ShuffleDeck();
+    }
+    private bool IsValidCombo(List<CardSO> cards)
+    {
+        if (cards == null || cards.Count == 0)
+            return false;
+
+        // Đánh 1 lá
+        if (cards.Count == 1)
+            return true;
+
+        List<CardSO> aces = new();
+        List<CardSO> normals = new();
+
+        foreach (CardSO card in cards)
+        {
+            if (card.value == 1)
+                aces.Add(card);
+            else
+                normals.Add(card);
+        }
+
+        //---------------------------------
+        // Chỉ toàn Ace
+        //---------------------------------
+
+        if (normals.Count == 0)
+        {
+            return aces.Count <= 10;
+        }
+
+        //---------------------------------
+        // Chỉ được 1 Ace Companion
+        //---------------------------------
+
+        if (aces.Count > 1)
+            return false;
+
+        //---------------------------------
+        // Các lá thường phải giống nhau
+        //---------------------------------
+
+        int rank = normals[0].value;
+        int total = 0;
+
+        foreach (CardSO card in normals)
+        {
+            if (card.value != rank)
+                return false;
+
+            total += card.value;
+        }
+
+        //---------------------------------
+        // Tổng nhóm chính <= 10
+        //---------------------------------
+
+        if (total > 10)
+            return false;
+
+        return true;
     }
 
     #endregion
