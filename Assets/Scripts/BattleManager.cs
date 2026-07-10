@@ -140,23 +140,57 @@ public class BattleManager : MonoBehaviour
 
         if (BossManager.Instance.IsDead())
         {
-            BossFXManager.Instance.PlayDeathFX(
-                BossManager.Instance.BossTransform
-            );
-
-            bool hasNextBoss = BossManager.Instance.LoadNextBoss();
-
-            if (!hasNextBoss)
-            {
-                ChangeState(BattleState.Victory);
-                return;
-            }
-
-            ChangeState(BattleState.PlayerTurn);
+            StartCoroutine(HandleBossDeath());
             return;
         }
 
         ChangeState(BattleState.BossTurn);
+    }
+
+    private IEnumerator HandleBossDeath()
+    {
+        BossSO deadBoss = BossManager.Instance.CurrentBoss;
+
+        yield return StartCoroutine(
+            BossFXManager.Instance.PlayDeathFX(
+                BossManager.Instance.BossTransform));
+
+        bool changeStage =
+            BossManager.Instance.NeedChangeStage(deadBoss);
+
+        if (changeStage)
+        {
+            BossRank nextStage = deadBoss.rank;
+
+            switch (deadBoss.rank)
+            {
+                case BossRank.Jack:
+                    nextStage = BossRank.Queen;
+                    break;
+
+                case BossRank.Queen:
+                    nextStage = BossRank.King;
+                    break;
+            }
+
+            yield return StartCoroutine(
+                StageManager.Instance.ChangeStage(nextStage));
+        }
+
+        bool hasNextBoss =
+            BossManager.Instance.LoadNextBoss();
+
+        if (!hasNextBoss)
+        {
+            yield return StartCoroutine(
+                StageManager.Instance.VictoryStage());
+
+            ChangeState(BattleState.Victory);
+
+            yield break;
+        }
+
+        ChangeState(BattleState.PlayerTurn);
     }
 
     #endregion
@@ -310,7 +344,9 @@ public class BattleManager : MonoBehaviour
 
     private void Victory()
     {
-        Debug.Log("VICTORY");
+        MusicManager.instance.PlayMusic(
+    "VictoryTheme",
+    1f);
     }
 
     private void Defeat()

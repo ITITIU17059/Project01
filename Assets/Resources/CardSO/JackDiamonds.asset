@@ -21,3 +21,5 @@ MonoBehaviour:
   hitVFX: {fileID: 393033613081136493, guid: d251affd0d7059c49ac9c07f6e891fc4, type: 3}
   attackSoundID: JackAttack
   attackFlyTime: 0.4
+  rank: 0
+  spawnSoundID: Jack

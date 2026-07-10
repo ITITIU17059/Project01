@@ -145,23 +145,22 @@ public class BossFXManager : MonoBehaviour
         );
     }
 
-    public void PlayDeathFX(Transform boss)
+    public IEnumerator PlayDeathFX(Transform boss)
     {
         boss.DOKill();
 
         Sequence seq = DOTween.Sequence();
 
         seq.Append(
-            boss.DOScale(1.3f, 0.2f)
-        );
+            boss.DOScale(1.3f, 0.2f));
 
         seq.Join(
-            boss.DOShakeRotation(0.2f, 20)
-        );
+            boss.DOShakeRotation(0.2f, 20));
 
         seq.Append(
-            boss.DOScale(0, 0.3f)
-        );
+            boss.DOScale(0, 0.3f));
+
+        yield return seq.WaitForCompletion();
     }
 
     public IEnumerator PlayBossAttackFX()

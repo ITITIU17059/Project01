@@ -25,4 +25,10 @@ public class BossSO : ScriptableObject
     public GameObject hitVFX;         // Nổ khi trúng player
     public string attackSoundID;      // Âm thanh
     public float attackFlyTime = 0.4f;
+
+    [Header("Stage")]
+    public BossRank rank;
+
+    [Header("Sound")]
+    public string spawnSoundID;
 }

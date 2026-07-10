@@ -21,3 +21,5 @@ MonoBehaviour:
   hitVFX: {fileID: 3699248822550756291, guid: 19c0cba23b6e74a4a9ce9035e3844aad, type: 3}
   attackSoundID: QueenAttack
   attackFlyTime: 0.4
+  rank: 1
+  spawnSoundID: Queen
