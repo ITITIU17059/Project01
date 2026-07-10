@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +17,9 @@ public class BattleManager : MonoBehaviour
     [Header("Spawn Points")]
     [SerializeField] private Transform tavernSpawnPoint;
     public Transform graveyardSpawnPoint;
+    [SerializeField] private Transform playerHitPoint;
+
+    public Transform PlayerHitPoint => playerHitPoint;
 
     [Header("Battle Stats")]
     public int currentShield = 0;
@@ -53,7 +58,7 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case BattleState.ResolveAttack:
-                ResolveBossAttack();
+                StartCoroutine(ResolveBossAttack());
                 break;
 
             case BattleState.CheckBattle:
@@ -85,7 +90,7 @@ public class BattleManager : MonoBehaviour
 
     private void StartPlayerTurn()
     {
-        Debug.Log("===== PLAYER TURN =====");
+        TurnUIController.Instance.ShowYourTurn();
 
         deckManager.DrawCard(handManager);
 
@@ -94,27 +99,39 @@ public class BattleManager : MonoBehaviour
 
     private void StartBossTurn()
     {
-        Debug.Log("===== BOSS TURN =====");
+        TurnUIController.Instance.ShowEnemyTurn();
 
+        DOVirtual.DelayedCall(1.2f, () =>
+    {
         ChangeState(BattleState.ResolveAttack);
+    });
     }
 
-    private void ResolveBossAttack()
+    private IEnumerator ResolveBossAttack()
     {
+        yield return StartCoroutine(
+            BossFXManager.Instance.PlayBossAttackFX());
+
         int damage = Mathf.Max(
             0,
-            BossManager.Instance.CurrentATK - currentShield
-        );
+            BossManager.Instance.CurrentATK - currentShield);
 
         currentShield = 0;
 
         if (damage == 0)
         {
             FinishDiscard(true);
-            return;
+            yield break;
         }
 
+        TurnUIController.Instance.ShowDiscardTurn();
+
+        yield return new WaitForSeconds(0.8f);
+
+        DOVirtual.DelayedCall(1.2f, () =>
+    {
         handManager.StartDiscardPhase(damage);
+    });
     }
 
     private void CheckBattle()
@@ -155,33 +172,44 @@ public class BattleManager : MonoBehaviour
             return;
 
         SoundManager.instance?.PlaySound2D("CardPlay");
-        ResolveSelectedCards();
+        StartCoroutine(ResolveSelectedCards());
     }
-
-    private void ResolveSelectedCards()
+    private IEnumerator ResolveSelectedCards()
     {
-        foreach (GameObject cardObject in handManager.selectedCards)
-        {
-            if (cardObject.TryGetComponent(out CardDisplay display))
-            {
-                OnCardPlayed(display.cardScriptableObject);
-            }
-        }
+        confirmButton.interactable = false;
 
-        foreach (GameObject cardObject in handManager.selectedCards)
+        List<GameObject> playedCards = new(handManager.selectedCards);
+
+        foreach (GameObject cardObject in playedCards)
         {
-            if (cardObject.TryGetComponent(out CardDisplay display))
-            {
-                GraveyardManager.Instance.AddToGraveyard(display.cardScriptableObject);
-            }
+            if (!cardObject.TryGetComponent(out CardDisplay display))
+                continue;
+
+            CardSO card = display.cardScriptableObject;
+
+            // 1. VFX theo chất bài
+            yield return StartCoroutine(
+                BossFXManager.Instance.PlayCardSuitFX(card.suit.ToString(), cardObject.transform)
+            );
+
+            // 2. Áp dụng hiệu ứng lá bài
+            OnCardPlayed(card);
+
+            // 3. Đưa xuống Graveyard
+            GraveyardManager.Instance.AddToGraveyard(card);
 
             CardFXManager.Instance.PlayAnimateToGraveyardFX(
                 cardObject,
                 graveyardSpawnPoint
             );
+
+            // 4. Đợi animation hoàn thành
+            yield return new WaitForSeconds(0.25f);
         }
 
         handManager.ClearSelection();
+
+        yield return new WaitForSeconds(0.2f);
 
         ChangeState(BattleState.CheckBattle);
     }

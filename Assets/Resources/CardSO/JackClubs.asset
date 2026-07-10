@@ -17,3 +17,7 @@ MonoBehaviour:
   suit: 3
   hp: 20
   atk: 10
+  attackVFX: {fileID: 407130811912978984, guid: d83d1a0fa14a05e4f9dca45d8694406b, type: 3}
+  hitVFX: {fileID: 393033613081136493, guid: d251affd0d7059c49ac9c07f6e891fc4, type: 3}
+  attackSoundID: JackAttack
+  attackFlyTime: 0.4

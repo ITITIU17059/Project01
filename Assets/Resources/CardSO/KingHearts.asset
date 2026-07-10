@@ -17,3 +17,7 @@ MonoBehaviour:
   suit: 1
   hp: 40
   atk: 20
+  attackVFX: {fileID: 4663878853560500949, guid: bf963c780da120144b8b2d58f3dcd867, type: 3}
+  hitVFX: {fileID: 6350935104525037357, guid: 8f9279d50354685448d53011b87b3f02, type: 3}
+  attackSoundID: KingAttack
+  attackFlyTime: 0.4

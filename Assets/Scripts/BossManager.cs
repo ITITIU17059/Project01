@@ -98,9 +98,6 @@ public class BossManager : MonoBehaviour
             CurrentHP = 0;
 
         bossDisplay.UpdateHP(CurrentHP);
-
-        if (BossFXManager.Instance)
-            BossFXManager.Instance.PlayHitFX(bossDisplay.transform);
     }
 
     public bool IsDead()

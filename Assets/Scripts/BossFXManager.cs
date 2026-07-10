@@ -1,9 +1,17 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
+using System.Collections.Generic;
 
 public class BossFXManager : MonoBehaviour
 {
     public static BossFXManager Instance { get; private set; }
+
+    [SerializeField] private GameObject heartVFX;
+    [SerializeField] private GameObject diamondVFX;
+    [SerializeField] private GameObject clubVFX;
+    [SerializeField] private GameObject spadeVFX;
+    [SerializeField] private GameObject bossAttackVFXPrefab;
 
     private void Awake()
     {
@@ -11,6 +19,79 @@ public class BossFXManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
+    }
+
+    private string GetAttackSound(string suit)
+    {
+        switch (suit)
+        {
+            case "Hearts":
+                return "HeartAttack";
+
+            case "Diamonds":
+                return "DiamondAttack";
+
+            case "Clubs":
+                return "ClubAttack";
+
+            case "Spades":
+                return "SpadeAttack";
+        }
+
+        return null;
+    }
+
+    public IEnumerator PlayCardSuitFX(string suit, Transform cardTransform)
+    {
+        GameObject prefab = null;
+
+        switch (suit)
+        {
+            case "Hearts":
+                prefab = heartVFX;
+                break;
+
+            case "Diamonds":
+                prefab = diamondVFX;
+                break;
+
+            case "Spades":
+                prefab = spadeVFX;
+                break;
+
+            case "Clubs":
+                prefab = clubVFX;
+                break;
+        }
+
+        if (prefab == null)
+            yield break;
+
+        GameObject fx = Instantiate(
+            prefab,
+            cardTransform.position,
+            Quaternion.identity);
+
+
+        Transform boss = BossManager.Instance.BossTransform;
+
+        fx.transform.DOMove(
+            boss.position,
+            0.35f)
+            .SetEase(Ease.InQuad);
+
+        yield return new WaitForSeconds(0.35f);
+
+        Destroy(fx);
+
+        string soundID = GetAttackSound(suit);
+
+        if (!string.IsNullOrEmpty(soundID))
+        {
+            SoundManager.instance?.PlaySound2D(soundID);
+        }
+
+        PlayHitFX(boss);
     }
 
     public void PlaySpawnFX(Transform boss)
@@ -81,5 +162,66 @@ public class BossFXManager : MonoBehaviour
         seq.Append(
             boss.DOScale(0, 0.3f)
         );
+    }
+
+    public IEnumerator PlayBossAttackFX()
+    {
+        BossSO boss = BossManager.Instance.CurrentBoss;
+
+        if (boss.attackVFX == null)
+            yield break;
+
+        GameObject fx = Instantiate(
+            boss.attackVFX,
+            BossManager.Instance.BossTransform.position,
+            Quaternion.identity);
+
+        SoundManager.instance?.PlaySound2D(
+            boss.attackSoundID);
+
+        yield return fx.transform
+            .DOMove(
+                BattleManager.Instance.PlayerHitPoint.position,
+                boss.attackFlyTime)
+            .SetEase(Ease.InQuad)
+            .WaitForCompletion();
+
+        Destroy(fx);
+
+        if (boss.hitVFX != null)
+        {
+            Instantiate(
+                boss.hitVFX,
+                BattleManager.Instance.PlayerHitPoint.position,
+                Quaternion.identity);
+        }
+
+        PlayPlayerHitFX(
+            BattleManager.Instance.PlayerHitPoint);
+
+        // Đợi Hit VFX chạy xong
+        yield return new WaitForSeconds(0.7f);
+    }
+
+    private void PlayPlayerHitFX(Transform player)
+    {
+        player.DOKill();
+
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(
+            player.DOShakePosition(
+                0.18f,
+                0.15f));
+
+        seq.Join(
+            player.DOScale(
+                0.92f,
+                0.08f));
+
+        seq.Append(
+            player.DOScale(
+                1f,
+                0.08f));
     }
 }

@@ -19,4 +19,10 @@ public class BossSO : ScriptableObject
     public int hp;
 
     public int atk;
+
+    [Header("Attack")]
+    public GameObject attackVFX;      // Đạn bay
+    public GameObject hitVFX;         // Nổ khi trúng player
+    public string attackSoundID;      // Âm thanh
+    public float attackFlyTime = 0.4f;
 }
