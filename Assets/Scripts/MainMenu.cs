@@ -1,27 +1,34 @@
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    public Slider musicSlider;
-    public Slider sfxSlider;
-    public AudioMixer audioMixer;
+    [Header("Audio")]
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider sfxSlider;
+    [SerializeField] private AudioMixer audioMixer;
+
     private void Start()
     {
         LoadVolume();
+
         MusicManager.instance.PlayMusic("MainMenu");
     }
 
     public void Play()
     {
-        LevelManager.instance.LoadScene("SampleScene", "CrossFade");
-        MusicManager.instance.PlayMusic("Gameplay");
+        SaveVolume();
+
+        LevelManager.instance.LoadScene(
+            "SampleScene",
+            "CrossFade");
     }
 
     public void Exit()
     {
+        SaveVolume();
+
         Application.Quit();
     }
 
@@ -42,11 +49,22 @@ public class MainMenu : MonoBehaviour
 
         audioMixer.GetFloat("SFX Volume", out float sfxVolume);
         PlayerPrefs.SetFloat("SFX Volume", sfxVolume);
+
+        PlayerPrefs.Save();
     }
 
     public void LoadVolume()
     {
-        musicSlider.value = PlayerPrefs.GetFloat("Music Volume");
-        sfxSlider.value = PlayerPrefs.GetFloat("SFX Volume");
+        float music =
+            PlayerPrefs.GetFloat("Music Volume", 0f);
+
+        float sfx =
+            PlayerPrefs.GetFloat("SFX Volume", 0f);
+
+        musicSlider.value = music;
+        sfxSlider.value = sfx;
+
+        audioMixer.SetFloat("Music Volume", music);
+        audioMixer.SetFloat("SFX Volume", sfx);
     }
 }

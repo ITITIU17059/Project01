@@ -6,6 +6,8 @@ public class MusicManager : MonoBehaviour
     public static MusicManager instance;
     [SerializeField] private MusicLibrary musicLibrary;
     [SerializeField] private AudioSource audioSource;
+    private string currentTrack;
+    private Coroutine fadeCoroutine;
 
     private void Awake()
     {
@@ -22,28 +24,55 @@ public class MusicManager : MonoBehaviour
 
     public void PlayMusic(string trackName, float fadeDuration = 0.5f)
     {
-        StartCoroutine(AnimateMusicCrossfade(musicLibrary.GetClipFromName(trackName), fadeDuration));
+        if (currentTrack == trackName)
+            return;
+
+        AudioClip clip = musicLibrary.GetClipFromName(trackName);
+
+        if (clip == null)
+            return;
+
+        currentTrack = trackName;
+
+        if (fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+
+        fadeCoroutine = StartCoroutine(
+            AnimateMusicCrossfade(clip, fadeDuration));
     }
 
-    IEnumerator AnimateMusicCrossfade(AudioClip nextTrack, float fadeDuration = 0.5f)
+    private IEnumerator AnimateMusicCrossfade(AudioClip nextTrack, float fadeDuration)
     {
-        float percent = 0;
-        while (percent < 1)
+        float startVolume = audioSource.volume;
+
+        float t = 0;
+
+        while (t < fadeDuration)
         {
-            percent += Time.deltaTime * 1 / fadeDuration;
-            audioSource.volume = Mathf.Lerp(1f, 0, percent);
+            t += Time.deltaTime;
+
+            audioSource.volume =
+                Mathf.Lerp(startVolume, 0, t / fadeDuration);
+
             yield return null;
         }
 
         audioSource.clip = nextTrack;
+        audioSource.loop = true;
         audioSource.Play();
 
-        percent = 0;
-        while (percent < 1)
+        t = 0;
+
+        while (t < fadeDuration)
         {
-            percent += Time.deltaTime * 1 / fadeDuration;
-            audioSource.volume = Mathf.Lerp(0, 1f, percent);
+            t += Time.deltaTime;
+
+            audioSource.volume =
+                Mathf.Lerp(0, startVolume, t / fadeDuration);
+
             yield return null;
         }
+
+        audioSource.volume = startVolume;
     }
 }

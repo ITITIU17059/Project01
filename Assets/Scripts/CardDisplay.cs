@@ -9,6 +9,10 @@ public class CardDisplay : MonoBehaviour
     void Start()
     {
         UpdateCardDisplay();
+        if (cardScriptableObject != null && cardSpriteRenderer != null)
+        {
+            cardSpriteRenderer.sortingLayerName = "UI";
+        }
     }
 
     void UpdateCardDisplay()

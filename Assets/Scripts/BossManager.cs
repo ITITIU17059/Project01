@@ -16,9 +16,13 @@ public class BossManager : MonoBehaviour
 
     private readonly Queue<BossSO> bossQueue = new();
 
+    private int defeatedJack;
+    private int defeatedQueen;
+    private int defeatedKing;
+
     public BossSO CurrentBoss { get; private set; }
 
-    public int CurrentHP { get; private set; }
+    public int CurrentHP;
 
     public int CurrentATK { get; private set; }
 
@@ -79,6 +83,11 @@ public class BossManager : MonoBehaviour
 
         bossDisplay.Setup(CurrentBoss);
 
+        if (!string.IsNullOrEmpty(CurrentBoss.spawnSoundID))
+        {
+            SoundManager.instance?.PlaySound2D(CurrentBoss.spawnSoundID);
+        }
+
         if (BossFXManager.Instance)
             BossFXManager.Instance.PlaySpawnFX(bossDisplay.transform);
 
@@ -93,9 +102,32 @@ public class BossManager : MonoBehaviour
             CurrentHP = 0;
 
         bossDisplay.UpdateHP(CurrentHP);
+    }
 
-        if (BossFXManager.Instance)
-            BossFXManager.Instance.PlayHitFX(bossDisplay.transform);
+    public bool NeedChangeStage(BossSO deadBoss)
+    {
+        switch (deadBoss.rank)
+        {
+            case BossRank.Jack:
+
+                defeatedJack++;
+
+                return defeatedJack == jackBosses.Count;
+
+            case BossRank.Queen:
+
+                defeatedQueen++;
+
+                return defeatedQueen == queenBosses.Count;
+
+            case BossRank.King:
+
+                defeatedKing++;
+
+                return defeatedKing == kingBosses.Count;
+        }
+
+        return false;
     }
 
     public bool IsDead()

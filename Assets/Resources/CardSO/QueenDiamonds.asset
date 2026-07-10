@@ -17,3 +17,9 @@ MonoBehaviour:
   suit: 2
   hp: 30
   atk: 15
+  attackVFX: {fileID: 8441464869164382320, guid: a81a1d72d6ce23f47b240b3af99595a0, type: 3}
+  hitVFX: {fileID: 3699248822550756291, guid: 19c0cba23b6e74a4a9ce9035e3844aad, type: 3}
+  attackSoundID: QueenAttack
+  attackFlyTime: 0.4
+  rank: 1
+  spawnSoundID: Queen

@@ -39,6 +39,11 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleMouseEnter()
     {
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlaySound2D("CardHover");
+        }
+
         if (isDragging) return; // Đang kéo thì bỏ qua
         isHovered = true;
 
