@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,9 +23,16 @@ public class TurnUIController : MonoBehaviour
     private const float CenterX = 0f;
     private const float EndX = 1600f;
 
+    [Header("Banner")]
+    [SerializeField] private Image victoryImage;
+    [SerializeField] private Image defeatImage;
+
     void Awake()
     {
         Instance = this;
+
+        victoryImage.gameObject.SetActive(false);
+        defeatImage.gameObject.SetActive(false);
     }
 
     public void ShowYourTurn()
@@ -40,6 +48,116 @@ public class TurnUIController : MonoBehaviour
     public void ShowDiscardTurn()
     {
         Show(discardTurn, "DiscardTurn");
+    }
+
+    public IEnumerator ShowVictory()
+    {
+        Image banner = victoryImage;
+
+        RectTransform rect = banner.rectTransform;
+        CanvasGroup group = banner.GetComponent<CanvasGroup>();
+
+        banner.gameObject.SetActive(true);
+
+        rect.localScale = Vector3.one * 0.5f;
+        rect.anchoredPosition = new Vector2(0, 700);
+
+        group.alpha = 0;
+
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(group.DOFade(1, 0.25f));
+
+        seq.Join(
+            rect.DOAnchorPos(Vector2.zero, 0.45f)
+                .SetEase(Ease.OutBack)
+        );
+
+        seq.Join(
+            rect.DOScale(1.15f, 0.35f)
+        );
+
+        seq.Append(
+            rect.DOScale(1f, 0.15f)
+        );
+
+        seq.Append(
+            rect.DOShakeScale(
+                0.25f,
+                0.06f
+            )
+        );
+
+        yield return seq.WaitForCompletion();
+
+        yield return new WaitForSeconds(1.2f);
+
+        Sequence end = DOTween.Sequence();
+
+        end.Join(group.DOFade(0, 0.35f));
+
+        end.Join(
+            rect.DOAnchorPos(
+                new Vector2(0, -600),
+                0.35f
+            )
+        );
+
+        yield return end.WaitForCompletion();
+
+        banner.gameObject.SetActive(false);
+    }
+
+    public IEnumerator ShowDefeat()
+    {
+        Image banner = defeatImage;
+
+        RectTransform rect = banner.rectTransform;
+        CanvasGroup group = banner.GetComponent<CanvasGroup>();
+
+        banner.gameObject.SetActive(true);
+
+        rect.localScale = Vector3.one * 1.4f;
+        rect.anchoredPosition = new Vector2(0, 700);
+
+        group.alpha = 0;
+
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(group.DOFade(1, 0.15f));
+
+        seq.Join(
+            rect.DOAnchorPos(Vector2.zero, 0.35f)
+                .SetEase(Ease.OutBounce)
+        );
+
+        seq.Join(
+            rect.DOScale(1f, 0.35f)
+        );
+
+        seq.Append(
+            rect.DOShakePosition(
+                0.4f,
+                18,
+                30
+            )
+        );
+
+        yield return seq.WaitForCompletion();
+
+        yield return new WaitForSeconds(1f);
+
+        Sequence end = DOTween.Sequence();
+
+        end.Join(group.DOFade(0, 0.35f));
+
+        end.Join(
+            rect.DOScale(0.8f, 0.35f)
+        );
+
+        yield return end.WaitForCompletion();
+
+        banner.gameObject.SetActive(false);
     }
 
     private void Show(Sprite sprite, string soundId)

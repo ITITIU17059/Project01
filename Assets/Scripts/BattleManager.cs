@@ -344,15 +344,42 @@ public class BattleManager : MonoBehaviour
 
     private void Victory()
     {
+        StartCoroutine(VictoryRoutine());
         MusicManager.instance.PlayMusic(
     "VictoryTheme",
     1f);
     }
 
-    private void Defeat()
+    private IEnumerator VictoryRoutine()
     {
-        Debug.Log("DEFEAT");
+        confirmButton.interactable = false;
+        handManager.enabled = false;
+
+        yield return TurnUIController.Instance.ShowVictory();
+
+        yield return new WaitForSeconds(2f);
+
+        LevelManager.instance.LoadScene("MenuScene", "CrossFade");
     }
 
+    private void Defeat()
+    {
+        StartCoroutine(DefeatRoutine());
+        MusicManager.instance.PlayMusic(
+    "DefeatTheme",
+    1f);
+    }
+
+    private IEnumerator DefeatRoutine()
+    {
+        confirmButton.interactable = false;
+        handManager.enabled = false;
+
+        yield return TurnUIController.Instance.ShowDefeat();
+
+        yield return new WaitForSeconds(2f);
+
+        LevelManager.instance.LoadScene("MenuScene", "CrossFade");
+    }
     #endregion
 }

@@ -932,6 +932,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 47993b1e4fbf1364e8a5091f392252ad, type: 3}
   - trackName: VictoryTheme
     clip: {fileID: 8300000, guid: 546dfb71e9f154b479d7ed980bd2e2de, type: 3}
+  - trackName: DefeatTheme
+    clip: {fileID: 8300000, guid: 59382dcada3b0a4448e6da7814c4e01d, type: 3}
 --- !u!1001 &545462749
 PrefabInstance:
   m_ObjectHideFlags: 0
