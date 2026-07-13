@@ -16,10 +16,10 @@ public class TarvernDeckManager : MonoBehaviour
 
     public void DrawCard(HandManager handManager)
     {
-        // Nếu hết sạch bài trong bộ bài rút -> Người chơi Thua (Theo luật Regicide)
+
         if (allCards.Count == 0)
         {
-            BattleManager.Instance.ChangeState(BattleState.Defeat);
+
             return;
         }
 

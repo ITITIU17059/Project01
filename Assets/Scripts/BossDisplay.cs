@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +7,7 @@ public class BossDisplay : MonoBehaviour
     [SerializeField] private SpriteRenderer artwork;
     [SerializeField] private TMP_Text hpText;
     [SerializeField] private TMP_Text atkText;
+    [SerializeField] private TMP_Text bossNameText;
 
     private BossSO boss;
 
@@ -17,6 +18,12 @@ public class BossDisplay : MonoBehaviour
         artwork.sprite = boss.cardSprite;
         hpText.text = boss.hp.ToString();
         atkText.text = boss.atk.ToString();
+        bossNameText.text = GetBossName(boss);
+       
+    }
+    private string GetBossName(BossSO boss)
+    {
+        return boss.bossName;
     }
 
     public void UpdateHP(int hp)

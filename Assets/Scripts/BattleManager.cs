@@ -92,75 +92,6 @@ public class BattleManager : MonoBehaviour
         confirmButton.interactable = true;
     }
 
-    public void ConfirmPlayCards()
-    {
-        if (CurrentState != BattleState.PlayerTurn)
-            return;
-
-        if (handManager == null)
-            return;
-
-        if (handManager.selectedCards.Count == 0)
-            return;
-
-        List<CardSO> selectedCards = new();
-
-        foreach (GameObject cardObject in handManager.selectedCards)
-        {
-            if (cardObject.TryGetComponent<CardDisplay>(out var display))
-            {
-                selectedCards.Add(display.cardScriptableObject);
-            }
-        }
-
-        if (!IsValidCombo(selectedCards))
-        {
-            Debug.Log("Invalid Combo!");
-            return;
-        }
-
-        ResolveSelectedCards();
-    }
-
-    private void ResolveSelectedCards()
-    {
-        foreach (GameObject cardObject in handManager.selectedCards)
-        {
-            if (cardObject.TryGetComponent<CardDisplay>(out var display))
-            {
-                OnCardPlayed(display.cardScriptableObject);
-            }
-        }
-
-        foreach (GameObject cardObject in handManager.selectedCards)
-        {
-            if (cardObject.TryGetComponent<CardDisplay>(out var display))
-            {
-                GraveyardManager.Instance.AddToGraveyard(display.cardScriptableObject);
-            }
-
-            CardFXManager.Instance.PlayAnimateToGraveyardFX(
-                cardObject,
-                graveyardSpawnPoint
-            );
-        }
-
-        handManager.ClearSelection();
-
-        ChangeState(BattleState.CheckBattle);
-    }
-
-    private void CheckBattle()
-    {
-        confirmButton.interactable = false;
-        if (bossHealth <= 0)
-        {
-            ChangeState(BattleState.Victory);
-            return;
-        }
-
-        ChangeState(BattleState.BossTurn);
-    }
     private void StartBossTurn()
     {
         TurnUIController.Instance.ShowEnemyTurn();
@@ -212,7 +143,14 @@ public class BattleManager : MonoBehaviour
     private IEnumerator HandleBossDeath()
     {
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
-
+        if (BossManager.Instance.LastKillWasPerfect)
+        {
+            deckManager.allCards.Insert(0, deadBoss.bossCard);
+        }
+        else
+        {
+            GraveyardManager.Instance.AddToGraveyard(deadBoss.bossCard);
+        }
         yield return StartCoroutine(
             BossFXManager.Instance.PlayDeathFX(
                 BossManager.Instance.BossTransform));
@@ -251,8 +189,21 @@ public class BattleManager : MonoBehaviour
 
             yield break;
         }
+        if (!hasNextBoss)
+        {
+            yield return StartCoroutine(StageManager.Instance.VictoryStage());
+            ChangeState(BattleState.Victory);
+            yield break;
+        }
+
+        if (handManager.handCards.Count == 0)
+        {
+            ChangeState(BattleState.Defeat);
+            yield break;
+        }
 
         ChangeState(BattleState.PlayerTurn);
+       
     }
 
     #endregion
@@ -290,47 +241,36 @@ public class BattleManager : MonoBehaviour
     }
     private void ResolveCombo(List<CardSO> cards)
     {
+        CardSO.Suit resist = BossManager.Instance.CurrentBoss.resistanceSuit;
+
         int total = 0;
+        int damage = 0;
 
         HashSet<CardSO.Suit> suits = new();
 
         foreach (CardSO card in cards)
         {
             total += card.value;
-            suits.Add(card.suit);
+            damage += card.value;      // Damage luôn tính
+
+            // Chỉ hiệu ứng mới bị kháng
+            if (card.suit != resist)
+                suits.Add(card.suit);
         }
-
-        //--------------------------------
-        // DAMAGE
-        //--------------------------------
-
-        int damage = total;
 
         if (suits.Contains(CardSO.Suit.Clubs))
             damage *= 2;
 
         AttackBoss(damage);
 
-        //--------------------------------
-        // HEART
-        //--------------------------------
-
         if (suits.Contains(CardSO.Suit.Hearts))
             HealDeck(total);
-
-        //--------------------------------
-        // DIAMOND
-        //--------------------------------
 
         if (suits.Contains(CardSO.Suit.Diamonds))
             DrawBonusCards(total);
 
-        //--------------------------------
-        // SPADE
-        //--------------------------------
-
         if (suits.Contains(CardSO.Suit.Spades))
-            ReduceBossAttack(total);
+            BossManager.Instance.ReduceAttack(total);
     }
     private void DrawBonusCards(int amount)
     {
@@ -463,66 +403,6 @@ public class BattleManager : MonoBehaviour
         );
 
         deckManager.ShuffleDeck();
-    }
-    private bool IsValidCombo(List<CardSO> cards)
-    {
-        if (cards == null || cards.Count == 0)
-            return false;
-
-        // Đánh 1 lá
-        if (cards.Count == 1)
-            return true;
-
-        List<CardSO> aces = new();
-        List<CardSO> normals = new();
-
-        foreach (CardSO card in cards)
-        {
-            if (card.value == 1)
-                aces.Add(card);
-            else
-                normals.Add(card);
-        }
-
-        //---------------------------------
-        // Chỉ toàn Ace
-        //---------------------------------
-
-        if (normals.Count == 0)
-        {
-            return aces.Count <= 10;
-        }
-
-        //---------------------------------
-        // Chỉ được 1 Ace Companion
-        //---------------------------------
-
-        if (aces.Count > 1)
-            return false;
-
-        //---------------------------------
-        // Các lá thường phải giống nhau
-        //---------------------------------
-
-        int rank = normals[0].value;
-        int total = 0;
-
-        foreach (CardSO card in normals)
-        {
-            if (card.value != rank)
-                return false;
-
-            total += card.value;
-        }
-
-        //---------------------------------
-        // Tổng nhóm chính <= 10
-        //---------------------------------
-
-        if (total > 10)
-            return false;
-
-        return true;
     }
 
     #endregion

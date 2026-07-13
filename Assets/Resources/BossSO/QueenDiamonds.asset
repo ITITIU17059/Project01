@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
-  m_Name: QueenHearts
+  m_Name: QueenDiamonds
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
-  bossName: Queen
-  cardSprite: {fileID: 7704857750013115146, guid: 6eae113f7cedbce4799918833a40f94a, type: 3}
-  suit: 1
+  bossName: "Queen of \u2666"
+  cardSprite: {fileID: -2723828375892563550, guid: 3095c570a07d84d4ba01e31ec8ac7abc, type: 3}
+  suit: 2
   hp: 30
   atk: 15
-  attackVFX: {fileID: 1604690657447723965, guid: 9be4587bff6cc9f4ba7aab966e24576a, type: 3}
+  resistanceSuit: 2
+  currentATK: 0
+  attackVFX: {fileID: 8441464869164382320, guid: a81a1d72d6ce23f47b240b3af99595a0, type: 3}
   hitVFX: {fileID: 3699248822550756291, guid: 19c0cba23b6e74a4a9ce9035e3844aad, type: 3}
   attackSoundID: QueenAttack
   attackFlyTime: 0.4

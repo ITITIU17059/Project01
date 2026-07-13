@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
   m_Name: KingClubs
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
-  bossName: King
+  bossName: "King of \u2663"
   cardSprite: {fileID: 8004696406757218565, guid: 937ca55d569a6eb4fbad588baa77d7fd, type: 3}
   suit: 3
   hp: 40
   atk: 20
+  resistanceSuit: 3
+  currentATK: 0
   attackVFX: {fileID: 7159496930085498811, guid: a778d4ba87844634280a6c13b2a712cd, type: 3}
   hitVFX: {fileID: 6350935104525037357, guid: 8f9279d50354685448d53011b87b3f02, type: 3}
   attackSoundID: KingAttack

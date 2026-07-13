@@ -26,6 +26,7 @@ public class BossManager : MonoBehaviour
     public int CurrentHP { get; private set; }
 
     public int CurrentATK => CurrentBoss.currentATK;
+    public bool LastKillWasPerfect { get; private set; }
 
     private void Awake()
     {
@@ -101,10 +102,17 @@ public class BossManager : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        int hpBefore = CurrentHP;
+
         CurrentHP -= damage;
 
-        if (CurrentHP < 0)
+        LastKillWasPerfect = false;
+
+        if (CurrentHP <= 0)
+        {
+            LastKillWasPerfect = (damage == hpBefore);
             CurrentHP = 0;
+        }
 
         bossDisplay.UpdateHP(CurrentHP);
     }
