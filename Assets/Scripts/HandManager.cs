@@ -35,6 +35,7 @@ public class HandManager : MonoBehaviour
 
     public void SelectCard(GameObject cardObject)
     {
+
         if (isDiscardMode)
         {
             SelectDiscardCard(cardObject);
@@ -324,39 +325,70 @@ public class HandManager : MonoBehaviour
 
     private bool CanSelectCard(int newValue)
     {
+        // Chưa chọn lá nào -> luôn được chọn
+        if (selectedCards.Count == 0)
+            return true;
+
+        int aceCount = 0;
         int mainValue = -1;
+        int total = 0;
 
         foreach (GameObject card in selectedCards)
         {
             int value = card.GetComponent<CardDisplay>()
                             .cardScriptableObject.value;
 
-            if (value != 1)
-            {
+            total += value;
+
+            if (value == 1)
+                aceCount++;
+            else if (mainValue == -1)
                 mainValue = value;
-                break;
-            }
         }
 
-        // Ace luôn được phép
+        // ==========================
+        // Chọn Ace
+        // ==========================
+
         if (newValue == 1)
-            return true;
-
-        int total = 0;
-
-        foreach (GameObject card in selectedCards)
         {
-            total += card.GetComponent<CardDisplay>()
-                         .cardScriptableObject.value;
+            // Chỉ được 1 Ace Companion
+            if (mainValue != -1)
+                return aceCount == 0;
+
+            // Chỉ toàn Ace
+            return aceCount + 1 <= 10;
         }
+
+        // ==========================
+        // Đã có Ace nhưng chưa có bài chính
+        // ==========================
 
         if (mainValue == -1)
-            return total + newValue <= 10;
+        {
+            return true;
+        }
 
-        return newValue == mainValue &&
-               total + newValue <= 10;
+        // ==========================
+        // Phải cùng số
+        // ==========================
+
+        if (newValue != mainValue)
+            return false;
+
+        // Nếu đã có Ace Companion thì bỏ giới hạn <=10
+        if (aceCount == 1)
+            return true;
+
+        return total + newValue <= 10;
     }
-
+    public void CancelCurrentSelection()
+    {
+        while (selectedCards.Count > 0)
+        {
+            DeselectCard(selectedCards[0]);
+        }
+    }
     public void ClearSelection()
     {
         selectedCards.Clear();
