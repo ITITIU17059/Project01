@@ -17,8 +17,10 @@ public class BossSO : ScriptableObject
     public Suit suit;
 
     public int hp;
-
     public int atk;
+
+    [HideInInspector]
+    public int currentATK;
 
     [Header("Attack")]
     public GameObject attackVFX;      // Đạn bay

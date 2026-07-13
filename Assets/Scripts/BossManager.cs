@@ -12,6 +12,7 @@ public class BossManager : MonoBehaviour
 
     [Header("Display")]
     [SerializeField] private BossDisplay bossDisplay;
+
     public Transform BossTransform => bossDisplay.transform;
 
     private readonly Queue<BossSO> bossQueue = new();
@@ -22,9 +23,9 @@ public class BossManager : MonoBehaviour
 
     public BossSO CurrentBoss { get; private set; }
 
-    public int CurrentHP;
+    public int CurrentHP { get; private set; }
 
-    public int CurrentATK { get; private set; }
+    public int CurrentATK => CurrentBoss.currentATK;
 
     private void Awake()
     {
@@ -79,17 +80,21 @@ public class BossManager : MonoBehaviour
         CurrentBoss = bossQueue.Dequeue();
 
         CurrentHP = CurrentBoss.hp;
-        CurrentATK = CurrentBoss.atk;
+        CurrentBoss.currentATK = CurrentBoss.atk;
 
         bossDisplay.Setup(CurrentBoss);
+        bossDisplay.UpdateHP(CurrentHP);
+        bossDisplay.UpdateATK(CurrentATK);
 
         if (!string.IsNullOrEmpty(CurrentBoss.spawnSoundID))
         {
             SoundManager.instance?.PlaySound2D(CurrentBoss.spawnSoundID);
         }
 
-        if (BossFXManager.Instance)
+        if (BossFXManager.Instance != null)
+        {
             BossFXManager.Instance.PlaySpawnFX(bossDisplay.transform);
+        }
 
         return true;
     }
@@ -104,26 +109,30 @@ public class BossManager : MonoBehaviour
         bossDisplay.UpdateHP(CurrentHP);
     }
 
+    public void ReduceAttack(int value)
+    {
+        CurrentBoss.currentATK -= value;
+
+        if (CurrentBoss.currentATK < 0)
+            CurrentBoss.currentATK = 0;
+
+        bossDisplay.UpdateATK(CurrentBoss.currentATK);
+    }
+
     public bool NeedChangeStage(BossSO deadBoss)
     {
         switch (deadBoss.rank)
         {
             case BossRank.Jack:
-
                 defeatedJack++;
-
                 return defeatedJack == jackBosses.Count;
 
             case BossRank.Queen:
-
                 defeatedQueen++;
-
                 return defeatedQueen == queenBosses.Count;
 
             case BossRank.King:
-
                 defeatedKing++;
-
                 return defeatedKing == kingBosses.Count;
         }
 
