@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
   m_Name: JackSpades
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
-  bossName: "Jack of \u2660"
+  bossName: Jack of Spades
   cardSprite: {fileID: 5346055301814289915, guid: cc5b224a3f39d1644b68627f17558423, type: 3}
   suit: 4
   hp: 20
