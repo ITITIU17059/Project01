@@ -17,6 +17,7 @@ MonoBehaviour:
   suit: 1
   hp: 30
   atk: 15
+  bossCard: {fileID: 11400000, guid: 26b6071239d26304ba8d5f87185fbaab, type: 2}
   resistanceSuit: 1
   currentATK: 0
   attackVFX: {fileID: 1604690657447723965, guid: 9be4587bff6cc9f4ba7aab966e24576a, type: 3}
