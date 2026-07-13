@@ -104,6 +104,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator ResolveBossAttack()
     {
+        handManager.CancelCurrentSelection();
         yield return StartCoroutine(
             BossFXManager.Instance.PlayBossAttackFX());
 
@@ -188,6 +189,10 @@ public class BattleManager : MonoBehaviour
             ChangeState(BattleState.Victory);
 
             yield break;
+        }
+        while (handManager.handCards.Count < handManager.maxHandSize)
+        {
+            deckManager.DrawCard(handManager);
         }
         if (!hasNextBoss)
         {
@@ -313,6 +318,7 @@ public class BattleManager : MonoBehaviour
         if (cards.Count == 0)
             return false;
 
+        // 1 lá luôn hợp lệ (kể cả J, Q, K)
         if (cards.Count == 1)
             return true;
 
@@ -329,9 +335,12 @@ public class BattleManager : MonoBehaviour
 
         // Chỉ toàn Ace
         if (normals.Count == 0)
-            return aces.Count <= 10;
+        {
+            int totalAce = aces.Count;
+            return totalAce <= 10;
+        }
 
-        // Companion chỉ được 1 Ace
+        // Chỉ được 1 Ace Companion
         if (aces.Count > 1)
             return false;
 
@@ -346,10 +355,11 @@ public class BattleManager : MonoBehaviour
             total += card.value;
         }
 
+        // Có Ace Companion thì bỏ qua giới hạn <=10
         if (aces.Count == 1)
             return true;
 
-        // Không có Ace
+        // Không có Ace thì tổng phải <=10
         return total <= 10;
     }
     public void FinishDiscard(bool success)
