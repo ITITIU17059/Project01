@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
   m_Name: QueenClubs
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
-  bossName: "Queen of \u2663"
+  bossName: Queen of Clubs
   cardSprite: {fileID: 3529022629283077381, guid: 3884db31d10a0c54eae546a45201643f, type: 3}
   suit: 3
   hp: 30
   atk: 15
   bossCard: {fileID: 11400000, guid: 4c6d22afeb56a1d4eb844b7fee320b67, type: 2}
   resistanceSuit: 3
-  currentATK: 0
+  currentATK: 7
   attackVFX: {fileID: 8168207955669841024, guid: fb72c1680083f7e41b250b2b834d585e, type: 3}
   hitVFX: {fileID: 3699248822550756291, guid: 19c0cba23b6e74a4a9ce9035e3844aad, type: 3}
   attackSoundID: QueenAttack

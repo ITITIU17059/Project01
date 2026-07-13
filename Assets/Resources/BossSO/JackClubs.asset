@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
   m_Name: JackClubs
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
-  bossName: "Jack of \u2663"
+  bossName: Jack of Clubs
   cardSprite: {fileID: -7702829183427735157, guid: 350ecfaf1e5294c4ba3b399c523656d0, type: 3}
   suit: 3
   hp: 20
   atk: 10
   bossCard: {fileID: 11400000, guid: 1cfa6d749ddbd254ba56f7d0fb5f7a88, type: 2}
   resistanceSuit: 3
-  currentATK: 10
+  currentATK: 2
   attackVFX: {fileID: 407130811912978984, guid: d83d1a0fa14a05e4f9dca45d8694406b, type: 3}
   hitVFX: {fileID: 393033613081136493, guid: d251affd0d7059c49ac9c07f6e891fc4, type: 3}
   attackSoundID: JackAttack
