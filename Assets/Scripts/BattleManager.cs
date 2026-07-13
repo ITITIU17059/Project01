@@ -21,8 +21,7 @@ public class BattleManager : MonoBehaviour
 
     public Transform PlayerHitPoint => playerHitPoint;
 
-    [Header("Battle Stats")]
-    public int currentShield = 0;
+
 
     private void Awake()
     {
@@ -81,8 +80,6 @@ public class BattleManager : MonoBehaviour
 
     private void StartBattle()
     {
-        currentShield = 0;
-
         BossManager.Instance.Initialize();
 
         StartCoroutine(deckManager.AddCardFromFirst());
@@ -91,8 +88,6 @@ public class BattleManager : MonoBehaviour
     private void StartPlayerTurn()
     {
         TurnUIController.Instance.ShowYourTurn();
-
-        deckManager.DrawCard(handManager);
 
         confirmButton.interactable = true;
     }
@@ -171,9 +166,9 @@ public class BattleManager : MonoBehaviour
         TurnUIController.Instance.ShowEnemyTurn();
 
         DOVirtual.DelayedCall(1.2f, () =>
-    {
-        ChangeState(BattleState.ResolveAttack);
-    });
+        {
+            ChangeState(BattleState.ResolveAttack);
+        });
     }
 
     private IEnumerator ResolveBossAttack()
@@ -181,15 +176,16 @@ public class BattleManager : MonoBehaviour
         yield return StartCoroutine(
             BossFXManager.Instance.PlayBossAttackFX());
 
-        int damage = Mathf.Max(
-            0,
-            BossManager.Instance.CurrentATK - currentShield);
+        int damage = BossManager.Instance.CurrentATK;
 
-        currentShield = 0;
-
-        if (damage == 0)
+        // Boss không còn ATK -> bỏ qua bước discard
+        if (damage <= 0)
         {
-            FinishDiscard(true);
+            Debug.Log("Boss ATK = 0, bỏ qua phản công.");
+
+            yield return new WaitForSeconds(0.5f);
+
+            ChangeState(BattleState.PlayerTurn);
             yield break;
         }
 
@@ -197,10 +193,7 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.8f);
 
-        DOVirtual.DelayedCall(1.2f, () =>
-    {
         handManager.StartDiscardPhase(damage);
-    });
     }
 
     private void CheckBattle()
@@ -265,7 +258,91 @@ public class BattleManager : MonoBehaviour
     #endregion
 
     #region Player Action
+    private IEnumerator ResolveSelectedCards()
+    {
+        List<CardSO> cards = new();
 
+        foreach (GameObject obj in handManager.selectedCards)
+        {
+            if (obj.TryGetComponent(out CardDisplay display))
+                cards.Add(display.cardScriptableObject);
+        }
+
+        ResolveCombo(cards);
+
+        foreach (GameObject obj in handManager.selectedCards)
+        {
+            if (obj.TryGetComponent(out CardDisplay display))
+            {
+                GraveyardManager.Instance.AddToGraveyard(display.cardScriptableObject);
+            }
+
+            CardFXManager.Instance.PlayAnimateToGraveyardFX(
+                obj,
+                graveyardSpawnPoint);
+        }
+
+        yield return new WaitForSeconds(0.3f);
+
+        handManager.ClearSelection();
+
+        ChangeState(BattleState.CheckBattle);
+    }
+    private void ResolveCombo(List<CardSO> cards)
+    {
+        int total = 0;
+
+        HashSet<CardSO.Suit> suits = new();
+
+        foreach (CardSO card in cards)
+        {
+            total += card.value;
+            suits.Add(card.suit);
+        }
+
+        //--------------------------------
+        // DAMAGE
+        //--------------------------------
+
+        int damage = total;
+
+        if (suits.Contains(CardSO.Suit.Clubs))
+            damage *= 2;
+
+        AttackBoss(damage);
+
+        //--------------------------------
+        // HEART
+        //--------------------------------
+
+        if (suits.Contains(CardSO.Suit.Hearts))
+            HealDeck(total);
+
+        //--------------------------------
+        // DIAMOND
+        //--------------------------------
+
+        if (suits.Contains(CardSO.Suit.Diamonds))
+            DrawBonusCards(total);
+
+        //--------------------------------
+        // SPADE
+        //--------------------------------
+
+        if (suits.Contains(CardSO.Suit.Spades))
+            ReduceBossAttack(total);
+    }
+    private void DrawBonusCards(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            deckManager.DrawCard(handManager);
+        }
+    }
+    private void ReduceBossAttack(int value)
+    {
+        BossManager.Instance.ReduceAttack(value);
+    }
     public void ConfirmPlayCards()
     {
         if (CurrentState != BattleState.PlayerTurn)
@@ -274,49 +351,67 @@ public class BattleManager : MonoBehaviour
         if (handManager.selectedCards.Count == 0)
             return;
 
+        List<CardSO> cards = new();
+
+        foreach (GameObject obj in handManager.selectedCards)
+        {
+            if (obj.TryGetComponent(out CardDisplay display))
+                cards.Add(display.cardScriptableObject);
+        }
+
+        if (!IsValidCombo(cards))
+        {
+            Debug.Log("Invalid Combo");
+            return;
+        }
+
         SoundManager.instance?.PlaySound2D("CardPlay");
         StartCoroutine(ResolveSelectedCards());
     }
-    private IEnumerator ResolveSelectedCards()
+    private bool IsValidCombo(List<CardSO> cards)
     {
-        confirmButton.interactable = false;
+        if (cards.Count == 0)
+            return false;
 
-        List<GameObject> playedCards = new(handManager.selectedCards);
+        if (cards.Count == 1)
+            return true;
 
-        foreach (GameObject cardObject in playedCards)
+        List<CardSO> aces = new();
+        List<CardSO> normals = new();
+
+        foreach (CardSO card in cards)
         {
-            if (!cardObject.TryGetComponent(out CardDisplay display))
-                continue;
-
-            CardSO card = display.cardScriptableObject;
-
-            // 1. VFX theo chất bài
-            yield return StartCoroutine(
-                BossFXManager.Instance.PlayCardSuitFX(card.suit.ToString(), cardObject.transform)
-            );
-
-            // 2. Áp dụng hiệu ứng lá bài
-            OnCardPlayed(card);
-
-            // 3. Đưa xuống Graveyard
-            GraveyardManager.Instance.AddToGraveyard(card);
-
-            CardFXManager.Instance.PlayAnimateToGraveyardFX(
-                cardObject,
-                graveyardSpawnPoint
-            );
-
-            // 4. Đợi animation hoàn thành
-            yield return new WaitForSeconds(0.25f);
+            if (card.value == 1)
+                aces.Add(card);
+            else
+                normals.Add(card);
         }
 
-        handManager.ClearSelection();
+        // Chỉ toàn Ace
+        if (normals.Count == 0)
+            return aces.Count <= 10;
 
-        yield return new WaitForSeconds(0.2f);
+        // Companion chỉ được 1 Ace
+        if (aces.Count > 1)
+            return false;
 
-        ChangeState(BattleState.CheckBattle);
+        int rank = normals[0].value;
+        int total = 0;
+
+        foreach (CardSO card in normals)
+        {
+            if (card.value != rank)
+                return false;
+
+            total += card.value;
+        }
+
+        if (aces.Count == 1)
+            return true;
+
+        // Không có Ace
+        return total <= 10;
     }
-
     public void FinishDiscard(bool success)
     {
         if (success)
@@ -337,33 +432,7 @@ public class BattleManager : MonoBehaviour
 
     #region Card Effect
 
-    public void OnCardPlayed(CardSO cardData)
-    {
-        int value = cardData.value;
-
-        switch (cardData.suit.ToString())
-        {
-            case "Hearts":
-                HealDeck(value);
-                AttackBoss(value);
-                break;
-
-            case "Diamonds":
-                AttackBoss(value);
-                DrawBonusCards(value);
-                break;
-
-            case "Spades":
-                AddShield(value);
-                AttackBoss(value);
-                break;
-
-            case "Clubs":
-                AttackBoss(value * 2);
-                break;
-        }
-    }
-
+   
     private void AttackBoss(int damage)
     {
         BossManager.Instance.TakeDamage(damage);
@@ -371,18 +440,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("Boss HP : " + BossManager.Instance.CurrentHP);
     }
 
-    private void AddShield(int value)
-    {
-        currentShield += value;
-
-        Debug.Log("Shield : " + currentShield);
-    }
-
-    private void DrawBonusCards(int amount)
-    {
-        for (int i = 0; i < amount; i++)
-            deckManager.DrawCard(handManager);
-    }
+  
 
     private void HealDeck(int amount)
     {

@@ -23,4 +23,8 @@ public class BossDisplay : MonoBehaviour
     {
         hpText.text = hp.ToString();
     }
+    public void UpdateATK(int atk)
+    {
+        atkText.text = atk.ToString();
+    }
 }
