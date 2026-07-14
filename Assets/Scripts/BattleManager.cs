@@ -88,7 +88,7 @@ public class BattleManager : MonoBehaviour
     private void StartPlayerTurn()
     {
         handManager.handCards.RemoveAll(card => card == null);
-
+        handManager.SetInteractable(true);
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -150,6 +150,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandleBossDeath()
     {
+        handManager.SetInteractable(false);
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
       
         yield return StartCoroutine(
@@ -158,7 +159,7 @@ public class BattleManager : MonoBehaviour
 
         bool changeStage =
             BossManager.Instance.NeedChangeStage(deadBoss);
-
+        handManager.SetInteractable(false);
         if (changeStage)
         {
             BossRank nextStage = deadBoss.rank;
@@ -237,6 +238,7 @@ public class BattleManager : MonoBehaviour
     #region Player Action
     private IEnumerator ResolveSelectedCards()
     {
+        handManager.SetInteractable(false);
         List<CardSO> cards = new();
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -305,10 +307,7 @@ public class BattleManager : MonoBehaviour
             deckManager.DrawCard(handManager);
         }
     }
-    private void ReduceBossAttack(int value)
-    {
-        BossManager.Instance.ReduceAttack(value);
-    }
+
     public void ConfirmPlayCards()
     {
         if (CurrentState != BattleState.PlayerTurn)
