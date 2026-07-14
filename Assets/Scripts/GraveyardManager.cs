@@ -22,9 +22,17 @@ public class GraveyardManager : MonoBehaviour
     public void AddToGraveyard(CardSO card)
     {
         graveyardCards.Add(card);
-        Debug.Log($"[Graveyard] Đã đưa lá {card.name} vào nghĩa địa. Tổng số bài trong mộ: {graveyardCards.Count}");
+        ShuffleGraveyard();
+    }
+    private void ShuffleGraveyard()
+    {
+        for (int i = graveyardCards.Count - 1; i > 0; i--)
+        {
+            int random = Random.Range(0, i + 1);
 
-        // TODO: Cập nhật hình ảnh lá bài trên cùng của đống bài hủy nếu cần
+            (graveyardCards[i], graveyardCards[random]) =
+                (graveyardCards[random], graveyardCards[i]);
+        }
     }
 
     // Hàm lấy bài ra để hồi phục (Dành cho chất Cơ - Hearts)

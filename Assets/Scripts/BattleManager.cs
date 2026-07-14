@@ -87,8 +87,15 @@ public class BattleManager : MonoBehaviour
 
     private void StartPlayerTurn()
     {
-        TurnUIController.Instance.ShowYourTurn();
+        handManager.handCards.RemoveAll(card => card == null);
 
+        if (handManager.handCards.Count == 0)
+        {
+            ChangeState(BattleState.Defeat);
+            return;
+        }
+
+        TurnUIController.Instance.ShowYourTurn();
         confirmButton.interactable = true;
     }
 
@@ -144,14 +151,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator HandleBossDeath()
     {
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
-        if (BossManager.Instance.LastKillWasPerfect)
-        {
-            deckManager.allCards.Insert(0, deadBoss.bossCard);
-        }
-        else
-        {
-            GraveyardManager.Instance.AddToGraveyard(deadBoss.bossCard);
-        }
+      
         yield return StartCoroutine(
             BossFXManager.Instance.PlayDeathFX(
                 BossManager.Instance.BossTransform));
@@ -178,22 +178,8 @@ public class BattleManager : MonoBehaviour
                 StageManager.Instance.ChangeStage(nextStage));
         }
 
-        bool hasNextBoss =
-            BossManager.Instance.LoadNextBoss();
+        bool hasNextBoss = BossManager.Instance.LoadNextBoss();
 
-        if (!hasNextBoss)
-        {
-            yield return StartCoroutine(
-                StageManager.Instance.VictoryStage());
-
-            ChangeState(BattleState.Victory);
-
-            yield break;
-        }
-        while (handManager.handCards.Count < handManager.maxHandSize)
-        {
-            deckManager.DrawCard(handManager);
-        }
         if (!hasNextBoss)
         {
             yield return StartCoroutine(StageManager.Instance.VictoryStage());
@@ -201,6 +187,41 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
+        // Rút bài trước
+        if (handManager.handCards.Count == 0)
+        {
+            while (handManager.handCards.Count < handManager.maxHandSize &&
+                   deckManager.allCards.Count > 0)
+            {
+                deckManager.DrawCard(handManager);
+            }
+        }
+        // Còn bài -> chỉ rút 2 lá
+        else
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                if (deckManager.allCards.Count == 0)
+                    break;
+
+                if (handManager.handCards.Count >= handManager.maxHandSize)
+                    break;
+
+                deckManager.DrawCard(handManager);
+            }
+        }
+
+        // Thêm Reward Card sau khi rút xong
+        if (BossManager.Instance.LastKillWasPerfect)
+        {
+            deckManager.allCards.Insert(0, deadBoss.bossCard);
+        }
+        else
+        {
+            GraveyardManager.Instance.AddToGraveyard(deadBoss.bossCard);
+        }
+
+        // Kiểm tra còn bài trên tay
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -208,7 +229,7 @@ public class BattleManager : MonoBehaviour
         }
 
         ChangeState(BattleState.PlayerTurn);
-       
+
     }
 
     #endregion
