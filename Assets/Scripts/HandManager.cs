@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Splines;
 using DG.Tweening;
 using System;
+using UnityEngine.UI;
 public class HandManager : MonoBehaviour
 {
     public int maxHandSize = 8;
@@ -10,6 +11,7 @@ public class HandManager : MonoBehaviour
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private SplineContainer splineContainer;
     [SerializeField] private Transform cardSpawnPoint;
+    [SerializeField] private Button confirmDiscardButton;
     private bool isDiscardMode = false;
     private int discardTarget = 0;
     private int discardCurrent = 0;
@@ -32,9 +34,16 @@ public class HandManager : MonoBehaviour
     {
 
     }
+    public bool canInteract { get; private set; } = true;
 
+    public void SetInteractable(bool value)
+    {
+        canInteract = value;
+    }
     public void SelectCard(GameObject cardObject)
     {
+        if (!canInteract && !isDiscardMode)
+            return;
 
         if (isDiscardMode)
         {
@@ -83,6 +92,10 @@ public class HandManager : MonoBehaviour
     // Hàm trả bài từ vùng chờ về lại trên tay (Nếu người chơi đổi ý click hủy)
     public void DeselectCard(GameObject cardObject)
     {
+        if (!canInteract && !isDiscardMode)
+            return;
+
+      
         if (isDiscardMode)
         {
             DeselectDiscardCard(cardObject);
@@ -223,21 +236,10 @@ public class HandManager : MonoBehaviour
         selectedCards.Clear();
         totalCardValue = 0;
 
-        Debug.Log("Discard Target = " + targetValue);
+        confirmDiscardButton.gameObject.SetActive(true);
+        confirmDiscardButton.interactable = false;
 
-        int total = 0;
-
-        foreach (GameObject card in handCards)
-        {
-            total += card.GetComponent<CardDisplay>()
-                         .cardScriptableObject.value;
-        }
-
-        if (total < targetValue)
-        {
-            BattleManager.Instance.FinishDiscard(false);
-            return;
-        }
+        RearrangeSelectedCards();
     }
 
     private void SelectDiscardCard(GameObject cardObject)
@@ -259,11 +261,9 @@ public class HandManager : MonoBehaviour
         RearrangeSelectedCards();
 
         Debug.Log($"Discard = {discardCurrent}/{discardTarget}");
+        confirmDiscardButton.interactable =
+    discardCurrent >= discardTarget;
 
-        if (discardCurrent >= discardTarget)
-        {
-            FinishDiscard();
-        }
     }
 
     private void DeselectDiscardCard(GameObject cardObject)
@@ -290,10 +290,20 @@ public class HandManager : MonoBehaviour
 
         RearrangeSelectedCards();
         RepositionAllCards(null);
-
+        confirmDiscardButton.interactable =
+    discardCurrent >= discardTarget;
         Debug.Log($"Discard = {discardCurrent}/{discardTarget}");
     }
+    public void ConfirmDiscard()
+    {
+        if (!isDiscardMode)
+            return;
 
+        if (discardCurrent < discardTarget)
+            return;
+
+        FinishDiscard();
+    }
     private void FinishDiscard()
     {
         foreach (GameObject card in selectedCards)
@@ -321,6 +331,7 @@ public class HandManager : MonoBehaviour
         RepositionAllCards(null);
 
         BattleManager.Instance.FinishDiscard(true);
+        confirmDiscardButton.gameObject.SetActive(false);
     }
 
     private bool CanSelectCard(int newValue)
