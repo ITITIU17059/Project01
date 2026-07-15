@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour
         SaveVolume();
 
         LevelManager.instance.LoadScene(
-            "SampleScene",
+            "CutScene",
             "CrossFade");
     }
 
