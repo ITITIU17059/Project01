@@ -11,18 +11,29 @@ public class GraveyardManager : MonoBehaviour
 
     [Header("Visual References (Optional)")]
     [SerializeField] private Transform graveyardSpawnPoint; // Vị trí đống bài hủy trên bàn bàn đấu
+    [SerializeField] private DeckBarUI discardDeckBar;
+    [SerializeField] private TarvernDeckManager deckManager;
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
+    private void Start()
+    {
+        Debug.Log("Graveyard Start");
+        discardDeckBar.Init(deckManager.allCards.Count);
+        discardDeckBar.UpdateBar(graveyardCards.Count);
+    }
 
     // Hàm thêm bài vào nghĩa địa
     public void AddToGraveyard(CardSO card)
     {
         graveyardCards.Add(card);
+
         ShuffleGraveyard();
+
+        discardDeckBar.UpdateBar(graveyardCards.Count);
     }
     private void ShuffleGraveyard()
     {
@@ -52,6 +63,7 @@ public class GraveyardManager : MonoBehaviour
 
             graveyardCards.RemoveAt(randomIndex);
             poppedCards.Add(card);
+            discardDeckBar.UpdateBar(graveyardCards.Count);
         }
 
         return poppedCards;
