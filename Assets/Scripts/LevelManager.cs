@@ -55,4 +55,9 @@ public class LevelManager : MonoBehaviour
         progressBar.gameObject.SetActive(false);
         yield return transition.AnimateTransitionOut();
     }
+
+    public void LoadBattleFromCutscene()
+    {
+        LoadScene("SampleScene", "CrossFade");
+    }
 }

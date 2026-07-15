@@ -6,6 +6,8 @@ public class MusicManager : MonoBehaviour
     public static MusicManager instance;
     [SerializeField] private MusicLibrary musicLibrary;
     [SerializeField] private AudioSource audioSource;
+    private float baseVolume = 1f;
+    private float musicMultiplier = 1f;
     private string currentTrack;
     private Coroutine fadeCoroutine;
 
@@ -68,11 +70,21 @@ public class MusicManager : MonoBehaviour
             t += Time.deltaTime;
 
             audioSource.volume =
-                Mathf.Lerp(0, startVolume, t / fadeDuration);
+                Mathf.Lerp(0, baseVolume * musicMultiplier, t / fadeDuration);
 
             yield return null;
         }
 
-        audioSource.volume = startVolume;
+        audioSource.volume = baseVolume * musicMultiplier;
+    }
+
+    public void SetMusicMultiplier(float multiplier)
+    {
+        musicMultiplier = Mathf.Clamp01(multiplier);
+        ApplyVolume();
+    }
+    private void ApplyVolume()
+    {
+        audioSource.volume = baseVolume * musicMultiplier;
     }
 }
