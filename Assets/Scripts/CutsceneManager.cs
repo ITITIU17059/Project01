@@ -26,6 +26,7 @@ public class CutsceneManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Image currentImage;
     [SerializeField] private Image nextImage;
+    [SerializeField] private Image fadePanel;
 
     [Header("Voice")]
     [SerializeField] private AudioSource voiceSource;
@@ -43,6 +44,9 @@ public class CutsceneManager : MonoBehaviour
 
     private void Start()
     {
+        Color color = fadePanel.color;
+        color.a = 0;
+        fadePanel.color = color;
         currentImage.sprite = frames[0].sprite;
 
         currentImage.color = Color.white;
@@ -93,7 +97,7 @@ public class CutsceneManager : MonoBehaviour
         {
             CutsceneFrame frame = frames[i];
 
-            yield return CrossFade(frame.sprite);
+            yield return ChangeImage(frame.sprite);
 
             if (frame.voiceClip != null)
             {
@@ -143,20 +147,19 @@ public class CutsceneManager : MonoBehaviour
             LevelManager.instance.LoadMainMenu();
     }
 
-    private IEnumerator CrossFade(Sprite nextSprite)
+    private IEnumerator ChangeImage(Sprite nextSprite)
     {
-        nextImage.sprite = nextSprite;
-        nextImage.color = new Color(1, 1, 1, 0);
+        // Fade sang đen
+        yield return fadePanel
+            .DOFade(1f, 0.25f)
+            .WaitForCompletion();
 
-        Sequence seq = DOTween.Sequence();
+        // Đổi ảnh
+        currentImage.sprite = nextSprite;
 
-        seq.Join(currentImage.DOFade(0, fadeTime));
-        seq.Join(nextImage.DOFade(1, fadeTime));
-
-        yield return seq.WaitForCompletion();
-
-        Image temp = currentImage;
-        currentImage = nextImage;
-        nextImage = temp;
+        // Fade trở lại
+        yield return fadePanel
+            .DOFade(0f, 0.25f)
+            .WaitForCompletion();
     }
 }
