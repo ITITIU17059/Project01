@@ -189,8 +189,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // Rút bài trước
-        Debug.Log("handWasEmptyAfterPlay = " + handWasEmptyAfterPlay);
-        Debug.Log("handCards.Count = " + handManager.handCards.Count);
+
         if (handWasEmptyAfterPlay)
         {
             while (handManager.handCards.Count < handManager.maxHandSize &&
@@ -243,9 +242,7 @@ public class BattleManager : MonoBehaviour
     {
         handManager.SetInteractable(false);
         handWasEmptyAfterPlay = handManager.handCards.Count == 0;
-        Debug.Log($"HAND = {handManager.handCards.Count}");
-        Debug.Log($"SELECTED = {handManager.selectedCards.Count}");
-        Debug.Log($"EMPTY = {handManager.handCards.Count == handManager.selectedCards.Count}");
+
         List<CardSO> cards = new();
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -268,7 +265,7 @@ public class BattleManager : MonoBehaviour
                 obj,
                 graveyardSpawnPoint);
         }
-        Debug.Log("After Remove = " + handManager.handCards.Count);
+    
         yield return new WaitForSeconds(0.55f);
 
         handManager.ClearSelection();
