@@ -20,7 +20,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Transform playerHitPoint;
 
     public Transform PlayerHitPoint => playerHitPoint;
-
+    private bool handWasEmptyAfterPlay;
 
 
     private void Awake()
@@ -87,8 +87,15 @@ public class BattleManager : MonoBehaviour
 
     private void StartPlayerTurn()
     {
-        TurnUIController.Instance.ShowYourTurn();
+        handManager.handCards.RemoveAll(card => card == null);
+        handManager.SetInteractable(true);
+        if (handManager.handCards.Count == 0)
+        {
+            ChangeState(BattleState.Defeat);
+            return;
+        }
 
+        TurnUIController.Instance.ShowYourTurn();
         confirmButton.interactable = true;
     }
 
@@ -104,6 +111,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator ResolveBossAttack()
     {
+        handManager.CancelCurrentSelection();
         yield return StartCoroutine(
             BossFXManager.Instance.PlayBossAttackFX());
 
@@ -142,22 +150,16 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandleBossDeath()
     {
+        handManager.SetInteractable(false);
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
-        if (BossManager.Instance.LastKillWasPerfect)
-        {
-            deckManager.allCards.Insert(0, deadBoss.bossCard);
-        }
-        else
-        {
-            GraveyardManager.Instance.AddToGraveyard(deadBoss.bossCard);
-        }
+      
         yield return StartCoroutine(
             BossFXManager.Instance.PlayDeathFX(
                 BossManager.Instance.BossTransform));
 
         bool changeStage =
             BossManager.Instance.NeedChangeStage(deadBoss);
-
+        handManager.SetInteractable(false);
         if (changeStage)
         {
             BossRank nextStage = deadBoss.rank;
@@ -177,18 +179,8 @@ public class BattleManager : MonoBehaviour
                 StageManager.Instance.ChangeStage(nextStage));
         }
 
-        bool hasNextBoss =
-            BossManager.Instance.LoadNextBoss();
+        bool hasNextBoss = BossManager.Instance.LoadNextBoss();
 
-        if (!hasNextBoss)
-        {
-            yield return StartCoroutine(
-                StageManager.Instance.VictoryStage());
-
-            ChangeState(BattleState.Victory);
-
-            yield break;
-        }
         if (!hasNextBoss)
         {
             yield return StartCoroutine(StageManager.Instance.VictoryStage());
@@ -196,6 +188,42 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
+        // Rút bài trước
+        if (handWasEmptyAfterPlay)
+        {
+            while (handManager.handCards.Count < handManager.maxHandSize &&
+                   deckManager.allCards.Count > 0)
+            {
+                deckManager.DrawCard(handManager);
+            }
+        }
+        // Còn bài -> chỉ rút 2 lá
+        else
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                if (deckManager.allCards.Count == 0)
+                    break;
+
+                if (handManager.handCards.Count >= handManager.maxHandSize)
+                    break;
+
+                deckManager.DrawCard(handManager);
+            }
+        }
+
+        // Thêm Reward Card sau khi rút xong
+        if (BossManager.Instance.LastKillWasPerfect)
+        {
+            deckManager.allCards.Insert(0, deadBoss.bossCard);
+            deckManager.RefreshDeckBar();
+        }
+        else
+        {
+            GraveyardManager.Instance.AddToGraveyard(deadBoss.bossCard);
+        }
+
+        // Kiểm tra còn bài trên tay
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -203,7 +231,7 @@ public class BattleManager : MonoBehaviour
         }
 
         ChangeState(BattleState.PlayerTurn);
-       
+
     }
 
     #endregion
@@ -211,6 +239,8 @@ public class BattleManager : MonoBehaviour
     #region Player Action
     private IEnumerator ResolveSelectedCards()
     {
+        handManager.SetInteractable(false);
+   
         List<CardSO> cards = new();
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -218,7 +248,9 @@ public class BattleManager : MonoBehaviour
             if (obj.TryGetComponent(out CardDisplay display))
                 cards.Add(display.cardScriptableObject);
         }
-
+         handWasEmptyAfterPlay =
+        handManager.handCards.Count ==
+        handManager.selectedCards.Count;
         ResolveCombo(cards);
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -241,6 +273,9 @@ public class BattleManager : MonoBehaviour
     }
     private void ResolveCombo(List<CardSO> cards)
     {
+        bool handEmptyAfterPlay =
+    handManager.handCards.Count ==
+    handManager.selectedCards.Count;
         CardSO.Suit resist = BossManager.Instance.CurrentBoss.resistanceSuit;
 
         int total = 0;
@@ -279,10 +314,7 @@ public class BattleManager : MonoBehaviour
             deckManager.DrawCard(handManager);
         }
     }
-    private void ReduceBossAttack(int value)
-    {
-        BossManager.Instance.ReduceAttack(value);
-    }
+
     public void ConfirmPlayCards()
     {
         if (CurrentState != BattleState.PlayerTurn)
@@ -313,6 +345,7 @@ public class BattleManager : MonoBehaviour
         if (cards.Count == 0)
             return false;
 
+        // 1 lá luôn hợp lệ (kể cả J, Q, K)
         if (cards.Count == 1)
             return true;
 
@@ -329,9 +362,12 @@ public class BattleManager : MonoBehaviour
 
         // Chỉ toàn Ace
         if (normals.Count == 0)
-            return aces.Count <= 10;
+        {
+            int totalAce = aces.Count;
+            return totalAce <= 10;
+        }
 
-        // Companion chỉ được 1 Ace
+        // Chỉ được 1 Ace Companion
         if (aces.Count > 1)
             return false;
 
@@ -346,10 +382,11 @@ public class BattleManager : MonoBehaviour
             total += card.value;
         }
 
+        // Có Ace Companion thì bỏ qua giới hạn <=10
         if (aces.Count == 1)
             return true;
 
-        // Không có Ace
+        // Không có Ace thì tổng phải <=10
         return total <= 10;
     }
     public void FinishDiscard(bool success)
@@ -403,6 +440,7 @@ public class BattleManager : MonoBehaviour
         );
 
         deckManager.ShuffleDeck();
+        deckManager.RefreshDeckBar();
     }
 
     #endregion

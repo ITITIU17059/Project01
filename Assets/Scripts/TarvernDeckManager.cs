@@ -6,12 +6,14 @@ public class TarvernDeckManager : MonoBehaviour
 {
     public List<CardSO> allCards = new();
     [SerializeField] private HandManager handManager;
-
+    [SerializeField] private DeckBarUI drawDeckBar;
     private void Start()
     {
         CardSO[] cards = Resources.LoadAll<CardSO>("CardSO");
         allCards.AddRange(cards);
         ShuffleDeck();
+        drawDeckBar.Init(allCards.Count);
+        drawDeckBar.UpdateBar(allCards.Count);
     }
 
     public void DrawCard(HandManager handManager)
@@ -30,7 +32,8 @@ public class TarvernDeckManager : MonoBehaviour
 
         // Xóa ngay lập tức lá đó khỏi bộ bài rút
         allCards.RemoveAt(0);
-
+        // Cập nhật thanh deck
+        drawDeckBar.UpdateBar(allCards.Count);
         // Thêm vào tay người chơi
         handManager.AddCardToHand(nextCard);
     }
@@ -45,7 +48,10 @@ public class TarvernDeckManager : MonoBehaviour
             allCards[randomIndex] = temp;
         }
     }
-
+    public void RefreshDeckBar()
+    {
+        drawDeckBar.UpdateBar(allCards.Count);
+    }
     public IEnumerator AddCardFromFirst(float duration = 0.3f)
     {
         for (int i = 0; i < handManager.maxHandSize; i++)

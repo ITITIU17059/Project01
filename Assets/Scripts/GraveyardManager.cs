@@ -11,20 +11,39 @@ public class GraveyardManager : MonoBehaviour
 
     [Header("Visual References (Optional)")]
     [SerializeField] private Transform graveyardSpawnPoint; // Vị trí đống bài hủy trên bàn bàn đấu
+    [SerializeField] private DeckBarUI discardDeckBar;
+    [SerializeField] private TarvernDeckManager deckManager;
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
+    private void Start()
+    {
+        Debug.Log("Graveyard Start");
+        discardDeckBar.Init(deckManager.allCards.Count);
+        discardDeckBar.UpdateBar(graveyardCards.Count);
+    }
 
     // Hàm thêm bài vào nghĩa địa
     public void AddToGraveyard(CardSO card)
     {
         graveyardCards.Add(card);
-        Debug.Log($"[Graveyard] Đã đưa lá {card.name} vào nghĩa địa. Tổng số bài trong mộ: {graveyardCards.Count}");
 
-        // TODO: Cập nhật hình ảnh lá bài trên cùng của đống bài hủy nếu cần
+        ShuffleGraveyard();
+
+        discardDeckBar.UpdateBar(graveyardCards.Count);
+    }
+    private void ShuffleGraveyard()
+    {
+        for (int i = graveyardCards.Count - 1; i > 0; i--)
+        {
+            int random = Random.Range(0, i + 1);
+
+            (graveyardCards[i], graveyardCards[random]) =
+                (graveyardCards[random], graveyardCards[i]);
+        }
     }
 
     // Hàm lấy bài ra để hồi phục (Dành cho chất Cơ - Hearts)
@@ -44,6 +63,7 @@ public class GraveyardManager : MonoBehaviour
 
             graveyardCards.RemoveAt(randomIndex);
             poppedCards.Add(card);
+            discardDeckBar.UpdateBar(graveyardCards.Count);
         }
 
         return poppedCards;

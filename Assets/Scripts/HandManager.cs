@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Splines;
 using DG.Tweening;
 using System;
+using UnityEngine.UI;
 public class HandManager : MonoBehaviour
 {
     public int maxHandSize = 8;
@@ -10,6 +11,7 @@ public class HandManager : MonoBehaviour
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private SplineContainer splineContainer;
     [SerializeField] private Transform cardSpawnPoint;
+    [SerializeField] private Button confirmDiscardButton;
     private bool isDiscardMode = false;
     private int discardTarget = 0;
     private int discardCurrent = 0;
@@ -32,9 +34,17 @@ public class HandManager : MonoBehaviour
     {
 
     }
+    public bool canInteract { get; private set; } = true;
 
+    public void SetInteractable(bool value)
+    {
+        canInteract = value;
+    }
     public void SelectCard(GameObject cardObject)
     {
+        if (!canInteract && !isDiscardMode)
+            return;
+
         if (isDiscardMode)
         {
             SelectDiscardCard(cardObject);
@@ -82,6 +92,10 @@ public class HandManager : MonoBehaviour
     // Hàm trả bài từ vùng chờ về lại trên tay (Nếu người chơi đổi ý click hủy)
     public void DeselectCard(GameObject cardObject)
     {
+        if (!canInteract && !isDiscardMode)
+            return;
+
+      
         if (isDiscardMode)
         {
             DeselectDiscardCard(cardObject);
@@ -222,21 +236,24 @@ public class HandManager : MonoBehaviour
         selectedCards.Clear();
         totalCardValue = 0;
 
-        Debug.Log("Discard Target = " + targetValue);
-
-        int total = 0;
+        int totalValue = 0;
 
         foreach (GameObject card in handCards)
         {
-            total += card.GetComponent<CardDisplay>()
-                         .cardScriptableObject.value;
+            totalValue += card.GetComponent<CardDisplay>()
+                              .cardScriptableObject.value;
         }
 
-        if (total < targetValue)
+        if (totalValue < discardTarget)
         {
             BattleManager.Instance.FinishDiscard(false);
             return;
         }
+
+        confirmDiscardButton.gameObject.SetActive(true);
+        confirmDiscardButton.interactable = false;
+
+        RearrangeSelectedCards();
     }
 
     private void SelectDiscardCard(GameObject cardObject)
@@ -258,11 +275,9 @@ public class HandManager : MonoBehaviour
         RearrangeSelectedCards();
 
         Debug.Log($"Discard = {discardCurrent}/{discardTarget}");
+        confirmDiscardButton.interactable =
+    discardCurrent >= discardTarget;
 
-        if (discardCurrent >= discardTarget)
-        {
-            FinishDiscard();
-        }
     }
 
     private void DeselectDiscardCard(GameObject cardObject)
@@ -289,10 +304,20 @@ public class HandManager : MonoBehaviour
 
         RearrangeSelectedCards();
         RepositionAllCards(null);
-
+        confirmDiscardButton.interactable =
+    discardCurrent >= discardTarget;
         Debug.Log($"Discard = {discardCurrent}/{discardTarget}");
     }
+    public void ConfirmDiscard()
+    {
+        if (!isDiscardMode)
+            return;
 
+        if (discardCurrent < discardTarget)
+            return;
+
+        FinishDiscard();
+    }
     private void FinishDiscard()
     {
         foreach (GameObject card in selectedCards)
@@ -320,43 +345,75 @@ public class HandManager : MonoBehaviour
         RepositionAllCards(null);
 
         BattleManager.Instance.FinishDiscard(true);
+        confirmDiscardButton.gameObject.SetActive(false);
     }
 
     private bool CanSelectCard(int newValue)
     {
+        // Chưa chọn lá nào -> luôn được chọn
+        if (selectedCards.Count == 0)
+            return true;
+
+        int aceCount = 0;
         int mainValue = -1;
+        int total = 0;
 
         foreach (GameObject card in selectedCards)
         {
             int value = card.GetComponent<CardDisplay>()
                             .cardScriptableObject.value;
 
-            if (value != 1)
-            {
+            total += value;
+
+            if (value == 1)
+                aceCount++;
+            else if (mainValue == -1)
                 mainValue = value;
-                break;
-            }
         }
 
-        // Ace luôn được phép
+        // ==========================
+        // Chọn Ace
+        // ==========================
+
         if (newValue == 1)
-            return true;
-
-        int total = 0;
-
-        foreach (GameObject card in selectedCards)
         {
-            total += card.GetComponent<CardDisplay>()
-                         .cardScriptableObject.value;
+            // Chỉ được 1 Ace Companion
+            if (mainValue != -1)
+                return aceCount == 0;
+
+            // Chỉ toàn Ace
+            return aceCount + 1 <= 10;
         }
+
+        // ==========================
+        // Đã có Ace nhưng chưa có bài chính
+        // ==========================
 
         if (mainValue == -1)
-            return total + newValue <= 10;
+        {
+            return true;
+        }
 
-        return newValue == mainValue &&
-               total + newValue <= 10;
+        // ==========================
+        // Phải cùng số
+        // ==========================
+
+        if (newValue != mainValue)
+            return false;
+
+        // Nếu đã có Ace Companion thì bỏ giới hạn <=10
+        if (aceCount == 1)
+            return true;
+
+        return total + newValue <= 10;
     }
-
+    public void CancelCurrentSelection()
+    {
+        while (selectedCards.Count > 0)
+        {
+            DeselectCard(selectedCards[0]);
+        }
+    }
     public void ClearSelection()
     {
         selectedCards.Clear();
