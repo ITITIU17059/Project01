@@ -255,6 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CutsceneManager
   currentImage: {fileID: 1499861810}
   nextImage: {fileID: 1253551759}
+  fadePanel: {fileID: 1969160188}
   voiceSource: {fileID: 1150278093}
   introMusicName: IntroTheme
   frames:
@@ -1167,7 +1168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 812.19, y: 471.66}
+  m_AnchoredPosition: {x: 799, y: 455}
   m_SizeDelta: {x: 295.6239, y: 136.6871}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1325093005

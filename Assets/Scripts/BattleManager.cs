@@ -152,7 +152,7 @@ public class BattleManager : MonoBehaviour
     {
         handManager.SetInteractable(false);
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
-      
+    
         yield return StartCoroutine(
             BossFXManager.Instance.PlayDeathFX(
                 BossManager.Instance.BossTransform));
@@ -189,6 +189,8 @@ public class BattleManager : MonoBehaviour
         }
 
         // Rút bài trước
+        Debug.Log("handWasEmptyAfterPlay = " + handWasEmptyAfterPlay);
+        Debug.Log("handCards.Count = " + handManager.handCards.Count);
         if (handWasEmptyAfterPlay)
         {
             while (handManager.handCards.Count < handManager.maxHandSize &&
@@ -240,7 +242,10 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ResolveSelectedCards()
     {
         handManager.SetInteractable(false);
-   
+        handWasEmptyAfterPlay = handManager.handCards.Count == 0;
+        Debug.Log($"HAND = {handManager.handCards.Count}");
+        Debug.Log($"SELECTED = {handManager.selectedCards.Count}");
+        Debug.Log($"EMPTY = {handManager.handCards.Count == handManager.selectedCards.Count}");
         List<CardSO> cards = new();
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -248,13 +253,12 @@ public class BattleManager : MonoBehaviour
             if (obj.TryGetComponent(out CardDisplay display))
                 cards.Add(display.cardScriptableObject);
         }
-         handWasEmptyAfterPlay =
-        handManager.handCards.Count ==
-        handManager.selectedCards.Count;
+
         ResolveCombo(cards);
 
         foreach (GameObject obj in handManager.selectedCards)
         {
+            handManager.handCards.Remove(obj);
             if (obj.TryGetComponent(out CardDisplay display))
             {
                 GraveyardManager.Instance.AddToGraveyard(display.cardScriptableObject);
@@ -264,8 +268,8 @@ public class BattleManager : MonoBehaviour
                 obj,
                 graveyardSpawnPoint);
         }
-
-        yield return new WaitForSeconds(0.3f);
+        Debug.Log("After Remove = " + handManager.handCards.Count);
+        yield return new WaitForSeconds(0.55f);
 
         handManager.ClearSelection();
 
@@ -273,9 +277,7 @@ public class BattleManager : MonoBehaviour
     }
     private void ResolveCombo(List<CardSO> cards)
     {
-        bool handEmptyAfterPlay =
-    handManager.handCards.Count ==
-    handManager.selectedCards.Count;
+
         CardSO.Suit resist = BossManager.Instance.CurrentBoss.resistanceSuit;
 
         int total = 0;

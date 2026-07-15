@@ -137,8 +137,6 @@ public class CutsceneManager : MonoBehaviour
         if (voiceSource != null)
             voiceSource.Stop();
 
-        Debug.Log("MusicManager = " + MusicManager.instance);
-        Debug.Log("LevelManager = " + LevelManager.instance);
 
         if (MusicManager.instance != null)
             MusicManager.instance.SetMusicMultiplier(1f);
