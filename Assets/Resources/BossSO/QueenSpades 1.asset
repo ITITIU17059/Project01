@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
+  m_Name: QueenSpades 1
+  m_EditorClassIdentifier: Assembly-CSharp::BossSO
+  bossName: The Joker
+  cardSprite: {fileID: -6462194140118145075, guid: 0a9f990126a3f3d498088ba8b5599203, type: 3}
+  suit: 0
+  hp: 50
+  atk: 30
+  bossCard: {fileID: 11400000, guid: 296ab2682a3265848aaedb96c91c0d9b, type: 2}
+  resistanceSuit: 0
+  currentATK: 15
+  attackVFX: {fileID: 4594704501983483620, guid: 954291805dc81d94ca2e962e727fc65a, type: 3}
+  hitVFX: {fileID: 3699248822550756291, guid: 19c0cba23b6e74a4a9ce9035e3844aad, type: 3}
+  attackSoundID: QueenAttack
+  attackFlyTime: 0.4
+  rank: 3
+  spawnSoundID: Queen
