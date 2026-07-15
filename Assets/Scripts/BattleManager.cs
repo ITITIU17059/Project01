@@ -20,7 +20,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Transform playerHitPoint;
 
     public Transform PlayerHitPoint => playerHitPoint;
-
+    private bool handWasEmptyAfterPlay;
 
 
     private void Awake()
@@ -189,7 +189,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // Rút bài trước
-        if (handManager.handCards.Count == 0)
+        if (handWasEmptyAfterPlay)
         {
             while (handManager.handCards.Count < handManager.maxHandSize &&
                    deckManager.allCards.Count > 0)
@@ -216,6 +216,7 @@ public class BattleManager : MonoBehaviour
         if (BossManager.Instance.LastKillWasPerfect)
         {
             deckManager.allCards.Insert(0, deadBoss.bossCard);
+            deckManager.RefreshDeckBar();
         }
         else
         {
@@ -239,6 +240,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ResolveSelectedCards()
     {
         handManager.SetInteractable(false);
+   
         List<CardSO> cards = new();
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -246,7 +248,9 @@ public class BattleManager : MonoBehaviour
             if (obj.TryGetComponent(out CardDisplay display))
                 cards.Add(display.cardScriptableObject);
         }
-
+         handWasEmptyAfterPlay =
+        handManager.handCards.Count ==
+        handManager.selectedCards.Count;
         ResolveCombo(cards);
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -269,6 +273,9 @@ public class BattleManager : MonoBehaviour
     }
     private void ResolveCombo(List<CardSO> cards)
     {
+        bool handEmptyAfterPlay =
+    handManager.handCards.Count ==
+    handManager.selectedCards.Count;
         CardSO.Suit resist = BossManager.Instance.CurrentBoss.resistanceSuit;
 
         int total = 0;
@@ -433,6 +440,7 @@ public class BattleManager : MonoBehaviour
         );
 
         deckManager.ShuffleDeck();
+        deckManager.RefreshDeckBar();
     }
 
     #endregion

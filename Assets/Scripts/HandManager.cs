@@ -236,6 +236,20 @@ public class HandManager : MonoBehaviour
         selectedCards.Clear();
         totalCardValue = 0;
 
+        int totalValue = 0;
+
+        foreach (GameObject card in handCards)
+        {
+            totalValue += card.GetComponent<CardDisplay>()
+                              .cardScriptableObject.value;
+        }
+
+        if (totalValue < discardTarget)
+        {
+            BattleManager.Instance.FinishDiscard(false);
+            return;
+        }
+
         confirmDiscardButton.gameObject.SetActive(true);
         confirmDiscardButton.interactable = false;
 
