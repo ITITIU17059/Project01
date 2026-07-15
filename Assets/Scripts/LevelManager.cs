@@ -56,8 +56,13 @@ public class LevelManager : MonoBehaviour
         yield return transition.AnimateTransitionOut();
     }
 
-    public void LoadBattleFromCutscene()
+    public void LoadMainMenu()
     {
-        LoadScene("SampleScene", "CrossFade");
+        LoadScene("MenuScene", "CrossFade");
+    }
+
+    public void LoadBattle()
+    {
+        LoadScene("BattleScene", "CrossFade");
     }
 }

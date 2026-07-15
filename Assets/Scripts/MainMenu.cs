@@ -20,9 +20,7 @@ public class MainMenu : MonoBehaviour
     {
         SaveVolume();
 
-        LevelManager.instance.LoadScene(
-            "CutScene",
-            "CrossFade");
+        LevelManager.instance.LoadBattle();
     }
 
     public void Exit()

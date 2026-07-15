@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CutsceneManager : MonoBehaviour
@@ -50,11 +51,9 @@ public class CutsceneManager : MonoBehaviour
         c.a = 0;
         nextImage.color = c;
 
-        MusicManager.instance.SetMusicMultiplier(0.25f);
-
-
         if (MusicManager.instance != null)
         {
+            MusicManager.instance.SetMusicMultiplier(0.25f);
             MusicManager.instance.PlayMusic(introMusicName, 1f);
         }
 
@@ -131,10 +130,17 @@ public class CutsceneManager : MonoBehaviour
 
         StopAllCoroutines();
 
-        voiceSource.Stop();
+        if (voiceSource != null)
+            voiceSource.Stop();
 
-        MusicManager.instance.SetMusicMultiplier(1f);
-        LevelManager.instance.LoadBattleFromCutscene();
+        Debug.Log("MusicManager = " + MusicManager.instance);
+        Debug.Log("LevelManager = " + LevelManager.instance);
+
+        if (MusicManager.instance != null)
+            MusicManager.instance.SetMusicMultiplier(1f);
+
+        if (LevelManager.instance != null)
+            LevelManager.instance.LoadMainMenu();
     }
 
     private IEnumerator CrossFade(Sprite nextSprite)
