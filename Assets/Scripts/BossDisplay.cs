@@ -8,18 +8,24 @@ public class BossDisplay : MonoBehaviour
     [SerializeField] private TMP_Text hpText;
     [SerializeField] private TMP_Text atkText;
     [SerializeField] private TMP_Text bossNameText;
+    public SpriteRenderer Artwork => artwork;
 
     private BossSO boss;
 
     public void Setup(BossSO data)
     {
+        ResetUI();
+
+        transform.localScale = Vector3.one;
+        transform.rotation = Quaternion.identity;
+
         boss = data;
 
         artwork.sprite = boss.cardSprite;
         hpText.text = boss.hp.ToString();
         atkText.text = boss.atk.ToString();
         bossNameText.text = GetBossName(boss);
-       
+
     }
     private string GetBossName(BossSO boss)
     {
@@ -33,5 +39,21 @@ public class BossDisplay : MonoBehaviour
     public void UpdateATK(int atk)
     {
         atkText.text = atk.ToString();
+    }
+
+    public void ShowRewardCard(CardSO rewardCard)
+    {
+        artwork.sprite = rewardCard.cardSprite;
+
+        hpText.gameObject.SetActive(false);
+        atkText.gameObject.SetActive(false);
+        bossNameText.gameObject.SetActive(false);
+    }
+
+    public void ResetUI()
+    {
+        hpText.gameObject.SetActive(true);
+        atkText.gameObject.SetActive(true);
+        bossNameText.gameObject.SetActive(true);
     }
 }

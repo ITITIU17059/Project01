@@ -152,10 +152,21 @@ public class BattleManager : MonoBehaviour
     {
         handManager.SetInteractable(false);
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
-      
-        yield return StartCoroutine(
-            BossFXManager.Instance.PlayDeathFX(
-                BossManager.Instance.BossTransform));
+
+        yield return BossFXManager.Instance
+    .PlayDeathFX(
+        BossManager.Instance.BossTransform);
+
+        Transform target =
+        BossManager.Instance.LastKillWasPerfect
+            ? tavernSpawnPoint
+            : graveyardSpawnPoint;
+
+        yield return BossFXManager.Instance
+            .PlayCollectRewardFX(
+                BossManager.Instance.BossDisplay,
+                deadBoss.bossCard,
+                target);
 
         bool changeStage =
             BossManager.Instance.NeedChangeStage(deadBoss);
@@ -240,7 +251,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ResolveSelectedCards()
     {
         handManager.SetInteractable(false);
-   
+
         List<CardSO> cards = new();
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -248,9 +259,9 @@ public class BattleManager : MonoBehaviour
             if (obj.TryGetComponent(out CardDisplay display))
                 cards.Add(display.cardScriptableObject);
         }
-         handWasEmptyAfterPlay =
-        handManager.handCards.Count ==
-        handManager.selectedCards.Count;
+        handWasEmptyAfterPlay =
+       handManager.handCards.Count ==
+       handManager.selectedCards.Count;
         ResolveCombo(cards);
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -409,7 +420,7 @@ public class BattleManager : MonoBehaviour
 
     #region Card Effect
 
-   
+
     private void AttackBoss(int damage)
     {
         BossManager.Instance.TakeDamage(damage);
@@ -417,7 +428,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("Boss HP : " + BossManager.Instance.CurrentHP);
     }
 
-  
+
 
     private void HealDeck(int amount)
     {
