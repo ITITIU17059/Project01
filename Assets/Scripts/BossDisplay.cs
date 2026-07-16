@@ -34,7 +34,6 @@ public class BossDisplay : MonoBehaviour
     {
         atkText.text = atk.ToString();
     }
-<<<<<<< HEAD
 
     public void ResetUI()
     {
@@ -42,6 +41,5 @@ public class BossDisplay : MonoBehaviour
         atkText.gameObject.SetActive(true);
         bossNameText.gameObject.SetActive(true);
     }
-=======
->>>>>>> parent of aa29897 (Thêm hiệu ứng boss bay vào bộ bài)
+
 }
