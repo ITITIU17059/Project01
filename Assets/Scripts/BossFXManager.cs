@@ -11,7 +11,6 @@ public class BossFXManager : MonoBehaviour
     [SerializeField] private GameObject diamondVFX;
     [SerializeField] private GameObject clubVFX;
     [SerializeField] private GameObject spadeVFX;
-    [SerializeField] private GameObject bossAttackVFXPrefab;
 
     private void Awake()
     {
@@ -21,46 +20,46 @@ public class BossFXManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private string GetAttackSound(string suit)
+    private string GetAttackSound(CardSO.Suit suit)
     {
         switch (suit)
         {
-            case "Hearts":
+            case CardSO.Suit.Hearts:
                 return "HeartAttack";
 
-            case "Diamonds":
+            case CardSO.Suit.Diamonds:
                 return "DiamondAttack";
 
-            case "Clubs":
+            case CardSO.Suit.Clubs:
                 return "ClubAttack";
 
-            case "Spades":
+            case CardSO.Suit.Spades:
                 return "SpadeAttack";
         }
 
         return null;
     }
 
-    public IEnumerator PlayCardSuitFX(string suit, Transform cardTransform)
+    public IEnumerator PlayCardSuitFX(CardSO card, Transform cardTransform)
     {
         GameObject prefab = null;
 
-        switch (suit)
+        switch (card.suit)
         {
-            case "Hearts":
+            case CardSO.Suit.Hearts:
                 prefab = heartVFX;
                 break;
 
-            case "Diamonds":
+            case CardSO.Suit.Diamonds:
                 prefab = diamondVFX;
                 break;
 
-            case "Spades":
-                prefab = spadeVFX;
+            case CardSO.Suit.Clubs:
+                prefab = clubVFX;
                 break;
 
-            case "Clubs":
-                prefab = clubVFX;
+            case CardSO.Suit.Spades:
+                prefab = spadeVFX;
                 break;
         }
 
@@ -84,7 +83,7 @@ public class BossFXManager : MonoBehaviour
 
         Destroy(fx);
 
-        string soundID = GetAttackSound(suit);
+        string soundID = GetAttackSound(card.suit);
 
         if (!string.IsNullOrEmpty(soundID))
         {
@@ -175,9 +174,9 @@ public class BossFXManager : MonoBehaviour
             BossManager.Instance.BossTransform.position,
             Quaternion.identity);
 
-        SoundManager.instance?.PlaySound2D(
-            boss.attackSoundID);
+        SoundManager.instance?.PlaySound2D(boss.attackSoundID);
 
+        // Bay tới người chơi
         yield return fx.transform
             .DOMove(
                 BattleManager.Instance.PlayerHitPoint.position,
@@ -185,21 +184,24 @@ public class BossFXManager : MonoBehaviour
             .SetEase(Ease.InQuad)
             .WaitForCompletion();
 
-        Destroy(fx);
+        // Giữ hiệu ứng đúng vị trí người chơi
+        fx.transform.position = BattleManager.Instance.PlayerHitPoint.position;
 
-        if (boss.hitVFX != null)
+        // Nếu prefab có ParticleSystem thì dừng việc phát thêm hạt mới
+        ParticleSystem[] systems = fx.GetComponentsInChildren<ParticleSystem>();
+
+        foreach (ParticleSystem ps in systems)
         {
-            Instantiate(
-                boss.hitVFX,
-                BattleManager.Instance.PlayerHitPoint.position,
-                Quaternion.identity);
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
 
-        PlayPlayerHitFX(
-            BattleManager.Instance.PlayerHitPoint);
+        // Hiệu ứng rung người chơi
+        PlayPlayerHitFX(BattleManager.Instance.PlayerHitPoint);
 
-        // Đợi Hit VFX chạy xong
-        yield return new WaitForSeconds(0.7f);
+        // Đợi Particle hiện tại chạy hết
+        yield return new WaitForSeconds(GetEffectDuration(fx));
+
+        Destroy(fx);
     }
 
     private void PlayPlayerHitFX(Transform player)
@@ -298,5 +300,26 @@ public class BossFXManager : MonoBehaviour
             0.2f);
 
         Destroy(reward);
+    }
+
+    private float GetEffectDuration(GameObject effect)
+    {
+        float maxDuration = 0f;
+
+        ParticleSystem[] systems = effect.GetComponentsInChildren<ParticleSystem>(true);
+
+        foreach (ParticleSystem ps in systems)
+        {
+            var main = ps.main;
+
+            float duration =
+                main.duration +
+                main.startLifetime.constantMax;
+
+            if (duration > maxDuration)
+                maxDuration = duration;
+        }
+
+        return Mathf.Max(maxDuration, 0.1f);
     }
 }

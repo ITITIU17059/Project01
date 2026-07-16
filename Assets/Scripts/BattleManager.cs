@@ -167,9 +167,9 @@ public class BattleManager : MonoBehaviour
                 deadBoss.bossCard,
                 target);
 
-        bool changeStage =
-            BossManager.Instance.NeedChangeStage(deadBoss);
+        bool changeStage = BossManager.Instance.NeedChangeStage(deadBoss);
         handManager.SetInteractable(false);
+
         if (changeStage)
         {
             BossRank nextStage = deadBoss.rank;
@@ -261,9 +261,9 @@ public class BattleManager : MonoBehaviour
                 cards.Add(display.cardScriptableObject);
         }
         handWasEmptyAfterPlay =
-       handManager.handCards.Count ==
-       handManager.selectedCards.Count;
-        ResolveCombo(cards);
+        handManager.handCards.Count ==
+        handManager.selectedCards.Count;
+        yield return StartCoroutine(ResolveCombo(cards));
 
         foreach (GameObject obj in handManager.selectedCards)
         {
@@ -284,39 +284,69 @@ public class BattleManager : MonoBehaviour
 
         ChangeState(BattleState.CheckBattle);
     }
-    private void ResolveCombo(List<CardSO> cards)
+    private IEnumerator ResolveCombo(List<CardSO> cards)
     {
-
         CardSO.Suit resist = BossManager.Instance.CurrentBoss.resistanceSuit;
 
         int total = 0;
         int damage = 0;
 
-        HashSet<CardSO.Suit> suits = new();
+        bool hasHeart = false;
+        bool hasDiamond = false;
+        bool hasClub = false;
+        bool hasSpade = false;
 
         foreach (CardSO card in cards)
         {
             total += card.value;
-            damage += card.value;      // Damage luôn tính
+            damage += card.value;
 
-            // Chỉ hiệu ứng mới bị kháng
-            if (card.suit != resist)
-                suits.Add(card.suit);
+            if (card.suit == resist)
+                continue;
+
+            switch (card.suit)
+            {
+                case CardSO.Suit.Hearts:
+                    hasHeart = true;
+                    break;
+
+                case CardSO.Suit.Diamonds:
+                    hasDiamond = true;
+                    break;
+
+                case CardSO.Suit.Clubs:
+                    hasClub = true;
+                    break;
+
+                case CardSO.Suit.Spades:
+                    hasSpade = true;
+                    break;
+            }
         }
 
-        if (suits.Contains(CardSO.Suit.Clubs))
+        if (hasClub)
             damage *= 2;
 
-        AttackBoss(damage);
+        BossManager.Instance.TakeDamage(damage);
 
-        if (suits.Contains(CardSO.Suit.Hearts))
+        if (hasHeart)
             HealDeck(total);
 
-        if (suits.Contains(CardSO.Suit.Diamonds))
+        if (hasDiamond)
             DrawBonusCards(total);
 
-        if (suits.Contains(CardSO.Suit.Spades))
+        if (hasSpade)
             BossManager.Instance.ReduceAttack(total);
+
+        // Chạy animation theo đúng thứ tự bài đánh
+        foreach (GameObject obj in handManager.selectedCards)
+        {
+            CardDisplay display = obj.GetComponent<CardDisplay>();
+
+            yield return BossFXManager.Instance.PlayCardSuitFX(
+                display.cardScriptableObject,
+                display.transform);
+        }
     }
     private void DrawBonusCards(int amount)
     {

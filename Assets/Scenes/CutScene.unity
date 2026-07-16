@@ -257,7 +257,7 @@ MonoBehaviour:
   currentImage: {fileID: 1499861810}
   nextImage: {fileID: 1253551759}
   fadePanel: {fileID: 2023637427}
-  voiceSource: {fileID: 1150278093}
+  voiceSource: {fileID: 1121091796}
   introMusicName: IntroTheme
   frames:
   - sprite: {fileID: 9182157284707403512, guid: 833d9f7224baa0b4a9ecf9c3fd420f14, type: 3}
