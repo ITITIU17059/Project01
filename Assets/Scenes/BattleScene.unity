@@ -2047,7 +2047,8 @@ MonoBehaviour:
   diamondVFX: {fileID: 4582622227507476575, guid: acf9a3c02c20b1845b53c77f41a14489, type: 3}
   clubVFX: {fileID: 6946500816198159903, guid: 3be655c5fb45da64586f66d21d4b1711, type: 3}
   spadeVFX: {fileID: 4136971357355896572, guid: 507d9b1ceb5bff14188aadcf1c30deb0, type: 3}
-  bossAttackVFXPrefab: {fileID: 0}
+  blockSuccessVFX: {fileID: 4870089122718421255, guid: 3155894efa5e7c94b9d914704a048a91, type: 3}
+  blockFailVFX: {fileID: 1228584910659928805, guid: 821df742f3953284196ede4282c84bc2, type: 3}
 --- !u!1 &741122706
 GameObject:
   m_ObjectHideFlags: 0
@@ -3528,7 +3529,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.15, y: -124}
+  m_AnchoredPosition: {x: 1.15, y: -90}
   m_SizeDelta: {x: 38.01, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1884384694
