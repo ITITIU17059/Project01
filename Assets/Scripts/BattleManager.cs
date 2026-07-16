@@ -260,9 +260,7 @@ public class BattleManager : MonoBehaviour
             if (obj.TryGetComponent(out CardDisplay display))
                 cards.Add(display.cardScriptableObject);
         }
-        handWasEmptyAfterPlay =
-        handManager.handCards.Count ==
-        handManager.selectedCards.Count;
+   
         yield return StartCoroutine(ResolveCombo(cards));
 
         foreach (GameObject obj in handManager.selectedCards)
