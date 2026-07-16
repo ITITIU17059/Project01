@@ -18,6 +18,7 @@ MonoBehaviour:
   hp: 50
   atk: 30
   bossCard: {fileID: 11400000, guid: 296ab2682a3265848aaedb96c91c0d9b, type: 2}
+  isJoker: 1
   resistanceSuit: 0
   currentATK: 15
   attackVFX: {fileID: 4594704501983483620, guid: 954291805dc81d94ca2e962e727fc65a, type: 3}
