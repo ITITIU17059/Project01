@@ -40,7 +40,6 @@ public class BossDisplay : MonoBehaviour
     {
         atkText.text = atk.ToString();
     }
-
     public void ResetUI()
     {
         hpText.gameObject.SetActive(true);

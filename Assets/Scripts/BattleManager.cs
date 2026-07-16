@@ -152,10 +152,20 @@ public class BattleManager : MonoBehaviour
     {
         handManager.SetInteractable(false);
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
-    
-        yield return StartCoroutine(
-            BossFXManager.Instance.PlayDeathFX(
-                BossManager.Instance.BossTransform));
+
+        yield return BossFXManager.Instance.PlayDeathFX(
+        BossManager.Instance.BossTransform);
+
+        Transform target =
+        BossManager.Instance.LastKillWasPerfect
+            ? tavernSpawnPoint
+            : graveyardSpawnPoint;
+
+        yield return BossFXManager.Instance
+            .PlayCollectRewardFX(
+                BossManager.Instance.BossDisplay,
+                deadBoss.bossCard,
+                target);
 
         bool changeStage =
             BossManager.Instance.NeedChangeStage(deadBoss);
