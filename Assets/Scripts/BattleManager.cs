@@ -260,7 +260,9 @@ public class BattleManager : MonoBehaviour
             if (obj.TryGetComponent(out CardDisplay display))
                 cards.Add(display.cardScriptableObject);
         }
-
+        handWasEmptyAfterPlay =
+       handManager.handCards.Count ==
+       handManager.selectedCards.Count;
         ResolveCombo(cards);
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -275,7 +277,7 @@ public class BattleManager : MonoBehaviour
                 obj,
                 graveyardSpawnPoint);
         }
-    
+
         yield return new WaitForSeconds(0.55f);
 
         handManager.ClearSelection();

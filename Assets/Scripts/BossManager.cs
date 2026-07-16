@@ -14,7 +14,6 @@ public class BossManager : MonoBehaviour
     [SerializeField] private BossDisplay bossDisplay;
 
     public Transform BossTransform => bossDisplay.transform;
-    public BossDisplay BossDisplay => bossDisplay;
 
     private readonly Queue<BossSO> bossQueue = new();
 
