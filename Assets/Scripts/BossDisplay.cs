@@ -8,11 +8,17 @@ public class BossDisplay : MonoBehaviour
     [SerializeField] private TMP_Text hpText;
     [SerializeField] private TMP_Text atkText;
     [SerializeField] private TMP_Text bossNameText;
+    public SpriteRenderer Artwork => artwork;
 
     private BossSO boss;
 
     public void Setup(BossSO data)
     {
+        ResetUI();
+
+        transform.localScale = Vector3.one;
+        transform.rotation = Quaternion.identity;
+
         boss = data;
 
         artwork.sprite = boss.cardSprite;

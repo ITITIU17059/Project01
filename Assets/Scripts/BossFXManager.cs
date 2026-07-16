@@ -223,4 +223,80 @@ public class BossFXManager : MonoBehaviour
                 1f,
                 0.08f));
     }
+
+    public IEnumerator PlayCollectRewardFX(
+    BossDisplay bossDisplay,
+    CardSO rewardCard,
+    Transform target)
+    {
+        //---------------------------------
+        // Clone artwork
+        //---------------------------------
+
+        SpriteRenderer original = bossDisplay.Artwork;
+
+        GameObject reward =
+            Instantiate(
+                original.gameObject,
+                original.transform.position,
+                original.transform.rotation);
+
+        SpriteRenderer render =
+            reward.GetComponent<SpriteRenderer>();
+
+        render.sprite = rewardCard.cardSprite;
+        render.sortingLayerName = "UI";
+        render.sortingOrder = 999;
+
+        reward.transform.localScale =
+            original.transform.lossyScale;
+
+        //---------------------------------
+        // Path
+        //---------------------------------
+
+        Vector3 start = reward.transform.position;
+
+        Vector3 end = target.position;
+
+        Vector3 mid =
+            (start + end) * 0.5f +
+            Vector3.up * 1.3f;
+
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(
+            reward.transform
+            .DOPath(
+                new[]
+                {
+                start,
+                mid,
+                end
+                },
+                0.8f,
+                PathType.CatmullRom)
+            .SetEase(Ease.InOutQuad));
+
+        seq.Join(
+            reward.transform
+            .DOScale(
+                target.lossyScale,
+                0.8f));
+
+        seq.Join(
+            reward.transform
+            .DORotate(
+                new Vector3(0, 0, 360),
+                0.8f,
+                RotateMode.FastBeyond360));
+
+        yield return seq.WaitForCompletion();
+
+        target.DOPunchScale(
+            Vector3.one * 0.12f,
+            0.2f);
+
+        Destroy(reward);
+    }
 }

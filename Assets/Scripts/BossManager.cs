@@ -12,6 +12,7 @@ public class BossManager : MonoBehaviour
 
     [Header("Display")]
     [SerializeField] private BossDisplay bossDisplay;
+    public BossDisplay BossDisplay => bossDisplay;
 
     public Transform BossTransform => bossDisplay.transform;
 
