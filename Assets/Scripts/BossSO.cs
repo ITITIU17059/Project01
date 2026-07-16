@@ -21,6 +21,9 @@ public class BossSO : ScriptableObject
     [Header("Reward")]
     public CardSO bossCard;
 
+    [Header("Special")]
+    public bool isJoker;
+
     [Header("Resistance")]
     public CardSO.Suit resistanceSuit;
 

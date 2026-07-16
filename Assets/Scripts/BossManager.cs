@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BossManager : MonoBehaviour
@@ -147,7 +147,35 @@ public class BossManager : MonoBehaviour
 
         return false;
     }
+    public void RandomizeJokerSuit()
+    {
+        if (CurrentBoss == null)
+            return;
 
+        if (!CurrentBoss.isJoker)
+            return;
+
+        CardSO.Suit[] suits =
+        {
+        CardSO.Suit.Hearts,
+        CardSO.Suit.Diamonds,
+        CardSO.Suit.Clubs,
+        CardSO.Suit.Spades
+    };
+
+        CardSO.Suit newSuit;
+
+        do
+        {
+            newSuit = suits[Random.Range(0, suits.Length)];
+        }
+        while (newSuit == CurrentBoss.resistanceSuit);
+
+        CurrentBoss.resistanceSuit = newSuit;
+
+
+        Debug.Log($"Joker đổi sang {newSuit}");
+    }
     public bool IsDead()
     {
         return CurrentHP <= 0;
