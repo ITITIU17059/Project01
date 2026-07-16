@@ -8,24 +8,18 @@ public class BossDisplay : MonoBehaviour
     [SerializeField] private TMP_Text hpText;
     [SerializeField] private TMP_Text atkText;
     [SerializeField] private TMP_Text bossNameText;
-    public SpriteRenderer Artwork => artwork;
 
     private BossSO boss;
 
     public void Setup(BossSO data)
     {
-        ResetUI();
-
-        transform.localScale = Vector3.one;
-        transform.rotation = Quaternion.identity;
-
         boss = data;
 
         artwork.sprite = boss.cardSprite;
         hpText.text = boss.hp.ToString();
         atkText.text = boss.atk.ToString();
         bossNameText.text = GetBossName(boss);
-
+       
     }
     private string GetBossName(BossSO boss)
     {
@@ -40,6 +34,7 @@ public class BossDisplay : MonoBehaviour
     {
         atkText.text = atk.ToString();
     }
+<<<<<<< HEAD
 
     public void ResetUI()
     {
@@ -47,4 +42,6 @@ public class BossDisplay : MonoBehaviour
         atkText.gameObject.SetActive(true);
         bossNameText.gameObject.SetActive(true);
     }
+=======
+>>>>>>> parent of aa29897 (Thêm hiệu ứng boss bay vào bộ bài)
 }

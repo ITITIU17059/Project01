@@ -152,7 +152,11 @@ public class BattleManager : MonoBehaviour
     {
         handManager.SetInteractable(false);
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
+<<<<<<< HEAD
     
+=======
+      
+>>>>>>> parent of aa29897 (Thêm hiệu ứng boss bay vào bộ bài)
         yield return StartCoroutine(
             BossFXManager.Instance.PlayDeathFX(
                 BossManager.Instance.BossTransform));
@@ -241,8 +245,12 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ResolveSelectedCards()
     {
         handManager.SetInteractable(false);
+<<<<<<< HEAD
         handWasEmptyAfterPlay = handManager.handCards.Count == 0;
 
+=======
+   
+>>>>>>> parent of aa29897 (Thêm hiệu ứng boss bay vào bộ bài)
         List<CardSO> cards = new();
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -250,7 +258,13 @@ public class BattleManager : MonoBehaviour
             if (obj.TryGetComponent(out CardDisplay display))
                 cards.Add(display.cardScriptableObject);
         }
+<<<<<<< HEAD
 
+=======
+         handWasEmptyAfterPlay =
+        handManager.handCards.Count ==
+        handManager.selectedCards.Count;
+>>>>>>> parent of aa29897 (Thêm hiệu ứng boss bay vào bộ bài)
         ResolveCombo(cards);
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -408,7 +422,7 @@ public class BattleManager : MonoBehaviour
 
     #region Card Effect
 
-
+   
     private void AttackBoss(int damage)
     {
         BossManager.Instance.TakeDamage(damage);
@@ -416,7 +430,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("Boss HP : " + BossManager.Instance.CurrentHP);
     }
 
-
+  
 
     private void HealDeck(int amount)
     {
