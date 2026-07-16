@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
-  m_Name: QueenSpades 1
+  m_Name: Joker
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
   bossName: The Joker
   cardSprite: {fileID: -6462194140118145075, guid: 0a9f990126a3f3d498088ba8b5599203, type: 3}
