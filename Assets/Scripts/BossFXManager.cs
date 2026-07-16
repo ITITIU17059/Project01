@@ -11,6 +11,8 @@ public class BossFXManager : MonoBehaviour
     [SerializeField] private GameObject diamondVFX;
     [SerializeField] private GameObject clubVFX;
     [SerializeField] private GameObject spadeVFX;
+    [SerializeField] private GameObject blockSuccessVFX;
+    [SerializeField] private GameObject blockFailVFX;
 
     private void Awake()
     {
@@ -174,9 +176,9 @@ public class BossFXManager : MonoBehaviour
             BossManager.Instance.BossTransform.position,
             Quaternion.identity);
 
-        SoundManager.instance?.PlaySound2D(boss.attackSoundID);
+        SoundManager.instance?.PlaySound2D(
+            boss.attackSoundID);
 
-        // Bay tới người chơi
         yield return fx.transform
             .DOMove(
                 BattleManager.Instance.PlayerHitPoint.position,
@@ -184,26 +186,24 @@ public class BossFXManager : MonoBehaviour
             .SetEase(Ease.InQuad)
             .WaitForCompletion();
 
-        // Giữ hiệu ứng đúng vị trí người chơi
-        fx.transform.position = BattleManager.Instance.PlayerHitPoint.position;
-
-        // Nếu prefab có ParticleSystem thì dừng việc phát thêm hạt mới
-        ParticleSystem[] systems = fx.GetComponentsInChildren<ParticleSystem>();
-
-        foreach (ParticleSystem ps in systems)
-        {
-            ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-        }
-
-        // Hiệu ứng rung người chơi
         PlayPlayerHitFX(BattleManager.Instance.PlayerHitPoint);
 
-        // Đợi Particle hiện tại chạy hết
-        yield return new WaitForSeconds(GetEffectDuration(fx));
+        Animator animator = fx.GetComponent<Animator>();
+
+        float duration = 0.5f;
+
+        if (animator != null)
+        {
+            foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
+            {
+                duration = Mathf.Max(duration, clip.length);
+            }
+        }
+
+        yield return new WaitForSeconds(duration);
 
         Destroy(fx);
     }
-
     private void PlayPlayerHitFX(Transform player)
     {
         player.DOKill();
@@ -301,25 +301,78 @@ public class BossFXManager : MonoBehaviour
 
         Destroy(reward);
     }
-
-    private float GetEffectDuration(GameObject effect)
+    public IEnumerator PlayBlockSuccessFX()
     {
-        float maxDuration = 0f;
+        Transform player =
+            BattleManager.Instance.PlayerHitPoint;
 
-        ParticleSystem[] systems = effect.GetComponentsInChildren<ParticleSystem>(true);
+        SoundManager.instance?.PlaySound2D("BlockSuccess");
 
-        foreach (ParticleSystem ps in systems)
+        yield return PlayAnimatorFX(
+            blockSuccessVFX,
+            player.position,
+            Quaternion.identity);
+
+        player.DOPunchScale(
+            Vector3.one * 0.08f,
+            0.2f);
+    }
+
+    public IEnumerator PlayBlockFailFX()
+    {
+        Transform player =
+            BattleManager.Instance.PlayerHitPoint;
+
+        SoundManager.instance?.PlaySound2D("BlockFail");
+
+        yield return PlayAnimatorFX(
+            blockFailVFX,
+            player.position,
+            Quaternion.identity);
+
+        player.DOShakePosition(
+            0.3f,
+            0.2f);
+    }
+
+    private IEnumerator PlayAnimatorFX(
+    GameObject prefab,
+    Vector3 position,
+    Quaternion rotation)
+    {
+        if (prefab == null)
+            yield break;
+
+        GameObject fx = Instantiate(
+            prefab,
+            position,
+            rotation);
+
+        float duration = GetAnimatorDuration(fx);
+
+        yield return new WaitForSeconds(duration);
+
+        Destroy(fx);
+    }
+
+    private float GetAnimatorDuration(GameObject obj)
+    {
+        Animator animator = obj.GetComponent<Animator>();
+
+        if (animator == null ||
+            animator.runtimeAnimatorController == null)
         {
-            var main = ps.main;
-
-            float duration =
-                main.duration +
-                main.startLifetime.constantMax;
-
-            if (duration > maxDuration)
-                maxDuration = duration;
+            return 0.5f;
         }
 
-        return Mathf.Max(maxDuration, 0.1f);
+        float duration = 0f;
+
+        foreach (AnimationClip clip
+            in animator.runtimeAnimatorController.animationClips)
+        {
+            duration = Mathf.Max(duration, clip.length);
+        }
+
+        return duration;
     }
 }

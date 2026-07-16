@@ -112,17 +112,17 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ResolveBossAttack()
     {
         handManager.CancelCurrentSelection();
+
+        // Boss tấn công trước
         yield return StartCoroutine(
             BossFXManager.Instance.PlayBossAttackFX());
 
         int damage = BossManager.Instance.CurrentATK;
 
-        // Boss không còn ATK -> bỏ qua bước discard
         if (damage <= 0)
         {
-            Debug.Log("Boss ATK = 0, bỏ qua phản công.");
-
-            yield return new WaitForSeconds(0.5f);
+            yield return StartCoroutine(
+                BossFXManager.Instance.PlayBlockSuccessFX());
 
             ChangeState(BattleState.PlayerTurn);
             yield break;
@@ -130,11 +130,10 @@ public class BattleManager : MonoBehaviour
 
         TurnUIController.Instance.ShowDiscardTurn();
 
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.6f);
 
         handManager.StartDiscardPhase(damage);
     }
-
     private void CheckBattle()
     {
         confirmButton.interactable = false;
@@ -346,6 +345,29 @@ public class BattleManager : MonoBehaviour
                 display.transform);
         }
     }
+
+    private IEnumerator FinishDiscardRoutine(bool success)
+    {
+        handManager.SetInteractable(false);
+
+        if (success)
+        {
+            yield return StartCoroutine(
+                BossFXManager.Instance.PlayBlockSuccessFX());
+
+            ChangeState(BattleState.PlayerTurn);
+        }
+        else
+        {
+            yield return StartCoroutine(
+                BossFXManager.Instance.PlayBlockFailFX());
+
+            yield return new WaitForSeconds(0.2f);
+
+            ChangeState(BattleState.Defeat);
+        }
+    }
+
     private void DrawBonusCards(int amount)
     {
         for (int i = 0; i < amount; i++)
@@ -430,10 +452,7 @@ public class BattleManager : MonoBehaviour
     }
     public void FinishDiscard(bool success)
     {
-        if (success)
-            ChangeState(BattleState.PlayerTurn);
-        else
-            ChangeState(BattleState.Defeat);
+        StartCoroutine(FinishDiscardRoutine(success));
     }
 
     public void EndTurn()
