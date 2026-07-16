@@ -153,8 +153,7 @@ public class BattleManager : MonoBehaviour
         handManager.SetInteractable(false);
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
 
-        yield return BossFXManager.Instance
-    .PlayDeathFX(
+        yield return BossFXManager.Instance.PlayDeathFX(
         BossManager.Instance.BossTransform);
 
         Transform target =

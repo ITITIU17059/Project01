@@ -41,15 +41,6 @@ public class BossDisplay : MonoBehaviour
         atkText.text = atk.ToString();
     }
 
-    public void ShowRewardCard(CardSO rewardCard)
-    {
-        artwork.sprite = rewardCard.cardSprite;
-
-        hpText.gameObject.SetActive(false);
-        atkText.gameObject.SetActive(false);
-        bossNameText.gameObject.SetActive(false);
-    }
-
     public void ResetUI()
     {
         hpText.gameObject.SetActive(true);
