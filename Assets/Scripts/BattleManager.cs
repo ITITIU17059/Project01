@@ -408,7 +408,7 @@ public class BattleManager : MonoBehaviour
 
     #region Card Effect
 
-   
+
     private void AttackBoss(int damage)
     {
         BossManager.Instance.TakeDamage(damage);
@@ -416,7 +416,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("Boss HP : " + BossManager.Instance.CurrentHP);
     }
 
-  
+
 
     private void HealDeck(int amount)
     {
