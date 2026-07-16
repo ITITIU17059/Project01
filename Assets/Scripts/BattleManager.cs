@@ -199,6 +199,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // Rút bài trước
+
         if (handWasEmptyAfterPlay)
         {
             while (handManager.handCards.Count < handManager.maxHandSize &&
@@ -250,6 +251,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ResolveSelectedCards()
     {
         handManager.SetInteractable(false);
+        handWasEmptyAfterPlay = handManager.handCards.Count == 0;
 
         List<CardSO> cards = new();
 
@@ -258,13 +260,12 @@ public class BattleManager : MonoBehaviour
             if (obj.TryGetComponent(out CardDisplay display))
                 cards.Add(display.cardScriptableObject);
         }
-        handWasEmptyAfterPlay =
-       handManager.handCards.Count ==
-       handManager.selectedCards.Count;
+
         ResolveCombo(cards);
 
         foreach (GameObject obj in handManager.selectedCards)
         {
+            handManager.handCards.Remove(obj);
             if (obj.TryGetComponent(out CardDisplay display))
             {
                 GraveyardManager.Instance.AddToGraveyard(display.cardScriptableObject);
@@ -274,8 +275,8 @@ public class BattleManager : MonoBehaviour
                 obj,
                 graveyardSpawnPoint);
         }
-
-        yield return new WaitForSeconds(0.3f);
+    
+        yield return new WaitForSeconds(0.55f);
 
         handManager.ClearSelection();
 
@@ -283,9 +284,7 @@ public class BattleManager : MonoBehaviour
     }
     private void ResolveCombo(List<CardSO> cards)
     {
-        bool handEmptyAfterPlay =
-    handManager.handCards.Count ==
-    handManager.selectedCards.Count;
+
         CardSO.Suit resist = BossManager.Instance.CurrentBoss.resistanceSuit;
 
         int total = 0;
