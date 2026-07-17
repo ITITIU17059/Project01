@@ -88,7 +88,12 @@ public class BattleManager : MonoBehaviour
     private void StartPlayerTurn()
     {
         handManager.handCards.RemoveAll(card => card == null);
+
+        if (BossManager.Instance.CurrentBoss.isJoker)
+            BossManager.Instance.RandomizeJokerSuit();
+
         handManager.SetInteractable(true);
+
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -181,6 +186,12 @@ public class BattleManager : MonoBehaviour
 
                 case BossRank.Queen:
                     nextStage = BossRank.King;
+                    break;
+
+                case BossRank.King:
+
+                    nextStage = BossRank.Joker;
+
                     break;
             }
 

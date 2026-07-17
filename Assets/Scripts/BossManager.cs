@@ -9,6 +9,7 @@ public class BossManager : MonoBehaviour
     [SerializeField] private List<BossSO> jackBosses;
     [SerializeField] private List<BossSO> queenBosses;
     [SerializeField] private List<BossSO> kingBosses;
+    [SerializeField] private List<BossSO> jokerBosses;
 
     [Header("Display")]
     [SerializeField] private BossDisplay bossDisplay;
@@ -21,6 +22,7 @@ public class BossManager : MonoBehaviour
     private int defeatedJack;
     private int defeatedQueen;
     private int defeatedKing;
+ 
 
     public BossSO CurrentBoss { get; private set; }
 
@@ -50,10 +52,12 @@ public class BossManager : MonoBehaviour
         List<BossSO> j = new(jackBosses);
         List<BossSO> q = new(queenBosses);
         List<BossSO> k = new(kingBosses);
+        List<BossSO> l = new(jokerBosses);
 
         Shuffle(j);
         Shuffle(q);
         Shuffle(k);
+        Shuffle(l);
 
         foreach (BossSO boss in j)
             bossQueue.Enqueue(boss);
@@ -62,6 +66,9 @@ public class BossManager : MonoBehaviour
             bossQueue.Enqueue(boss);
 
         foreach (BossSO boss in k)
+            bossQueue.Enqueue(boss);
+
+        foreach (BossSO boss in l)
             bossQueue.Enqueue(boss);
     }
 
@@ -88,11 +95,12 @@ public class BossManager : MonoBehaviour
         bossDisplay.UpdateHP(CurrentHP);
         bossDisplay.UpdateATK(CurrentATK);
 
+
         if (!string.IsNullOrEmpty(CurrentBoss.spawnSoundID))
         {
             SoundManager.instance?.PlaySound2D(CurrentBoss.spawnSoundID);
         }
-
+     
         if (BossFXManager.Instance != null)
         {
             BossFXManager.Instance.PlaySpawnFX(bossDisplay.transform);
@@ -172,7 +180,7 @@ public class BossManager : MonoBehaviour
         while (newSuit == CurrentBoss.resistanceSuit);
 
         CurrentBoss.resistanceSuit = newSuit;
-
+        bossDisplay.UpdateResistance(newSuit);
 
         Debug.Log($"Joker đổi sang {newSuit}");
     }
