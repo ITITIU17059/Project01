@@ -1547,6 +1547,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 540327477613588685, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: tracks.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 540327477613588685, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: tracks.Array.data[8].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: ede75b7f8385b124aab4aa3f65bdbdfd, type: 3}
+    - target: {fileID: 540327477613588685, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: tracks.Array.data[8].trackName
+      value: JokerTheme
+      objectReference: {fileID: 0}
     - target: {fileID: 7881778789683042331, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: m_Name
       value: AudioManager
