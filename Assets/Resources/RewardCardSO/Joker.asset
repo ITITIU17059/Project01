@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40fee21677203da438e6b3b7aab3b738, type: 3}
-  m_Name: Q Heart
+  m_Name: Joker
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
-  cardSprite: {fileID: 7704857750013115146, guid: 6eae113f7cedbce4799918833a40f94a, type: 3}
-  value: 15
-  suit: 1
-  type: 3
+  cardSprite: {fileID: -6462194140118145075, guid: 0a9f990126a3f3d498088ba8b5599203, type: 3}
+  value: 30
+  suit: 0
+  type: 5
