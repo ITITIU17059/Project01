@@ -17,6 +17,7 @@ public class StageManager : MonoBehaviour
     [SerializeField] private Sprite jackBackground;
     [SerializeField] private Sprite queenBackground;
     [SerializeField] private Sprite kingBackground;
+    [SerializeField] private Sprite jokerBackground;
     [SerializeField] private Sprite victoryBackground;
 
     private void Awake()
@@ -56,6 +57,12 @@ public class StageManager : MonoBehaviour
 
                 background.sprite = kingBackground;
                 MusicManager.instance.PlayMusic("KingTheme");
+                break;
+
+            case BossRank.Joker:
+
+                background.sprite = jokerBackground;
+                MusicManager.instance.PlayMusic("JokerTheme");
                 break;
         }
 

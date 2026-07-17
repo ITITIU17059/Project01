@@ -171,6 +171,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 959529420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &76660256
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 76660257}
+  - component: {fileID: 76660259}
+  - component: {fileID: 76660258}
+  m_Layer: 5
+  m_Name: BossResistant
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &76660257
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76660256}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 848775554}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 31.2, y: 54.1}
+  m_SizeDelta: {x: 26.05, y: 24.61}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &76660258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76660256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &76660259
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76660256}
+  m_CullTransparentMesh: 1
 --- !u!1 &127245375
 GameObject:
   m_ObjectHideFlags: 0
@@ -1720,8 +1795,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279440364
-  m_fontColor: {r: 0.9245283, g: 0.07268285, b: 0.07268285, a: 1}
+    rgba: 4278190187
+  m_fontColor: {r: 0.42138356, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2325,6 +2400,11 @@ MonoBehaviour:
   hpText: {fileID: 357580134}
   atkText: {fileID: 234310675}
   bossNameText: {fileID: 563127382}
+  resistanceIcon: {fileID: 76660258}
+  heartSprite: {fileID: 9100165322678347953, guid: 241e14efc45b7c14e9de279569616c0d, type: 3}
+  diamondSprite: {fileID: -5552445063739692392, guid: e1aa4e5e91869d549a1f89d569b4c0b5, type: 3}
+  clubSprite: {fileID: 6853485414348313987, guid: 26dacffb8a4461d49ae288f2edec8da3, type: 3}
+  spadeSprite: {fileID: -5218923232838051155, guid: e7f63765d6fc78a4aa43500057cfeca9, type: 3}
 --- !u!224 &848775554
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2342,6 +2422,7 @@ RectTransform:
   - {fileID: 1520275538}
   - {fileID: 1525621445}
   - {fileID: 563127381}
+  - {fileID: 76660257}
   m_Father: {fileID: 2091500579}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2494,6 +2575,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bac3790c86e24744dbeba7efaab5fa2a, type: 2}
   - {fileID: 11400000, guid: eb0d479eb9892aa4d9dce1fe61c043d0, type: 2}
   - {fileID: 11400000, guid: 353bd01e09f0586429e4bc904cabf53b, type: 2}
+  jokerBosses:
+  - {fileID: 11400000, guid: 8e7e3fc2d240f45429acfa1219b21d04, type: 2}
   bossDisplay: {fileID: 848775553}
 --- !u!1 &1061128433
 GameObject:
@@ -3656,6 +3739,7 @@ MonoBehaviour:
   jackBackground: {fileID: 21300000, guid: 8da1c7d3d8e70bc4889d53e0edc3060f, type: 3}
   queenBackground: {fileID: 21300000, guid: 88e42c427a40f9c43b52bad9c001bfb8, type: 3}
   kingBackground: {fileID: 21300000, guid: d58907eb88d88d54484951546e3bdc04, type: 3}
+  jokerBackground: {fileID: -5774163580340884036, guid: 8a73b2aceeeccef45adb84eebd0fc778, type: 3}
   victoryBackground: {fileID: 21300000, guid: 0c342975d83242c4aaac985bda520cd1, type: 3}
 --- !u!1 &2030284703
 GameObject:

@@ -8,6 +8,13 @@ public class BossDisplay : MonoBehaviour
     [SerializeField] private TMP_Text hpText;
     [SerializeField] private TMP_Text atkText;
     [SerializeField] private TMP_Text bossNameText;
+    
+    [SerializeField] private Image resistanceIcon;
+
+    [SerializeField] private Sprite heartSprite;
+    [SerializeField] private Sprite diamondSprite;
+    [SerializeField] private Sprite clubSprite;
+    [SerializeField] private Sprite spadeSprite;
     public SpriteRenderer Artwork => artwork;
 
     private BossSO boss;
@@ -25,7 +32,7 @@ public class BossDisplay : MonoBehaviour
         hpText.text = boss.hp.ToString();
         atkText.text = boss.atk.ToString();
         bossNameText.text = GetBossName(boss);
-
+        UpdateResistance(boss.resistanceSuit);
     }
     private string GetBossName(BossSO boss)
     {
@@ -39,6 +46,33 @@ public class BossDisplay : MonoBehaviour
     public void UpdateATK(int atk)
     {
         atkText.text = atk.ToString();
+    }
+    public void UpdateResistance(CardSO.Suit suit)
+    {
+        switch (suit)
+        {
+            case CardSO.Suit.Hearts:
+                resistanceIcon.sprite = heartSprite;
+                break;
+
+            case CardSO.Suit.Diamonds:
+                resistanceIcon.sprite = diamondSprite;
+                break;
+
+            case CardSO.Suit.Clubs:
+                resistanceIcon.sprite = clubSprite;
+                break;
+
+            case CardSO.Suit.Spades:
+                resistanceIcon.sprite = spadeSprite;
+                break;
+
+            default:
+                resistanceIcon.enabled = false;
+                return;
+        }
+
+        resistanceIcon.enabled = true;
     }
     public void ResetUI()
     {
