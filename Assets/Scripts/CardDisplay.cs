@@ -22,7 +22,10 @@ public class CardDisplay : MonoBehaviour
             cardSpriteRenderer.sprite = cardScriptableObject.cardSprite;
         }
     }
-
+    private void OnDestroy()
+    {
+        transform.DOKill();
+    }
     public void SetSortingOrder(int order)
     {
         if (cardSpriteRenderer != null)
