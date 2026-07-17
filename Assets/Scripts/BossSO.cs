@@ -12,13 +12,8 @@ public class BossSO : ScriptableObject
         Spades
     }
 
-    [Header("Description")]
-    [TextArea]
-    public string traitDescription;
-
-    [TextArea]
-    public string rewardDescription;
-
+   
+    
     public string bossName;
     public Sprite cardSprite;
 
@@ -26,7 +21,11 @@ public class BossSO : ScriptableObject
 
     public int hp;
     public int atk;
+    [Header("Trait")]
+    public BossTraitSO trait;
+
     [Header("Reward")]
+    public RewardSO reward;
     public CardSO bossCard;
 
     [Header("Special")]
