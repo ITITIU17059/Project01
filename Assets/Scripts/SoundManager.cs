@@ -19,6 +19,9 @@ public class SoundManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
+
+        if (audioSource == null)
+            audioSource = transform.Find("AudioSource").GetComponent<AudioSource>();
     }
 
     public void PlaySound3D(AudioClip clip, Vector3 pos)
@@ -37,5 +40,15 @@ public class SoundManager : MonoBehaviour
     public void PlaySound2D(string soundName)
     {
         audioSource.PlayOneShot(soundLibrary.GetClipFromName(soundName));
+    }
+
+    public void PlayHover()
+    {
+        PlaySound2D("Hover");
+    }
+
+    public void PlayClick()
+    {
+        PlaySound2D("Click");
     }
 }

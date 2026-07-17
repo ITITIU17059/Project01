@@ -2047,7 +2047,7 @@ MonoBehaviour:
   diamondVFX: {fileID: 4582622227507476575, guid: acf9a3c02c20b1845b53c77f41a14489, type: 3}
   clubVFX: {fileID: 6946500816198159903, guid: 3be655c5fb45da64586f66d21d4b1711, type: 3}
   spadeVFX: {fileID: 4136971357355896572, guid: 507d9b1ceb5bff14188aadcf1c30deb0, type: 3}
-  blockSuccessVFX: {fileID: 4870089122718421255, guid: 3155894efa5e7c94b9d914704a048a91, type: 3}
+  blockSuccessVFX: {fileID: 7159496930085498811, guid: a778d4ba87844634280a6c13b2a712cd, type: 3}
   blockFailVFX: {fileID: 1228584910659928805, guid: 821df742f3953284196ede4282c84bc2, type: 3}
 --- !u!1 &741122706
 GameObject:

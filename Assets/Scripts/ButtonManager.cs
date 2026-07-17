@@ -20,4 +20,14 @@ public class ButtonManager : MonoBehaviour
     {
         image.color = Color.darkGray;
     }
+
+    public void PlayHover()
+    {
+        SoundManager.instance.PlaySound2D("Hover");
+    }
+
+    public void PlayClick()
+    {
+        SoundManager.instance.PlaySound2D("Click");
+    }
 }
