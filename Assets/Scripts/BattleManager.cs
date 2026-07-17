@@ -408,8 +408,10 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Invalid Combo");
             return;
         }
-
         SoundManager.instance?.PlaySound2D("CardPlay");
+        handManager.SetInteractable(false);
+        confirmButton.interactable = false;
+        
         StartCoroutine(ResolveSelectedCards());
     }
     private bool IsValidCombo(List<CardSO> cards)
