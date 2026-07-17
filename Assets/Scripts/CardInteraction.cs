@@ -92,6 +92,7 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleDragStart()
     {
+     
         isDragging = true;
         cardPhysics.ResetPhysics();
     }
@@ -155,6 +156,7 @@ public class CardInteraction : MonoBehaviour
 
     private void ToggleCardSelection()
     {
+   
         if (!handManager) return;
         transform.DOKill();
         transform.DORotate(Vector3.zero, 0.15f);
