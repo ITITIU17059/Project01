@@ -1547,14 +1547,54 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 540327477613588685, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: tracks.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 540327477613588685, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: tracks.Array.data[8].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: ede75b7f8385b124aab4aa3f65bdbdfd, type: 3}
+    - target: {fileID: 540327477613588685, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: tracks.Array.data[8].trackName
+      value: JokerTheme
+      objectReference: {fileID: 0}
     - target: {fileID: 7881778789683042331, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: m_Name
       value: AudioManager
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: soundEffects.Array.size
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: soundEffects.Array.data[23].groupId
+      value: JokerAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: soundEffects.Array.data[24].groupId
+      value: Joker
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: soundEffects.Array.data[23].clips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: soundEffects.Array.data[24].clips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: 'soundEffects.Array.data[14].clips.Array.data[0]'
       value: 
       objectReference: {fileID: 8300000, guid: 16978e0caa61bf542b8db3f318c56ae0, type: 3}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: 'soundEffects.Array.data[23].clips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 4159e7f53ab3d864f93c57f174e77a7e, type: 3}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: 'soundEffects.Array.data[24].clips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 8dd1b1427178fe04fbaccada0833f70a, type: 3}
     - target: {fileID: 8679864226830082696, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

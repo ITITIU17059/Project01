@@ -12,18 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
   m_Name: Joker
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
+  traitDescription: 
+  rewardDescription: 
   bossName: The Joker
   cardSprite: {fileID: -6462194140118145075, guid: 0a9f990126a3f3d498088ba8b5599203, type: 3}
   suit: 0
   hp: 50
   atk: 30
-  bossCard: {fileID: 11400000, guid: 296ab2682a3265848aaedb96c91c0d9b, type: 2}
+  bossCard: {fileID: 11400000, guid: d643d36d95dc28b489d868de24a4a595, type: 2}
   isJoker: 1
-  resistanceSuit: 0
-  currentATK: 15
-  attackVFX: {fileID: 4594704501983483620, guid: 954291805dc81d94ca2e962e727fc65a, type: 3}
-  hitVFX: {fileID: 3699248822550756291, guid: 19c0cba23b6e74a4a9ce9035e3844aad, type: 3}
-  attackSoundID: QueenAttack
+  resistanceSuit: 4
+  currentATK: 30
+  attackVFX: {fileID: 3987306231668895585, guid: 0bde82b2638401f41ae1867dfabc6462, type: 3}
+  hitVFX: {fileID: 6370263198934622829, guid: 63b5b6a477fdca145a1e679dc4b89a25, type: 3}
+  attackSoundID: JokerAttack
   attackFlyTime: 0.4
   rank: 3
-  spawnSoundID: Queen
+  spawnSoundID: Joker

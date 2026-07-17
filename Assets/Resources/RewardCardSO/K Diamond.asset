@@ -15,4 +15,4 @@ MonoBehaviour:
   cardSprite: {fileID: 680571131446629603, guid: bcf34604bb23a6f46ba3d19b61a3ac69, type: 3}
   value: 20
   suit: 2
-  type: 2
+  type: 4
