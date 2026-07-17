@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8a1db54e0e5624f949e40ef3d9e2ad, type: 3}
   m_Name: Joker
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
-  traitDescription: 
-  rewardDescription: 
   bossName: The Joker
   cardSprite: {fileID: -6462194140118145075, guid: 0a9f990126a3f3d498088ba8b5599203, type: 3}
   suit: 0
   hp: 50
   atk: 30
+  trait: {fileID: 0}
+  reward: {fileID: 0}
   bossCard: {fileID: 11400000, guid: d643d36d95dc28b489d868de24a4a595, type: 2}
   isJoker: 1
-  resistanceSuit: 4
+  resistanceSuit: 0
   currentATK: 30
   attackVFX: {fileID: 3987306231668895585, guid: 0bde82b2638401f41ae1867dfabc6462, type: 3}
   hitVFX: {fileID: 6370263198934622829, guid: 63b5b6a477fdca145a1e679dc4b89a25, type: 3}
