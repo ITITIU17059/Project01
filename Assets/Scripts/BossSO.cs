@@ -11,6 +11,14 @@ public class BossSO : ScriptableObject
         Clubs,
         Spades
     }
+
+    [Header("Description")]
+    [TextArea]
+    public string traitDescription;
+
+    [TextArea]
+    public string rewardDescription;
+
     public string bossName;
     public Sprite cardSprite;
 
