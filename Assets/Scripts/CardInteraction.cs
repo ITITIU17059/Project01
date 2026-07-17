@@ -25,16 +25,24 @@ public class CardInteraction : MonoBehaviour
         cardDisplay = GetComponent<CardDisplay>();
         cardPhysics = GetComponent<CardPhysics>();
     }
-
+    private void OnDestroy()
+    {
+        transform.DOKill();
+    }
     public void MoveTo(Vector3 localPos, Quaternion rotation, float duration = 0.25f)
     {
         splineLocalPosition = localPos;
-        if (isDragging) return;
 
-        if (isDragging || isHovered) return;
+        if (isDragging || isHovered)
+            return;
 
-        transform.DOLocalMove(localPos, duration).SetEase(Ease.OutCubic);
-        transform.DOLocalRotateQuaternion(rotation, duration).SetEase(Ease.OutCubic);
+        transform.DOKill();  
+
+        transform.DOLocalMove(localPos, duration)
+                 .SetEase(Ease.OutCubic);
+
+        transform.DOLocalRotateQuaternion(rotation, duration)
+                 .SetEase(Ease.OutCubic);
     }
 
     public void HandleMouseEnter()

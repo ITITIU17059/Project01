@@ -332,8 +332,6 @@ public class HandManager : MonoBehaviour
             );
         }
 
-        selectedCards = new List<GameObject>();
-
         selectedCards.Clear();
         totalCardValue = 0;
 
