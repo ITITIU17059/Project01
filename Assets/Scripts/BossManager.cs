@@ -13,6 +13,7 @@ public class BossManager : MonoBehaviour
 
     [Header("Display")]
     [SerializeField] private BossDisplay bossDisplay;
+    [SerializeField] private BossInfoPanelUI bossInfoPanel;
     public BossDisplay BossDisplay => bossDisplay;
 
     public Transform BossTransform => bossDisplay.transform;
@@ -92,6 +93,7 @@ public class BossManager : MonoBehaviour
         CurrentBoss.currentATK = CurrentBoss.atk;
 
         bossDisplay.Setup(CurrentBoss);
+        bossInfoPanel.Setup(CurrentBoss);
         bossDisplay.UpdateHP(CurrentHP);
         bossDisplay.UpdateATK(CurrentATK);
 
