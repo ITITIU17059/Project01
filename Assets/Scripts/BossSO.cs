@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Boss Card", menuName = "Boss/BossSO")]
@@ -12,8 +13,18 @@ public class BossSO : ScriptableObject
         Spades
     }
 
-   
-    
+    [Header("Boss Info")]
+
+    public string traitTitle;
+
+    [TextArea]
+    public string traitDescription;
+
+    public string rewardTitle;
+
+    [TextArea]
+    public string rewardDescription;
+
     public string bossName;
     public Sprite cardSprite;
 
@@ -21,8 +32,11 @@ public class BossSO : ScriptableObject
 
     public int hp;
     public int atk;
-    [Header("Trait")]
-    public BossTraitSO trait;
+    [Header("Trait Pool")]
+    public List<BossTraitSO> possibleTraits;
+
+    [HideInInspector]
+    public BossTraitSO currentTrait;
 
     [Header("Reward")]
     public RewardSO reward;
