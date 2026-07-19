@@ -14,32 +14,23 @@ public class BossSO : ScriptableObject
     }
 
     [Header("Boss Info")]
-
-    public string traitTitle;
-
-    [TextArea]
-    public string traitDescription;
-
-    public string rewardTitle;
-
-    [TextArea]
-    public string rewardDescription;
-
     public string bossName;
     public Sprite cardSprite;
-
     public Suit suit;
 
     public int hp;
     public int atk;
+
     [Header("Trait Pool")]
     public List<BossTraitSO> possibleTraits;
 
     [HideInInspector]
     public BossTraitSO currentTrait;
 
-    [Header("Reward")]
-    public RewardSO reward;
+    [HideInInspector]
+    public RewardSO currentReward;
+
+    [Header("Boss Card")]
     public CardSO bossCard;
 
     [Header("Special")]
@@ -52,11 +43,11 @@ public class BossSO : ScriptableObject
     public int currentATK;
 
     [Header("Attack")]
-    public GameObject attackVFX;      // Đạn bay
-    public GameObject hitVFX;         // Nổ khi trúng player
-    public string attackSoundID;      // Âm thanh
+    public GameObject attackVFX;
+    public GameObject hitVFX;
+    public string attackSoundID;
     public float attackFlyTime = 0.4f;
-    
+
     [Header("Stage")]
     public BossRank rank;
 

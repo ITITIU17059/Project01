@@ -186,6 +186,13 @@ public class BossManager : MonoBehaviour
 
         Debug.Log($"Joker đổi sang {newSuit}");
     }
+    public void RefreshBossInfo()
+    {
+        if (bossInfoPanel != null)
+        {
+            bossInfoPanel.Setup(CurrentBoss);
+        }
+    }
     public bool IsDead()
     {
         return CurrentHP <= 0;

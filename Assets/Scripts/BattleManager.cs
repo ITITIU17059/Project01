@@ -75,7 +75,10 @@ public class BattleManager : MonoBehaviour
     }
 
     #endregion
-
+    public void StartBattleAfterTraitSelected()
+    {
+        ChangeState(BattleState.PlayerTurn);
+    }
     #region Battle Flow
 
     private void StartBattle()

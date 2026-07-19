@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11584b51d090ff347aa707fa546f3622, type: 3}
+  m_Name: Expanded Arsenal
+  m_EditorClassIdentifier: Assembly-CSharp::RewardSO
+  icon: {fileID: 21300000, guid: bb67b03c2969d104caba950c446f8c8d, type: 3}
+  rewardName: Expanded Arsenal
+  description: "+1 gi\u1EDBi h\u1EA1n b\xE0i tr\xEAn tay."

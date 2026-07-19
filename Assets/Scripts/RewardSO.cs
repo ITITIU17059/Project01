@@ -1,7 +1,11 @@
 using UnityEngine;
 
-public abstract class RewardSO : ScriptableObject
+[CreateAssetMenu(fileName = "Reward", menuName = "Boss/Reward")]
+public class RewardSO : ScriptableObject
 {
+    [Header("UI")]
+    public Sprite icon;
+
     public string rewardName;
 
     [TextArea]
