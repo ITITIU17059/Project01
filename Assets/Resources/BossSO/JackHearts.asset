@@ -17,7 +17,15 @@ MonoBehaviour:
   suit: 1
   hp: 20
   atk: 10
+  possibleTraits:
+  - {fileID: 11400000, guid: 4e5f99ef7d9bc7a41af4fd3e0c68e8cc, type: 2}
+  - {fileID: 11400000, guid: 3b06283b4d406ac489ff9af0e7a337d7, type: 2}
+  - {fileID: 11400000, guid: 7ba2675673164ff45ab8d730dd2289f4, type: 2}
+  - {fileID: 11400000, guid: 8b4b0c50f406fb041b6c5956b8405c57, type: 2}
+  currentTrait: {fileID: 0}
+  currentReward: {fileID: 0}
   bossCard: {fileID: 11400000, guid: baa1fb82cc4d75b4b89d2eca16c50938, type: 2}
+  isJoker: 0
   resistanceSuit: 1
   currentATK: 10
   attackVFX: {fileID: 5453914515797376023, guid: 86f6f0700445378479325d1398169de5, type: 3}

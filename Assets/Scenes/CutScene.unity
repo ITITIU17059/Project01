@@ -276,7 +276,7 @@ MonoBehaviour:
     voiceClip: {fileID: 8300000, guid: c87ef8042b9323a4f8da3803cef28a91, type: 3}
     waitVoiceFinish: 1
     duration: 4
-  - sprite: {fileID: -2370847343634883966, guid: 4a69ebd9c9af97643982910a6e56a195, type: 3}
+  - sprite: {fileID: -4238758519034355421, guid: 7f3eb0a6dacae544eb6f5a9540b62d22, type: 3}
     voiceClip: {fileID: 8300000, guid: 504da32291ad27a48aa0f5af52befcc1, type: 3}
     waitVoiceFinish: 1
     duration: 4
