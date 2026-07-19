@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ebe589fe1e61e45b76eb31a2b1f86e, type: 3}
-  m_Name: Lone Duel
+  m_Name: QSeal of Silence
   m_EditorClassIdentifier: Assembly-CSharp::BossTraitSO
-  traitID: 7
-  icon: {fileID: 21300000, guid: c67fbf9375ad5c34399c2849430ca7f7, type: 3}
-  traitName: Lone Duel
-  description: "Ch\u1EC9 \u0111\u01B0\u1EE3c \u0111\xE1nh 1 l\xE1 m\u1ED7i l\u01B0\u1EE3t."
-  reward: {fileID: 11400000, guid: 8370cb891737b8447a1ae91ba9afa2fe, type: 2}
+  traitID: 6
+  icon: {fileID: 21300000, guid: bb67b03c2969d104caba950c446f8c8d, type: 3}
+  traitName: Seal of Silence
+  description: "Kh\xF3a l\xE1 b\xE0i c\xF3 gi\xE1 tr\u1ECB l\u1EDBn nh\u1EA5t cho
+    \u0111\u1EBFn khi Boss ch\u1EBFt."
+  reward: {fileID: 11400000, guid: acddde95a63fc764daad9092faf0ea48, type: 2}

@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ebe589fe1e61e45b76eb31a2b1f86e, type: 3}
-  m_Name: Withered Blessing
+  m_Name: KAbsolute Authority
   m_EditorClassIdentifier: Assembly-CSharp::BossTraitSO
-  traitID: 1
-  icon: {fileID: 21300000, guid: ee40d72ece864764f9d17d015aedb524, type: 3}
-  traitName: Withered Blessing
-  description: "C\u01A1 ch\u1EC9 h\u1ED3i \u0111\u01B0\u1EE3c 1 l\xE1."
-  reward: {fileID: 11400000, guid: ce3d5d7962e118849986f86ff187f0bd, type: 2}
+  traitID: 8
+  icon: {fileID: 21300000, guid: 6960c6bd5088317429f7e0e033bee813, type: 3}
+  traitName: Absolute Authority
+  description: "Ch\u1EC9 t\xEDnh hi\u1EC7u \u1EE9ng c\u1EE7a l\xE1 \u0111\u1EA7u
+    ti\xEAn khi \u0111\xE1nh nhi\u1EC1u l\xE1."
+  reward: {fileID: 11400000, guid: 6ea8146e2a812d74fbd2ac20212a11ca, type: 2}

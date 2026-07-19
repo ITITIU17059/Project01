@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ebe589fe1e61e45b76eb31a2b1f86e, type: 3}
-  m_Name: Greedy Tribute
+  m_Name: KRoyal Decree
   m_EditorClassIdentifier: Assembly-CSharp::BossTraitSO
-  icon: {fileID: 21300000, guid: 0825dfa25de4551469e65496af7b3c71, type: 3}
-  traitName: Greedy Tribute
-  description: "Ch\u1EC9 \u0111\u01B0\u1EE3c r\xFAt t\u1ED1i \u0111a 3 l\xE1."
-  reward: {fileID: 11400000, guid: 780775c793f0e2144ac7690a1ccb64b3, type: 2}
+  traitID: 10
+  icon: {fileID: 21300000, guid: eed44235dcbd621438f7c0c4f05e2356, type: 3}
+  traitName: Royal Decree
+  description: "M\u1ED7i l\u01B0\u1EE3t \u0111\u1ED5i ng\u1EABu nhi\xEAn m\u1ED9t
+    ch\u1EA5t, ch\u1EC9 ch\u1EA5t \u0111\xF3 m\u1EDBi g\xE2y s\xE1t th\u01B0\u01A1ng."
+  reward: {fileID: 11400000, guid: f5d0c56242820fc48bcde936018d8a03, type: 2}

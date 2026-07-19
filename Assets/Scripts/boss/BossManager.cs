@@ -14,6 +14,7 @@ public class BossManager : MonoBehaviour
     [Header("Display")]
     [SerializeField] private BossDisplay bossDisplay;
     [SerializeField] private BossInfoPanelUI bossInfoPanel;
+    [SerializeField] private TraitSelectionPanelUI traitSelectionPanel;
     public BossDisplay BossDisplay => bossDisplay;
 
     public Transform BossTransform => bossDisplay.transform;
@@ -43,6 +44,7 @@ public class BossManager : MonoBehaviour
     public void Initialize()
     {
         CreateQueue();
+        InitializeTraitPools();
         LoadNextBoss();
     }
 
@@ -72,7 +74,35 @@ public class BossManager : MonoBehaviour
         foreach (BossSO boss in l)
             bossQueue.Enqueue(boss);
     }
+    private void InitializeTraitPools()
+    {
+        if (jackBosses.Count > 0)
+        {
+            TraitPoolManager.Instance.InitializePool(
+                BossRank.Jack,
+                jackBosses[0].possibleTraits
+            );
+        }
 
+        if (queenBosses.Count > 0)
+        {
+            TraitPoolManager.Instance.InitializePool(
+                BossRank.Queen,
+                queenBosses[0].possibleTraits
+            );
+        }
+
+        if (kingBosses.Count > 0)
+        {
+            TraitPoolManager.Instance.InitializePool(
+                BossRank.King,
+                kingBosses[0].possibleTraits
+            );
+        }
+        Debug.Log("Jack Trait : " + jackBosses[0].possibleTraits.Count);
+        Debug.Log("Queen Trait : " + queenBosses[0].possibleTraits.Count);
+        Debug.Log("King Trait : " + kingBosses[0].possibleTraits.Count);
+    }
     private void Shuffle(List<BossSO> list)
     {
         for (int i = list.Count - 1; i > 0; i--)
@@ -96,6 +126,7 @@ public class BossManager : MonoBehaviour
         bossInfoPanel.Setup(CurrentBoss);
         bossDisplay.UpdateHP(CurrentHP);
         bossDisplay.UpdateATK(CurrentATK);
+        traitSelectionPanel.Show(CurrentBoss);
 
 
         if (!string.IsNullOrEmpty(CurrentBoss.spawnSoundID))

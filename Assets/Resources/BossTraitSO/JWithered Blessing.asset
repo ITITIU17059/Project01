@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ebe589fe1e61e45b76eb31a2b1f86e, type: 3}
-  m_Name: Heavy Guard
+  m_Name: JWithered Blessing
   m_EditorClassIdentifier: Assembly-CSharp::BossTraitSO
-  traitID: 2
-  icon: {fileID: 21300000, guid: 08c71e4e0565fe4469d1e0a593047156, type: 3}
-  traitName: Heavy Guard
-  description: "L\xE1 B\xEDch > 5 +  3 ATK boss"
-  reward: {fileID: 11400000, guid: 856a49aaac780cd40a92e99be9f7f622, type: 2}
+  traitID: 1
+  icon: {fileID: 21300000, guid: ee40d72ece864764f9d17d015aedb524, type: 3}
+  traitName: Withered Blessing
+  description: "C\u01A1 ch\u1EC9 h\u1ED3i \u0111\u01B0\u1EE3c 1 l\xE1."
+  reward: {fileID: 11400000, guid: ce3d5d7962e118849986f86ff187f0bd, type: 2}

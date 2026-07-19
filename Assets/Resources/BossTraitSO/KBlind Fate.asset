@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ebe589fe1e61e45b76eb31a2b1f86e, type: 3}
-  m_Name: Blind Fate
+  m_Name: KBlind Fate
   m_EditorClassIdentifier: Assembly-CSharp::BossTraitSO
   traitID: 9
   icon: {fileID: 21300000, guid: 37de44bcb59b8174497def1957cc490b, type: 3}

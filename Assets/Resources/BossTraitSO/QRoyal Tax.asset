@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ebe589fe1e61e45b76eb31a2b1f86e, type: 3}
-  m_Name: Royal Decree
+  m_Name: QRoyal Tax
   m_EditorClassIdentifier: Assembly-CSharp::BossTraitSO
-  traitID: 10
-  icon: {fileID: 21300000, guid: eed44235dcbd621438f7c0c4f05e2356, type: 3}
-  traitName: Royal Decree
-  description: "M\u1ED7i l\u01B0\u1EE3t \u0111\u1ED5i ng\u1EABu nhi\xEAn m\u1ED9t
-    ch\u1EA5t, ch\u1EC9 ch\u1EA5t \u0111\xF3 m\u1EDBi g\xE2y s\xE1t th\u01B0\u01A1ng."
-  reward: {fileID: 11400000, guid: f5d0c56242820fc48bcde936018d8a03, type: 2}
+  traitID: 4
+  icon: {fileID: 21300000, guid: bbe833a9207e7fa41bbd3ce71ad09605, type: 3}
+  traitName: Royal Tax
+  description: "Discard ph\u1EA3i b\u1ECF th\xEAm 1 l\xE1."
+  reward: {fileID: 11400000, guid: 07a22f9e7ab9c364ea358bb4bba78769, type: 2}

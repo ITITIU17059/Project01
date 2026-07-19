@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ebe589fe1e61e45b76eb31a2b1f86e, type: 3}
-  m_Name: Endless Wrath
+  m_Name: JBroken Force
   m_EditorClassIdentifier: Assembly-CSharp::BossTraitSO
-  traitID: 11
-  icon: {fileID: 21300000, guid: 125bb49b217257347be09ede099b888d, type: 3}
-  traitName: Endless Wrath
-  description: "M\u1ED7i l\u01B0\u1EE3t t\u0103ng ATK theo c\u1EA5p s\u1ED1 c\u1ED9ng
-    (1 + X)."
-  reward: {fileID: 11400000, guid: 6d6d99a7b51ac2842902754b6ec07fcd, type: 2}
+  traitID: 3
+  icon: {fileID: 21300000, guid: 0389074d1deba1c448d45812db40c0df, type: 3}
+  traitName: Broken Force
+  description: "Chu\u1ED3ng kh\xF4ng nh\xE2n 2 v\u1EDBi l\xE1 > 6"
+  reward: {fileID: 11400000, guid: ae0998b0e967f6a4088bff6393ceeef0, type: 2}

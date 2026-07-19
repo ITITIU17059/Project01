@@ -8,23 +8,40 @@ public class TraitSelectionPanelUI : MonoBehaviour
 
     private BossSO currentBoss;
     private readonly List<GameObject> spawnedCards = new();
+    
     public void Show(BossSO boss)
     {
+
+
         currentBoss = boss;
 
         gameObject.SetActive(true);
 
+        transform.SetAsLastSibling();
+
         ClearCards();
 
-        int count = Mathf.Min(3, boss.possibleTraits.Count);
 
-        for (int i = 0; i < count; i++)
+        List<BossTraitSO> traits =
+    TraitPoolManager.Instance.GetRandomTraits(
+        boss.rank,
+        3
+    );
+
+        foreach (BossTraitSO trait in traits)
         {
-            GameObject card = Instantiate(traitCardPrefab, traitContainer);
+            GameObject card =
+                Instantiate(traitCardPrefab, traitContainer);
 
-            TraitCardUI ui = card.GetComponent<TraitCardUI>();
+            TraitCardUI ui =
+                card.GetComponent<TraitCardUI>();
 
-            ui.Setup(boss.possibleTraits[i]);
+            ui.Setup(trait);
+
+            TraitCardButton button =
+                card.GetComponent<TraitCardButton>();
+
+            button.Initialize(this, trait);
 
             spawnedCards.Add(card);
         }
@@ -46,7 +63,10 @@ public class TraitSelectionPanelUI : MonoBehaviour
     {
         currentBoss.currentTrait = selectedTrait;
         currentBoss.currentReward = selectedTrait.reward;
-
+        TraitPoolManager.Instance.RemoveTrait(
+        currentBoss.rank,
+        selectedTrait
+        );
         BossManager.Instance.RefreshBossInfo();
 
         gameObject.SetActive(false);
