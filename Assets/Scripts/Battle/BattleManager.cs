@@ -513,7 +513,7 @@ public class BattleManager : MonoBehaviour
             tavernSpawnPoint
         );
 
-        deckManager.ShuffleDeck();
+        //deckManager.ShuffleDeck();
         deckManager.RefreshDeckBar();
     }
 
