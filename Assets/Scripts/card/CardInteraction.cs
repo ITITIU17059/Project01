@@ -47,6 +47,9 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleMouseEnter()
     {
+        
+        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+            return;
         if (SoundManager.instance != null)
         {
             SoundManager.instance.PlaySound2D("CardHover");
@@ -72,6 +75,8 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleMouseExit()
     {
+        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+            return;
         if (!isHovered || isDragging) return;
         isHovered = false;
 
@@ -92,13 +97,17 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleDragStart()
     {
-     
+        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+            return;
         isDragging = true;
         cardPhysics.ResetPhysics();
     }
 
     public void HandleDragging(Vector3 targetWorldPos)
     {
+       
+        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+            return;
         transform.position = targetWorldPos;
 
         if (!isSelectedInCenter)
@@ -110,6 +119,8 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleDragEnd(bool isClick, Vector3 mouseWorldPos)
     {
+        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+            return;
         if (!isDragging) return;
         isDragging = false;
         isHovered = false;
@@ -156,7 +167,8 @@ public class CardInteraction : MonoBehaviour
 
     private void ToggleCardSelection()
     {
-   
+        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+            return;
         if (!handManager) return;
         transform.DOKill();
         transform.DORotate(Vector3.zero, 0.15f);

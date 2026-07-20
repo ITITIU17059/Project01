@@ -34,7 +34,9 @@ public class HandManager : MonoBehaviour
     {
 
     }
-    public bool canInteract { get; private set; } = true;
+    private bool canInteract = true;
+    public bool CanInteract => canInteract;
+    public bool IsDiscardMode => isDiscardMode;
 
     public void SetInteractable(bool value)
     {
@@ -404,6 +406,18 @@ public class HandManager : MonoBehaviour
             return true;
 
         return total + newValue <= 10;
+    }
+    public void ResetAllCardHover()
+    {
+        foreach (GameObject card in handCards)
+        {
+            CardInteraction interaction = card.GetComponent<CardInteraction>();
+
+            if (interaction != null)
+            {
+                interaction.HandleDeselect();
+            }
+        }
     }
     public void CancelCurrentSelection()
     {
