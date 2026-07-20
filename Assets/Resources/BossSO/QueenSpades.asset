@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: QueenSpades
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
   bossName: Queen of Spades
-  cardSprite: {fileID: -5781337745158164669, guid: 0b13790f415ff4540881da8c39c4483d, type: 3}
+  cardSprite: {fileID: -6326129063433842016, guid: 37e1b83fb10f47344853eb1c022aa681, type: 3}
   suit: 4
   hp: 30
   atk: 15
