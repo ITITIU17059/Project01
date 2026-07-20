@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40fee21677203da438e6b3b7aab3b738, type: 3}
   m_Name: 4Spades
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
-  cardSprite: {fileID: -6753424832047052619, guid: 6c8329ca6b7c6b849b28859b10d62d8b, type: 3}
+  cardSprite: {fileID: 1052478843260823358, guid: 5547a67243b8e6e44a85bf11062c52eb, type: 3}
   value: 4
   suit: 4
   type: 1

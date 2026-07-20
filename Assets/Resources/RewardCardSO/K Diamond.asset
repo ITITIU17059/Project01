@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40fee21677203da438e6b3b7aab3b738, type: 3}
   m_Name: K Diamond
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
-  cardSprite: {fileID: 680571131446629603, guid: bcf34604bb23a6f46ba3d19b61a3ac69, type: 3}
+  cardSprite: {fileID: -611116401464331423, guid: 37e1b83fb10f47344853eb1c022aa681, type: 3}
   value: 20
   suit: 2
   type: 4
