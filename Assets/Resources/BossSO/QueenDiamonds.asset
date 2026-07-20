@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: QueenDiamonds
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
   bossName: Queen of Diamonds
-  cardSprite: {fileID: -2723828375892563550, guid: 3095c570a07d84d4ba01e31ec8ac7abc, type: 3}
+  cardSprite: {fileID: -726366967544383059, guid: 37e1b83fb10f47344853eb1c022aa681, type: 3}
   suit: 2
   hp: 30
   atk: 15

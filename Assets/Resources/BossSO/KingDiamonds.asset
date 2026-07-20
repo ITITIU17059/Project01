@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: KingDiamonds
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
   bossName: King of Diamonds
-  cardSprite: {fileID: 680571131446629603, guid: bcf34604bb23a6f46ba3d19b61a3ac69, type: 3}
+  cardSprite: {fileID: -611116401464331423, guid: 37e1b83fb10f47344853eb1c022aa681, type: 3}
   suit: 2
   hp: 40
   atk: 20

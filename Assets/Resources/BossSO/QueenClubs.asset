@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: QueenClubs
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
   bossName: Queen of Clubs
-  cardSprite: {fileID: 3529022629283077381, guid: 3884db31d10a0c54eae546a45201643f, type: 3}
+  cardSprite: {fileID: 883625683549101819, guid: 37e1b83fb10f47344853eb1c022aa681, type: 3}
   suit: 3
   hp: 30
   atk: 15

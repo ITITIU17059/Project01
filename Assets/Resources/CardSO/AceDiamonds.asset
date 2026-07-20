@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40fee21677203da438e6b3b7aab3b738, type: 3}
   m_Name: AceDiamonds
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
-  cardSprite: {fileID: -2255316151519851609, guid: 14ae9e1cd5dadd746a2efbfaa48d637c, type: 3}
+  cardSprite: {fileID: -8961030851059602783, guid: 5547a67243b8e6e44a85bf11062c52eb, type: 3}
   value: 1
   suit: 2
   type: 1
