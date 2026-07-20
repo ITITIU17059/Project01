@@ -108,10 +108,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
+    maxTextureSize: 4096
+    resizeAlgorithm: 1
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -152,12 +152,12 @@ TextureImporter:
       name: BossUpdate_0
       rect:
         serializedVersion: 2
-        x: 14
-        y: 488
-        width: 96
-        height: 145
+        x: 16
+        y: 490
+        width: 91
+        height: 141
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -174,12 +174,12 @@ TextureImporter:
       name: BossUpdate_1
       rect:
         serializedVersion: 2
-        x: 123
-        y: 488
-        width: 96
-        height: 145
+        x: 125
+        y: 491
+        width: 92
+        height: 140
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -196,12 +196,12 @@ TextureImporter:
       name: BossUpdate_2
       rect:
         serializedVersion: 2
-        x: 232
-        y: 488
-        width: 96
-        height: 145
+        x: 235
+        y: 491
+        width: 91
+        height: 140
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -218,12 +218,12 @@ TextureImporter:
       name: BossUpdate_3
       rect:
         serializedVersion: 2
-        x: 341
-        y: 488
-        width: 96
-        height: 145
+        x: 343
+        y: 492
+        width: 91
+        height: 139
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -240,12 +240,12 @@ TextureImporter:
       name: BossUpdate_4
       rect:
         serializedVersion: 2
-        x: 14
-        y: 330
-        width: 96
-        height: 145
+        x: 16
+        y: 332
+        width: 91
+        height: 140
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -262,12 +262,12 @@ TextureImporter:
       name: BossUpdate_5
       rect:
         serializedVersion: 2
-        x: 123
-        y: 330
-        width: 96
-        height: 145
+        x: 125
+        y: 333
+        width: 92
+        height: 138
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -284,12 +284,12 @@ TextureImporter:
       name: BossUpdate_6
       rect:
         serializedVersion: 2
-        x: 232
-        y: 330
-        width: 96
-        height: 145
+        x: 235
+        y: 332
+        width: 91
+        height: 140
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -306,12 +306,12 @@ TextureImporter:
       name: BossUpdate_7
       rect:
         serializedVersion: 2
-        x: 341
-        y: 330
-        width: 96
-        height: 145
+        x: 344
+        y: 333
+        width: 91
+        height: 139
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -328,12 +328,12 @@ TextureImporter:
       name: BossUpdate_8
       rect:
         serializedVersion: 2
-        x: 14
-        y: 172
-        width: 96
-        height: 145
+        x: 16
+        y: 174
+        width: 91
+        height: 138
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -350,12 +350,12 @@ TextureImporter:
       name: BossUpdate_9
       rect:
         serializedVersion: 2
-        x: 123
-        y: 172
-        width: 96
-        height: 145
+        x: 125
+        y: 174
+        width: 92
+        height: 139
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -372,12 +372,12 @@ TextureImporter:
       name: BossUpdate_10
       rect:
         serializedVersion: 2
-        x: 232
-        y: 172
-        width: 96
-        height: 145
+        x: 235
+        y: 175
+        width: 91
+        height: 137
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -394,12 +394,12 @@ TextureImporter:
       name: BossUpdate_11
       rect:
         serializedVersion: 2
-        x: 341
-        y: 172
-        width: 96
-        height: 145
+        x: 343
+        y: 174
+        width: 91
+        height: 139
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -416,12 +416,12 @@ TextureImporter:
       name: BossUpdate_12
       rect:
         serializedVersion: 2
-        x: 14
-        y: 14
-        width: 96
-        height: 145
+        x: 16
+        y: 17
+        width: 92
+        height: 139
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -438,7 +438,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: adcc3ec0428201a4cb368b19d5b295a5
     internalID: 0
     vertices: []
     indices: 
