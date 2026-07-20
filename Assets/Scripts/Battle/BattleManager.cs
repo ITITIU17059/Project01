@@ -254,7 +254,7 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-        ChangeState(BattleState.PlayerTurn);
+        yield break;
 
     }
 

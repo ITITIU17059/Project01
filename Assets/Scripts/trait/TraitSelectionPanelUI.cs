@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class TraitSelectionPanelUI : MonoBehaviour
 {
@@ -12,8 +14,11 @@ public class TraitSelectionPanelUI : MonoBehaviour
     public void Show(BossSO boss)
     {
 
-
         currentBoss = boss;
+        HandManager hand = FindAnyObjectByType<HandManager>();
+
+        hand.SetInteractable(false);
+        hand.ResetAllCardHover();
 
         gameObject.SetActive(true);
 
@@ -62,6 +67,7 @@ public class TraitSelectionPanelUI : MonoBehaviour
     public void SelectTrait(BossTraitSO selectedTrait)
     {
         currentBoss.currentTrait = selectedTrait;
+        TraitManager.Instance.SetCurrentTrait(selectedTrait);
         currentBoss.currentReward = selectedTrait.reward;
         TraitPoolManager.Instance.RemoveTrait(
         currentBoss.rank,
@@ -72,5 +78,8 @@ public class TraitSelectionPanelUI : MonoBehaviour
         gameObject.SetActive(false);
 
         BattleManager.Instance.StartBattleAfterTraitSelected();
+        FindAnyObjectByType<HandManager>()
+    .SetInteractable(true);
+        TraitManager.Instance.DebugCurrentTrait();
     }
 }
