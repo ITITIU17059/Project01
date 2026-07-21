@@ -334,20 +334,48 @@ public class BattleManager : MonoBehaviour
                     break;
             }
         }
-
+        
         if (hasClub)
+        {
+            int originalDamage = damage;
+
             damage *= 2;
+
+            foreach (CardSO card in cards)
+            {
+                if (card.suit == CardSO.Suit.Clubs)
+                {
+                    damage = TraitManager.Instance.ModifyAttackDamage(
+                        card,
+                        originalDamage,
+                        damage);
+
+                    break;
+                }
+            }
+        }
 
         BossManager.Instance.TakeDamage(damage);
 
         if (hasHeart)
+        {
+            total = TraitManager.Instance.ModifyHealAmount(total);
+
             HealDeck(total);
+        }
 
         if (hasDiamond)
+        {
+            total = TraitManager.Instance.ModifyDrawAmount(total);
             DrawBonusCards(total);
+        }
 
         if (hasSpade)
+        {
+            total = TraitManager.Instance.ModifyShieldAmount(total);
+
             BossManager.Instance.ReduceAttack(total);
+        }
 
         // Chạy animation theo đúng thứ tự bài đánh
         foreach (GameObject obj in handManager.selectedCards)
@@ -384,6 +412,7 @@ public class BattleManager : MonoBehaviour
 
     private void DrawBonusCards(int amount)
     {
+        
         for (int i = 0; i < amount; i++)
         {
             deckManager.DrawCard(handManager);
@@ -495,6 +524,7 @@ public class BattleManager : MonoBehaviour
 
     private void HealDeck(int amount)
     {
+        
         if (GraveyardManager.Instance == null)
             return;
 

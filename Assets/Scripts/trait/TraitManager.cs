@@ -4,8 +4,6 @@ public class TraitManager : MonoBehaviour
 {
     public static TraitManager Instance { get; private set; }
 
-    private BossTraitSO currentTrait;
-
     private void Awake()
     {
         if (Instance == null)
@@ -14,25 +12,69 @@ public class TraitManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void SetCurrentTrait(BossTraitSO trait)
+    //====================================================
+    // Current Trait
+    //====================================================
+
+    public BossTraitSO CurrentTrait
     {
-        currentTrait = trait;
+        get
+        {
+            if (BossManager.Instance == null)
+                return null;
+
+            if (BossManager.Instance.CurrentBoss == null)
+                return null;
+
+            return BossManager.Instance.CurrentBoss.currentTrait;
+        }
     }
 
-    public BossTraitSO GetCurrentTrait()
+    public bool HasTrait => CurrentTrait != null;
+
+    //====================================================
+    // Event
+    //====================================================
+
+    public int ModifyDrawAmount(int amount)
     {
-        return currentTrait;
+        return BossSkill.ModifyDrawAmount(CurrentTrait, amount);
     }
 
-    public bool HasTrait()
+    public int ModifyHealAmount(int amount)
     {
-        return currentTrait != null;
+        return BossSkill.ModifyHealAmount(CurrentTrait, amount);
     }
-    public void DebugCurrentTrait()
-    {
-        if (currentTrait == null)
-            return;
 
-        Debug.Log("Current Trait: " + currentTrait.traitID);
+    public int ModifyShieldAmount(int amount)
+    {
+        return BossSkill.ModifyShieldAmount(CurrentTrait, amount);
+    }
+
+    public int ModifyAttackDamage(
+     CardSO card,
+     int originalDamage,
+     int finalDamage)
+    {
+        return BossSkill.ModifyAttackDamage(
+            CurrentTrait,
+            card,
+            originalDamage,
+            finalDamage);
+    }
+
+
+    public RewardSO CurrentReward
+    {
+        get
+        {
+            if (BossManager.Instance == null)
+                return null;
+
+            if (BossManager.Instance.CurrentBoss == null)
+                return null;
+
+            return BossManager.Instance.CurrentBoss.currentReward;
+        }
     }
 }

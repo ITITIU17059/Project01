@@ -67,7 +67,7 @@ public class TraitSelectionPanelUI : MonoBehaviour
     public void SelectTrait(BossTraitSO selectedTrait)
     {
         currentBoss.currentTrait = selectedTrait;
-        TraitManager.Instance.SetCurrentTrait(selectedTrait);
+        
         currentBoss.currentReward = selectedTrait.reward;
         TraitPoolManager.Instance.RemoveTrait(
         currentBoss.rank,
@@ -80,6 +80,6 @@ public class TraitSelectionPanelUI : MonoBehaviour
         BattleManager.Instance.StartBattleAfterTraitSelected();
         FindAnyObjectByType<HandManager>()
     .SetInteractable(true);
-        TraitManager.Instance.DebugCurrentTrait();
+       
     }
 }
