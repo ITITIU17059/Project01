@@ -524,7 +524,6 @@ public class BattleManager : MonoBehaviour
 
     private void HealDeck(int amount)
     {
-        
         if (GraveyardManager.Instance == null)
             return;
 
@@ -534,8 +533,7 @@ public class BattleManager : MonoBehaviour
         if (healedCards.Count == 0)
             return;
 
-        foreach (CardSO card in healedCards)
-            deckManager.allCards.Add(card);
+        deckManager.allCards.AddRange(healedCards);
 
         CardFXManager.Instance.PlayHealDeckFX(
             healedCards,
@@ -543,7 +541,6 @@ public class BattleManager : MonoBehaviour
             tavernSpawnPoint
         );
 
-        //deckManager.ShuffleDeck();
         deckManager.RefreshDeckBar();
     }
 
