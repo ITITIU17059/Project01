@@ -62,6 +62,25 @@ public class TraitManager : MonoBehaviour
             originalDamage,
             finalDamage);
     }
+    public int ModifyRewardDrawAmount(int amount)
+    {
+        return RewardSkill.ModifyDrawAmount(CurrentReward, amount);
+    }
+
+    public int ModifyRewardHealAmount(int amount)
+    {
+        return RewardSkill.ModifyHealAmount(CurrentReward, amount);
+    }
+
+    public int ModifyRewardShieldAmount(int amount)
+    {
+        return RewardSkill.ModifyShieldAmount(CurrentReward, amount);
+    }
+
+    public int ModifyRewardAttackDamage(CardSO card, int original, int finalDamage)
+    {
+        return RewardSkill.ModifyAttackDamage(CurrentReward, card, original, finalDamage);
+    }
 
 
     public RewardSO CurrentReward
