@@ -6,7 +6,10 @@ public static class RewardSkill
     public delegate int ValueModifier(int value);
 
     public delegate int DamageModifier(CardSO card, int originalValue, int finalValue);
+    public delegate void RewardEvent();
 
+    private static Dictionary<TraitID, RewardEvent> playerTurnEvents;
+    private static Dictionary<TraitID, RewardEvent> discardEvents;
     private static Dictionary<TraitID, ValueModifier> drawModifiers;
     private static Dictionary<TraitID, ValueModifier> healModifiers;
     private static Dictionary<TraitID, ValueModifier> shieldModifiers;
@@ -18,6 +21,26 @@ public static class RewardSkill
         InitializeHealModifiers();
         InitializeShieldModifiers();
         InitializeAttackModifiers();
+
+        InitializePlayerTurnEvents();
+        InitializeDiscardEvents();
+    }
+    private static void InitializePlayerTurnEvents()
+    {
+        playerTurnEvents = new();
+
+        playerTurnEvents.Add(
+            TraitID.J_GREEDY_TRIBUTE,
+            JackGreedyTribute_PlayerTurnReward);
+    }
+
+    private static void InitializeDiscardEvents()
+    {
+        discardEvents = new();
+
+        discardEvents.Add(
+            TraitID.J_WITHERED_BLESSING,
+            JackWitheredBlessing_DiscardReward);
     }
     private static void InitializeDrawModifiers()
     {
@@ -32,11 +55,18 @@ public static class RewardSkill
     private static void InitializeShieldModifiers()
     {
         shieldModifiers = new();
+
+        shieldModifiers.Add(
+    TraitID.J_HEAVY_GUARD,
+    JackHeavyGuard_ShieldReward);
     }
 
     private static void InitializeAttackModifiers()
     {
         attackModifiers = new();
+        attackModifiers.Add(
+    TraitID.J_BROKEN_FORCE,
+    JackBrokenForce_AttackReward);
     }
     public static int ModifyDrawAmount(
         RewardSO reward,
@@ -106,5 +136,67 @@ public static class RewardSkill
         }
 
         return finalValue;
+    }
+
+    private static void JackGreedyTribute_PlayerTurnReward()
+    {
+        Debug.Log("Reward J1 Activated");
+
+        BattleManager.Instance.DrawBonusCards(1);
+    }
+    private static void JackWitheredBlessing_DiscardReward()
+    {
+        Debug.Log("Reward J2 Activated");
+
+        BattleManager.Instance.HealDeck(2);
+    }
+    private static int JackHeavyGuard_ShieldReward(int amount)
+    {
+        Debug.Log("Reward J3 Activated");
+
+        return amount + 3;
+    }
+    private static int JackBrokenForce_AttackReward(
+    CardSO card,
+    int originalValue,
+    int finalValue)
+    {
+        Debug.Log("Reward J4 Activated");
+
+        if (card == null)
+            return finalValue;
+
+        if (card.suit != CardSO.Suit.Clubs)
+            return finalValue;
+
+        if (card.value >= 6)
+            return finalValue;
+
+        return originalValue * 3;
+    }
+    public static void InvokePlayerTurn(RewardSO reward)
+    {
+        if (reward == null)
+            return;
+
+        if (playerTurnEvents.TryGetValue(
+            reward.traitID,
+            out RewardEvent evt))
+        {
+            evt.Invoke();
+        }
+    }
+
+    public static void InvokeDiscard(RewardSO reward)
+    {
+        if (reward == null)
+            return;
+
+        if (discardEvents.TryGetValue(
+            reward.traitID,
+            out RewardEvent evt))
+        {
+            evt.Invoke();
+        }
     }
 }
