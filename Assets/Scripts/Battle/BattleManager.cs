@@ -96,7 +96,7 @@ public class BattleManager : MonoBehaviour
             BossManager.Instance.RandomizeJokerSuit();
 
         handManager.SetInteractable(true);
-
+        TraitManager.Instance.InvokeRewardPlayerTurn();
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -350,6 +350,11 @@ public class BattleManager : MonoBehaviour
                         originalDamage,
                         damage);
 
+                    damage = TraitManager.Instance.ModifyRewardAttackDamage(
+                        card,
+                        originalDamage,
+                        damage);
+
                     break;
                 }
             }
@@ -367,17 +372,30 @@ public class BattleManager : MonoBehaviour
         if (hasDiamond)
         {
             total = TraitManager.Instance.ModifyDrawAmount(total);
+           
             DrawBonusCards(total);
         }
 
         if (hasSpade)
         {
-            total = TraitManager.Instance.ModifyShieldAmount(total);
+            int reduceAmount = total;
 
-            BossManager.Instance.ReduceAttack(total);
+            reduceAmount = TraitManager.Instance.ModifyShieldAmount(reduceAmount);
+
+            foreach (CardSO card in cards)
+            {
+                if (card.suit == CardSO.Suit.Spades &&
+                    card.value < 6)
+                {
+                    reduceAmount = TraitManager.Instance.ModifyRewardShieldAmount(reduceAmount);
+                    break;
+                }
+            }
+
+            BossManager.Instance.ReduceAttack(reduceAmount);
         }
 
-        // Chạy animation theo đúng thứ tự bài đánh
+        // ===== EFFECT ANIMATION =====
         foreach (GameObject obj in handManager.selectedCards)
         {
             CardDisplay display = obj.GetComponent<CardDisplay>();
@@ -386,6 +404,8 @@ public class BattleManager : MonoBehaviour
                 display.cardScriptableObject,
                 display.transform);
         }
+
+        yield break;
     }
 
     private IEnumerator FinishDiscardRoutine(bool success)
@@ -394,6 +414,8 @@ public class BattleManager : MonoBehaviour
 
         if (success)
         {
+            TraitManager.Instance.InvokeRewardDiscard();
+
             yield return StartCoroutine(
                 BossFXManager.Instance.PlayBlockSuccessFX());
 
@@ -410,7 +432,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void DrawBonusCards(int amount)
+    public void DrawBonusCards(int amount)
     {
         
         for (int i = 0; i < amount; i++)
@@ -511,18 +533,7 @@ public class BattleManager : MonoBehaviour
     #endregion
 
     #region Card Effect
-
-
-    private void AttackBoss(int damage)
-    {
-        BossManager.Instance.TakeDamage(damage);
-
-        Debug.Log("Boss HP : " + BossManager.Instance.CurrentHP);
-    }
-
-
-
-    private void HealDeck(int amount)
+    public void HealDeck(int amount)
     {
         if (GraveyardManager.Instance == null)
             return;
@@ -545,7 +556,17 @@ public class BattleManager : MonoBehaviour
     }
 
     #endregion
+    public void InvokeRewardPlayerTurn()
+    {
+        RewardSkill.InvokePlayerTurn(
+            BossManager.Instance.CurrentBoss.currentReward);
+    }
 
+    public void InvokeRewardDiscard()
+    {
+        RewardSkill.InvokeDiscard(
+            BossManager.Instance.CurrentBoss.currentReward);
+    }
     #region End Battle
 
     private void Victory()

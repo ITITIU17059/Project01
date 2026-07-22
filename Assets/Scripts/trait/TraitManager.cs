@@ -64,36 +64,48 @@ public class TraitManager : MonoBehaviour
     }
     public int ModifyRewardDrawAmount(int amount)
     {
-        return RewardSkill.ModifyDrawAmount(CurrentReward, amount);
+        return RewardSkill.ModifyDrawAmount(
+            RewardManager.Instance.CurrentReward,
+            amount);
     }
 
     public int ModifyRewardHealAmount(int amount)
     {
-        return RewardSkill.ModifyHealAmount(CurrentReward, amount);
+        return RewardSkill.ModifyHealAmount(
+            RewardManager.Instance.CurrentReward,
+            amount);
     }
 
     public int ModifyRewardShieldAmount(int amount)
     {
-        return RewardSkill.ModifyShieldAmount(CurrentReward, amount);
+        return RewardSkill.ModifyShieldAmount(
+            RewardManager.Instance.CurrentReward,
+            amount);
     }
 
-    public int ModifyRewardAttackDamage(CardSO card, int original, int finalDamage)
+    public int ModifyRewardAttackDamage(
+        CardSO card,
+        int original,
+        int finalDamage)
     {
-        return RewardSkill.ModifyAttackDamage(CurrentReward, card, original, finalDamage);
+        return RewardSkill.ModifyAttackDamage(
+            RewardManager.Instance.CurrentReward,
+            card,
+            original,
+            finalDamage);
     }
 
-
-    public RewardSO CurrentReward
+    public void InvokeRewardPlayerTurn()
     {
-        get
-        {
-            if (BossManager.Instance == null)
-                return null;
-
-            if (BossManager.Instance.CurrentBoss == null)
-                return null;
-
-            return BossManager.Instance.CurrentBoss.currentReward;
-        }
+        RewardSkill.InvokePlayerTurn(
+            RewardManager.Instance.CurrentReward);
     }
+
+    public void InvokeRewardDiscard()
+    {
+        RewardSkill.InvokeDiscard(
+            RewardManager.Instance.CurrentReward);
+    }
+
+
 }
