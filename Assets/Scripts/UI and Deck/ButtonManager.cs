@@ -30,4 +30,11 @@ public class ButtonManager : MonoBehaviour
     {
         SoundManager.instance.PlaySound2D("Click");
     }
+
+    public void RefreshState()
+    {
+        image.color = button.interactable
+            ? Color.white
+            : new Color(1f, 1f, 1f, 0.4f);
+    }
 }

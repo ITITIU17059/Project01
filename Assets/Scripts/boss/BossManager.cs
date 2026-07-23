@@ -19,12 +19,15 @@ public class BossManager : MonoBehaviour
 
     public Transform BossTransform => bossDisplay.transform;
 
-    private readonly Queue<BossSO> bossQueue = new();
+    private readonly List<BossSO> bossSequence = new();
+
+    public int CurrentBossIndex { get; private set; }
+    public int CurrentStageIndex { get; private set; }
 
     private int defeatedJack;
     private int defeatedQueen;
     private int defeatedKing;
- 
+
 
     public BossSO CurrentBoss { get; private set; }
 
@@ -45,34 +48,53 @@ public class BossManager : MonoBehaviour
     {
         CreateQueue();
         InitializeTraitPools();
+
+        SaveData save = SaveManager.Instance.LoadProgress();
+
+        if (save != null)
+        {
+            CurrentStageIndex = save.stageIndex;
+            CurrentBossIndex = save.bossIndex;
+
+            defeatedJack = Mathf.Min(CurrentBossIndex, jackBosses.Count);
+
+            if (CurrentBossIndex >= jackBosses.Count)
+                defeatedQueen = Mathf.Min(CurrentBossIndex - jackBosses.Count, queenBosses.Count);
+
+            if (CurrentBossIndex >= jackBosses.Count + queenBosses.Count)
+                defeatedKing = Mathf.Min(
+                    CurrentBossIndex - jackBosses.Count - queenBosses.Count,
+                    kingBosses.Count);
+        }
+        else
+        {
+            CurrentBossIndex = 0;
+            CurrentStageIndex = 0;
+        }
+
+        StageManager.Instance.ApplyStage(CurrentStageIndex);
+
         LoadNextBoss();
     }
 
     private void CreateQueue()
     {
-        bossQueue.Clear();
+        bossSequence.Clear();
 
         List<BossSO> j = new(jackBosses);
         List<BossSO> q = new(queenBosses);
         List<BossSO> k = new(kingBosses);
-        List<BossSO> l = new(jokerBosses);
+        List<BossSO> joker = new(jokerBosses);
 
         Shuffle(j);
         Shuffle(q);
         Shuffle(k);
-        Shuffle(l);
+        Shuffle(joker);
 
-        foreach (BossSO boss in j)
-            bossQueue.Enqueue(boss);
-
-        foreach (BossSO boss in q)
-            bossQueue.Enqueue(boss);
-
-        foreach (BossSO boss in k)
-            bossQueue.Enqueue(boss);
-
-        foreach (BossSO boss in l)
-            bossQueue.Enqueue(boss);
+        bossSequence.AddRange(j);
+        bossSequence.AddRange(q);
+        bossSequence.AddRange(k);
+        bossSequence.AddRange(joker);
     }
     private void InitializeTraitPools()
     {
@@ -114,32 +136,56 @@ public class BossManager : MonoBehaviour
 
     public bool LoadNextBoss()
     {
-        if (bossQueue.Count == 0)
+        if (CurrentBossIndex >= bossSequence.Count)
             return false;
 
-        CurrentBoss = bossQueue.Dequeue();
+        CurrentBoss = bossSequence[CurrentBossIndex];
 
         CurrentHP = CurrentBoss.hp;
         CurrentBoss.currentATK = CurrentBoss.atk;
 
         bossDisplay.Setup(CurrentBoss);
         bossInfoPanel.Setup(CurrentBoss);
+
         bossDisplay.UpdateHP(CurrentHP);
         bossDisplay.UpdateATK(CurrentATK);
+
         traitSelectionPanel.Show(CurrentBoss);
 
-
         if (!string.IsNullOrEmpty(CurrentBoss.spawnSoundID))
-        {
             SoundManager.instance?.PlaySound2D(CurrentBoss.spawnSoundID);
-        }
-     
-        if (BossFXManager.Instance != null)
-        {
-            BossFXManager.Instance.PlaySpawnFX(bossDisplay.transform);
-        }
+
+        BossFXManager.Instance?.PlaySpawnFX(bossDisplay.transform);
 
         return true;
+    }
+
+    public void OnBossDefeated(BossSO deadBoss)
+    {
+        CurrentBossIndex++;
+
+        switch (deadBoss.rank)
+        {
+            case BossRank.Jack:
+                defeatedJack++;
+                if (defeatedJack == jackBosses.Count)
+                    CurrentStageIndex = 1;
+                break;
+
+            case BossRank.Queen:
+                defeatedQueen++;
+                if (defeatedQueen == queenBosses.Count)
+                    CurrentStageIndex = 2;
+                break;
+
+            case BossRank.King:
+                defeatedKing++;
+                if (defeatedKing == kingBosses.Count)
+                    CurrentStageIndex = 3;
+                break;
+        }
+
+        SaveManager.Instance.SaveProgress(CurrentStageIndex, CurrentBossIndex);
     }
 
     public void TakeDamage(int damage)

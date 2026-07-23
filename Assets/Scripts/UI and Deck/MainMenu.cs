@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -8,18 +9,29 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private Button continueButton;
+    [SerializeField] private ButtonManager continueButtonManager;
+    [SerializeField] private EventTrigger eventTrigger;
 
     private void Start()
     {
         LoadVolume();
 
         MusicManager.instance.PlayMusic("MainMenu");
+        RefreshContinueButton();
     }
 
     public void Play()
     {
         SaveVolume();
+        SaveManager.Instance.DeleteSave();
 
+        LevelManager.instance.LoadBattle();
+    }
+
+    public void ContinueGame()
+    {
+        SaveVolume();
         LevelManager.instance.LoadBattle();
     }
 
@@ -65,4 +77,15 @@ public class MainMenu : MonoBehaviour
         audioMixer.SetFloat("Music Volume", music);
         audioMixer.SetFloat("SFX Volume", sfx);
     }
+
+    private void RefreshContinueButton()
+    {
+        bool hasSave = SaveManager.Instance != null &&
+                       SaveManager.Instance.HasSave();
+
+        continueButton.interactable = hasSave;
+        continueButtonManager.RefreshState();
+        eventTrigger.enabled = hasSave;
+    }
+
 }

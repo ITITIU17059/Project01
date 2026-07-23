@@ -27,10 +27,7 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-        background.sprite = jackBackground;
         background.transform.SetAsFirstSibling();
-
-        MusicManager.instance.PlayMusic("JackTheme");
     }
 
     public IEnumerator ChangeStage(BossRank nextStage)
@@ -88,5 +85,33 @@ public class StageManager : MonoBehaviour
         yield return fadeGroup
             .DOFade(0, 0.5f)
             .WaitForCompletion();
+    }
+
+    public void ApplyStage(int stageIndex)
+    {
+        switch (stageIndex)
+        {
+            case 0:
+                background.sprite = jackBackground;
+                MusicManager.instance.PlayMusic("JackTheme");
+                break;
+
+            case 1:
+                background.sprite = queenBackground;
+                MusicManager.instance.PlayMusic("QueenTheme");
+                break;
+
+            case 2:
+                background.sprite = kingBackground;
+                MusicManager.instance.PlayMusic("KingTheme");
+                break;
+
+            case 3:
+                background.sprite = jokerBackground;
+                MusicManager.instance.PlayMusic("JokerTheme");
+                break;
+        }
+
+        background.transform.SetAsFirstSibling();
     }
 }

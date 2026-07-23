@@ -174,32 +174,22 @@ public class BattleManager : MonoBehaviour
                 deadBoss.bossCard,
                 target);
 
-        bool changeStage = BossManager.Instance.NeedChangeStage(deadBoss);
-        handManager.SetInteractable(false);
+        BossManager.Instance.OnBossDefeated(deadBoss);
 
-        if (changeStage)
+        if (BossManager.Instance.CurrentStageIndex == 1 &&
+    deadBoss.rank == BossRank.Jack)
         {
-            BossRank nextStage = deadBoss.rank;
-
-            switch (deadBoss.rank)
-            {
-                case BossRank.Jack:
-                    nextStage = BossRank.Queen;
-                    break;
-
-                case BossRank.Queen:
-                    nextStage = BossRank.King;
-                    break;
-
-                case BossRank.King:
-
-                    nextStage = BossRank.Joker;
-
-                    break;
-            }
-
-            yield return StartCoroutine(
-                StageManager.Instance.ChangeStage(nextStage));
+            yield return StageManager.Instance.ChangeStage(BossRank.Queen);
+        }
+        else if (BossManager.Instance.CurrentStageIndex == 2 &&
+                 deadBoss.rank == BossRank.Queen)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.King);
+        }
+        else if (BossManager.Instance.CurrentStageIndex == 3 &&
+                 deadBoss.rank == BossRank.King)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.Joker);
         }
 
         bool hasNextBoss = BossManager.Instance.LoadNextBoss();
@@ -207,6 +197,7 @@ public class BattleManager : MonoBehaviour
         if (!hasNextBoss)
         {
             yield return StartCoroutine(StageManager.Instance.VictoryStage());
+            SaveManager.Instance.DeleteSave();
             ChangeState(BattleState.Victory);
             yield break;
         }
@@ -273,7 +264,7 @@ public class BattleManager : MonoBehaviour
             if (obj.TryGetComponent(out CardDisplay display))
                 cards.Add(display.cardScriptableObject);
         }
-   
+
         yield return StartCoroutine(ResolveCombo(cards));
 
         foreach (GameObject obj in handManager.selectedCards)
@@ -334,7 +325,7 @@ public class BattleManager : MonoBehaviour
                     break;
             }
         }
-        
+
         if (hasClub)
         {
             int originalDamage = damage;
@@ -372,7 +363,7 @@ public class BattleManager : MonoBehaviour
         if (hasDiamond)
         {
             total = TraitManager.Instance.ModifyDrawAmount(total);
-           
+
             DrawBonusCards(total);
         }
 
@@ -434,7 +425,7 @@ public class BattleManager : MonoBehaviour
 
     public void DrawBonusCards(int amount)
     {
-        
+
         for (int i = 0; i < amount; i++)
         {
             deckManager.DrawCard(handManager);
@@ -465,7 +456,7 @@ public class BattleManager : MonoBehaviour
         SoundManager.instance?.PlaySound2D("CardPlay");
         handManager.SetInteractable(false);
         confirmButton.interactable = false;
-        
+
         StartCoroutine(ResolveSelectedCards());
     }
     private bool IsValidCombo(List<CardSO> cards)
