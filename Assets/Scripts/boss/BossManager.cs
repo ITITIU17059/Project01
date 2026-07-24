@@ -36,6 +36,8 @@ public class BossManager : MonoBehaviour
     public int CurrentATK => CurrentBoss.currentATK;
     public bool LastKillWasPerfect { get; private set; }
 
+    public bool HasMoreBosses => CurrentBossIndex < bossSequence.Count;
+
     private void Awake()
     {
         if (Instance == null)
@@ -46,37 +48,28 @@ public class BossManager : MonoBehaviour
 
     public void Initialize()
     {
+        CreateQueue();
         InitializeTraitPools();
 
         SaveData save = SaveManager.Instance.LoadProgress();
 
         if (save != null)
         {
-            LoadBossSequence(save.bossSequence);
-
             CurrentStageIndex = save.stageIndex;
             CurrentBossIndex = save.bossIndex;
 
             defeatedJack = Mathf.Min(CurrentBossIndex, jackBosses.Count);
 
             if (CurrentBossIndex >= jackBosses.Count)
-            {
-                defeatedQueen = Mathf.Min(
-                    CurrentBossIndex - jackBosses.Count,
-                    queenBosses.Count);
-            }
+                defeatedQueen = Mathf.Min(CurrentBossIndex - jackBosses.Count, queenBosses.Count);
 
             if (CurrentBossIndex >= jackBosses.Count + queenBosses.Count)
-            {
                 defeatedKing = Mathf.Min(
                     CurrentBossIndex - jackBosses.Count - queenBosses.Count,
                     kingBosses.Count);
-            }
         }
         else
         {
-            CreateQueue();
-
             CurrentBossIndex = 0;
             CurrentStageIndex = 0;
         }
@@ -226,13 +219,22 @@ public class BossManager : MonoBehaviour
 
     public bool NeedChangeStage(BossSO deadBoss)
     {
-        return deadBoss.rank switch
+        switch (deadBoss.rank)
         {
-            BossRank.Jack => defeatedJack == jackBosses.Count,
-            BossRank.Queen => defeatedQueen == queenBosses.Count,
-            BossRank.King => defeatedKing == kingBosses.Count,
-            _ => false
-        };
+            case BossRank.Jack:
+                defeatedJack++;
+                return defeatedJack == jackBosses.Count;
+
+            case BossRank.Queen:
+                defeatedQueen++;
+                return defeatedQueen == queenBosses.Count;
+
+            case BossRank.King:
+                defeatedKing++;
+                return defeatedKing == kingBosses.Count;
+        }
+
+        return false;
     }
     public void RandomizeJokerSuit()
     {
@@ -273,28 +275,5 @@ public class BossManager : MonoBehaviour
     public bool IsDead()
     {
         return CurrentHP <= 0;
-    }
-
-    public List<string> GetBossSequence()
-    {
-        List<string> data = new();
-
-        foreach (BossSO boss in bossSequence)
-            data.Add(boss.name);
-
-        return data;
-    }
-
-    public void LoadBossSequence(List<string> data)
-    {
-        bossSequence.Clear();
-
-        foreach (string bossName in data)
-        {
-            BossSO boss = Resources.Load<BossSO>("BossSO/" + bossName);
-
-            if (boss != null)
-                bossSequence.Add(boss);
-        }
     }
 }

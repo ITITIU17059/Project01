@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class PlayerReward : MonoBehaviour
 {
-    public static PlayerReward Instance;
+   
+    public static PlayerReward Instance { get; private set; }
+
 
     private void Awake()
     {

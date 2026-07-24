@@ -20,9 +20,13 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Transform playerHitPoint;
 
     public Transform PlayerHitPoint => playerHitPoint;
-    public HandManager HandManager => handManager;
-    public TarvernDeckManager DeckManager => deckManager;
     private bool handWasEmptyAfterPlay;
+    private bool waitingForInventory;
+
+    public void ContinueFromInventory()
+    {
+        waitingForInventory = false;
+    }
 
 
     private void Awake()
@@ -87,20 +91,7 @@ public class BattleManager : MonoBehaviour
     {
         BossManager.Instance.Initialize();
 
-        SaveData save = SaveManager.Instance.LoadProgress();
-
-        if (save != null)
-        {
-            deckManager.LoadDeck(save.deckCards);
-
-            GraveyardManager.Instance.LoadData(save.graveyardCards);
-
-            handManager.LoadHand(save.handCards);
-        }
-        else
-        {
-            StartCoroutine(deckManager.AddCardFromFirst());
-        }
+        StartCoroutine(deckManager.AddCardFromFirst());
     }
 
     private void StartPlayerTurn()
@@ -212,7 +203,7 @@ public class BattleManager : MonoBehaviour
             yield return StageManager.Instance.ChangeStage(BossRank.Joker);
         }
 
-        bool hasNextBoss = BossManager.Instance.LoadNextBoss();
+        bool hasNextBoss = BossManager.Instance.HasMoreBosses;
 
         if (!hasNextBoss)
         {
@@ -221,6 +212,16 @@ public class BattleManager : MonoBehaviour
             ChangeState(BattleState.Victory);
             yield break;
         }
+
+        // Vào Inventory Scene (additive, không mất deck/hand hiện tại)
+        waitingForInventory = true;
+        LevelManager.instance.LoadSceneAdditive("InventoryScene");
+
+        yield return new WaitUntil(() => !waitingForInventory);
+
+        LevelManager.instance.UnloadSceneAdditive("InventoryScene");
+
+        BossManager.Instance.LoadNextBoss();
 
         // Rút bài trước
 
