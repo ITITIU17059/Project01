@@ -1,8 +1,15 @@
-using UnityEngine;
+using System;
+using System.Collections.Generic;
 
-[System.Serializable]
+[Serializable]
 public class SaveData
 {
-    public int stageIndex;      // Jack = 0, Queen = 1, King = 2
-    public int bossIndex;       // Boss tiếp theo cần đánh
+    public int stageIndex;
+    public int bossIndex;
+
+    public List<string> bossSequence = new();
+
+    public List<string> handCards = new();
+    public List<string> deckCards = new();
+    public List<string> graveyardCards = new();
 }

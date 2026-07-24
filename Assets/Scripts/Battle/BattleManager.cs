@@ -20,6 +20,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Transform playerHitPoint;
 
     public Transform PlayerHitPoint => playerHitPoint;
+    public HandManager HandManager => handManager;
+    public TarvernDeckManager DeckManager => deckManager;
     private bool handWasEmptyAfterPlay;
 
 
@@ -85,7 +87,20 @@ public class BattleManager : MonoBehaviour
     {
         BossManager.Instance.Initialize();
 
-        StartCoroutine(deckManager.AddCardFromFirst());
+        SaveData save = SaveManager.Instance.LoadProgress();
+
+        if (save != null)
+        {
+            deckManager.LoadDeck(save.deckCards);
+
+            GraveyardManager.Instance.LoadData(save.graveyardCards);
+
+            handManager.LoadHand(save.handCards);
+        }
+        else
+        {
+            StartCoroutine(deckManager.AddCardFromFirst());
+        }
     }
 
     private void StartPlayerTurn()

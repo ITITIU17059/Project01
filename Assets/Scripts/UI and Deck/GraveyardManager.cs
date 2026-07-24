@@ -68,4 +68,29 @@ public class GraveyardManager : MonoBehaviour
 
         return poppedCards;
     }
+
+    public List<string> GetSaveData()
+    {
+        List<string> data = new();
+
+        foreach (CardSO card in graveyardCards)
+            data.Add(card.name);
+
+        return data;
+    }
+
+    public void LoadData(List<string> data)
+    {
+        graveyardCards.Clear();
+
+        foreach (string cardName in data)
+        {
+            CardSO card = Resources.Load<CardSO>("CardSO/" + cardName);
+
+            if (card != null)
+                graveyardCards.Add(card);
+        }
+
+        discardDeckBar.UpdateBar(graveyardCards.Count);
+    }
 }
