@@ -458,6 +458,10 @@ public class HandManager : MonoBehaviour
         {
             CardSO card =
                 Resources.Load<CardSO>("CardSO/" + cardName);
+            if (card == null)
+            {
+                card = Resources.Load<CardSO>("RewardCardSO/" + cardName);
+            }
 
             AddCardToHand(card);
         }
