@@ -1,35 +1,52 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class RewardSlot : MonoBehaviour
+[RequireComponent(typeof(CanvasGroup))]
+public class RewardSlot :
+    MonoBehaviour,
+    IBeginDragHandler,
+    IDragHandler,
+    IEndDragHandler
 {
     [SerializeField] private Image icon;
-    [SerializeField] private TMP_Text nameText;
-    [SerializeField] private Button button;
-    [SerializeField] private GameObject equippedHighlight; // viền/khung sáng khi đang equip
 
     private RewardSO reward;
-    private InventoryManager owner;
 
-    public void Setup(
-     RewardSO reward,
-     InventoryManager owner)
+    private CanvasGroup canvasGroup;
+
+    private void Awake()
     {
-        this.reward = reward;
-        this.owner = owner;
-
-        icon.sprite = reward.icon;
-        nameText.text = reward.rewardName;
-
-        button.onClick.RemoveAllListeners();
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public void RefreshEquippedVisual()
+    public void Setup(RewardSO reward, InventoryManager owner)
     {
-        if (equippedHighlight == null || reward == null)
+        this.reward = reward;
+
+        icon.sprite = reward.icon;
+        icon.enabled = true;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (reward == null)
             return;
 
-        equippedHighlight.SetActive(PlayerReward.Instance.IsEquipped(reward));
+        canvasGroup.blocksRaycasts = false;
+
+        DragManager.Instance.BeginDrag(reward);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        DragManager.Instance.Drag(eventData.position);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        canvasGroup.blocksRaycasts = true;
+
+        DragManager.Instance.EndDrag();
     }
 }

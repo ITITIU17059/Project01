@@ -11,30 +11,32 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private EquipSlot[] equipSlots;
 
     private readonly List<RewardSlot> rewardSlots = new();
-
+    private RewardSO selectedReward;
     private void Start()
     {
-        //RefreshRewardList();
+        RefreshRewardList();
+        RefreshEquipSlots();
     }
 
-    //public void RefreshRewardList()
-    //{
-    //    ClearRewardList();
+    public void RefreshRewardList()
+    {
+        Debug.Log("PlayerReward = " + PlayerReward.Instance);
+        Debug.Log("Prefab = " + rewardSlotPrefab);
+        Debug.Log("Content = " + rewardContent);
 
-    //    List<RewardSO> rewards = PlayerReward.Instance.OwnedRewards;
+        ClearRewardList();
 
-    //    foreach (RewardSO reward in rewards)
-    //    {
-    //        RewardSlot slot =
-    //            Instantiate(rewardSlotPrefab, rewardContent);
+        foreach (RewardSO reward in PlayerReward.Instance.OwnedRewards)
+        {
+            Debug.Log("Create : " + reward.rewardName);
 
-    //        slot.Setup(
-    //        reward,
-    //        this);
+            RewardSlot slot = Instantiate(rewardSlotPrefab, rewardContent);
 
-    //        rewardSlots.Add(slot);
-    //    }
-    //}
+            slot.Setup(reward, this);
+
+            rewardSlots.Add(slot);
+        }
+    }
 
     private void ClearRewardList()
     {
@@ -47,30 +49,55 @@ public class InventoryManager : MonoBehaviour
         rewardSlots.Clear();
     }
 
-    public EquipSlot GetFirstEmptySlot()
+    public void OnRewardClicked(RewardSO reward)
     {
-        foreach (EquipSlot slot in equipSlots)
+        selectedReward = reward;
+
+        Debug.Log("Selected Reward : " + reward.rewardName);
+    }
+
+    public void OnEquipSlotClicked(int slotIndex)
+    {
+        if (selectedReward == null)
         {
-            if (slot.CurrentReward == null)
-                return slot;
+            PlayerReward.Instance.UnequipReward(slotIndex);
+        }
+        else
+        {
+            PlayerReward.Instance.EquipReward(selectedReward, slotIndex);
+            selectedReward = null;
         }
 
-        return null;
+        RefreshRewardList();
+        RefreshEquipSlots();
     }
 
     public void RefreshEquipSlots()
     {
-        IReadOnlyList<RewardSO> equipped =
-            PlayerReward.Instance.EquippedRewards;
+        RewardSO[] equipped = PlayerReward.Instance.EquippedRewards;
 
-        for (int i = 0; i < equipSlots.Length; i++)
+
+        for (int i = 0; i < Mathf.Min(equipSlots.Length, equipped.Length); i++)
         {
-            RewardSO reward = null;
+            Debug.Log($"Setup Slot {i}");
 
-            if (i < equipped.Count)
-                reward = equipped[i];
+            if (equipSlots[i] == null)
+            {
+                Debug.LogError($"EquipSlot {i} is NULL");
+                continue;
+            }
 
-            equipSlots[i].Setup(reward);
+            equipSlots[i].Setup(equipped[i], this);
+        }
+    }
+    public void OnRewardDropped(RewardSO reward, int slotIndex)
+    {
+        if (PlayerReward.Instance.EquipReward(reward, slotIndex))
+        {
+            DragManager.Instance.EndDrag();
+
+            RefreshRewardList();
+            RefreshEquipSlots();
         }
     }
 }

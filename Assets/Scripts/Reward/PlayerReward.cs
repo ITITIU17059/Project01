@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerReward : MonoBehaviour
@@ -26,10 +26,11 @@ public class PlayerReward : MonoBehaviour
     private List<RewardSO> ownedRewards = new();
 
     [SerializeField]
-    private List<RewardSO> equippedRewards = new();
+    private RewardSO[] equippedRewards =
+     new RewardSO[MaxEquipSlots];
 
     public IReadOnlyList<RewardSO> OwnedRewards => ownedRewards;
-    public IReadOnlyList<RewardSO> EquippedRewards => equippedRewards;
+    public RewardSO[] EquippedRewards => equippedRewards;
 
     public bool AddReward(RewardSO reward)
     {
@@ -49,38 +50,45 @@ public class PlayerReward : MonoBehaviour
 
     public bool IsEquipped(RewardSO reward)
     {
-        return reward != null && equippedRewards.Contains(reward);
+        foreach (RewardSO r in equippedRewards)
+        {
+            if (r == reward)
+                return true;
+        }
+
+        return false;
     }
 
-    public bool EquipReward(RewardSO reward)
+    public bool EquipReward(RewardSO reward, int slotIndex)
     {
         if (reward == null)
             return false;
 
         if (!ownedRewards.Contains(reward))
-        {
-            Debug.LogWarning("Cannot equip, reward not owned : " + reward.rewardName);
             return false;
+
+        if (slotIndex < 0 || slotIndex >= MaxEquipSlots)
+            return false;
+
+        // Nếu reward này đã đang equip ở slot khác thì không cho equip
+        for (int i = 0; i < equippedRewards.Length; i++)
+        {
+            if (equippedRewards[i] == reward)
+                return false;
         }
 
-        if (equippedRewards.Contains(reward))
-            return false;
+        // Ghi đè reward cũ ở slot này
+        equippedRewards[slotIndex] = reward;
 
-        if (equippedRewards.Count >= MaxEquipSlots)
-        {
-            Debug.LogWarning("Equip slots full (" + MaxEquipSlots + ")");
-            return false;
-        }
-
-        equippedRewards.Add(reward);
         return true;
     }
 
-    public bool UnequipReward(RewardSO reward)
+    public bool UnequipReward(int slotIndex)
     {
-        if (reward == null)
+        if (slotIndex < 0 || slotIndex >= MaxEquipSlots)
             return false;
 
-        return equippedRewards.Remove(reward);
+        equippedRewards[slotIndex] = null;
+        return true;
     }
 }
