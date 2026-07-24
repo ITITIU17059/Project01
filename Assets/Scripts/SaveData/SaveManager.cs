@@ -22,16 +22,20 @@ public class SaveManager : MonoBehaviour
 
     public void SaveProgress(int stageIndex, int bossIndex)
     {
-        SaveData data = new SaveData()
-        {
-            stageIndex = stageIndex,
-            bossIndex = bossIndex
-        };
+        SaveData data = new();
 
-        string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(SavePath, json);
+        data.stageIndex = stageIndex;
+        data.bossIndex = bossIndex;
 
-        Debug.Log("Auto Save Success");
+        data.handCards = BattleManager.Instance.HandManager.GetSaveData();
+
+        data.deckCards = BattleManager.Instance.DeckManager.GetDeckSaveData();
+
+        data.graveyardCards = GraveyardManager.Instance.GetSaveData();
+
+        data.bossSequence = BossManager.Instance.GetBossSequence();
+
+        File.WriteAllText(SavePath, JsonUtility.ToJson(data, true));
     }
 
     public SaveData LoadProgress()

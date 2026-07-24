@@ -97,7 +97,7 @@ public class HandManager : MonoBehaviour
         if (!canInteract && !isDiscardMode)
             return;
 
-      
+
         if (isDiscardMode)
         {
             DeselectDiscardCard(cardObject);
@@ -430,5 +430,36 @@ public class HandManager : MonoBehaviour
     {
         selectedCards.Clear();
         totalCardValue = 0;
+    }
+
+    public List<string> GetSaveData()
+    {
+        List<string> data = new();
+
+        foreach (GameObject card in handCards)
+        {
+            CardSO so =
+                card.GetComponent<CardDisplay>().cardScriptableObject;
+
+            data.Add(so.name);
+        }
+
+        return data;
+    }
+
+    public void LoadHand(List<string> data)
+    {
+        foreach (GameObject card in handCards)
+            Destroy(card);
+
+        handCards.Clear();
+
+        foreach (string cardName in data)
+        {
+            CardSO card =
+                Resources.Load<CardSO>("CardSO/" + cardName);
+
+            AddCardToHand(card);
+        }
     }
 }
