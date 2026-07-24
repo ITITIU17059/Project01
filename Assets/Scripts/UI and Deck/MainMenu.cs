@@ -12,12 +12,16 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button continueButton;
     [SerializeField] private ButtonManager continueButtonManager;
     [SerializeField] private EventTrigger eventTrigger;
+    [SerializeField] private bool isMenu = true;
 
     private void Start()
     {
         LoadVolume();
 
-        MusicManager.instance.PlayMusic("MainMenu");
+        if (isMenu)
+        {
+            MusicManager.instance.PlayMusic("MainMenu");
+        }
         RefreshContinueButton();
     }
 
@@ -80,6 +84,7 @@ public class MainMenu : MonoBehaviour
 
     private void RefreshContinueButton()
     {
+        if (continueButton == null || continueButtonManager == null || eventTrigger == null) return;
         bool hasSave = SaveManager.Instance != null &&
                        SaveManager.Instance.HasSave();
 
