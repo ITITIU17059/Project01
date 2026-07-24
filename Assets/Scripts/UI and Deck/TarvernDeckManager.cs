@@ -62,4 +62,29 @@ public class TarvernDeckManager : MonoBehaviour
 
         BattleManager.Instance.ChangeState(BattleState.PlayerTurn);
     }
+
+    public List<string> GetDeckSaveData()
+    {
+        List<string> data = new();
+
+        foreach (CardSO card in allCards)
+            data.Add(card.name);
+
+        return data;
+    }
+
+    public void LoadDeck(List<string> data)
+    {
+        allCards.Clear();
+
+        foreach (string cardName in data)
+        {
+            CardSO card = Resources.Load<CardSO>("CardSO/" + cardName);
+
+            if (card != null)
+                allCards.Add(card);
+        }
+
+        RefreshDeckBar();
+    }
 }
