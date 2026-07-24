@@ -18,6 +18,8 @@ public class PlayerReward : MonoBehaviour
         }
     }
 
+    public const int MaxEquipSlots = 3;
+
     [SerializeField]
     private List<RewardSO> ownedRewards = new();
 
@@ -26,6 +28,7 @@ public class PlayerReward : MonoBehaviour
 
     public IReadOnlyList<RewardSO> OwnedRewards => ownedRewards;
     public IReadOnlyList<RewardSO> EquippedRewards => equippedRewards;
+
     public bool AddReward(RewardSO reward)
     {
         if (reward == null)
@@ -38,9 +41,44 @@ public class PlayerReward : MonoBehaviour
         }
 
         ownedRewards.Add(reward);
-
         Debug.Log("Receive Reward : " + reward.rewardName);
-
         return true;
+    }
+
+    public bool IsEquipped(RewardSO reward)
+    {
+        return reward != null && equippedRewards.Contains(reward);
+    }
+
+    public bool EquipReward(RewardSO reward)
+    {
+        if (reward == null)
+            return false;
+
+        if (!ownedRewards.Contains(reward))
+        {
+            Debug.LogWarning("Cannot equip, reward not owned : " + reward.rewardName);
+            return false;
+        }
+
+        if (equippedRewards.Contains(reward))
+            return false;
+
+        if (equippedRewards.Count >= MaxEquipSlots)
+        {
+            Debug.LogWarning("Equip slots full (" + MaxEquipSlots + ")");
+            return false;
+        }
+
+        equippedRewards.Add(reward);
+        return true;
+    }
+
+    public bool UnequipReward(RewardSO reward)
+    {
+        if (reward == null)
+            return false;
+
+        return equippedRewards.Remove(reward);
     }
 }

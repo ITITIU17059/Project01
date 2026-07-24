@@ -27,9 +27,6 @@ public class BossSO : ScriptableObject
     [HideInInspector]
     public BossTraitSO currentTrait;
 
-    [HideInInspector]
-    public RewardSO currentReward;
-
     [Header("Boss Card")]
     public CardSO bossCard;
 
