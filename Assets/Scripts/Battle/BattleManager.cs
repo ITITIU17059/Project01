@@ -571,6 +571,7 @@ public class BattleManager : MonoBehaviour
 
     private void Victory()
     {
+        SaveManager.Instance.DeleteSave();
         StartCoroutine(VictoryRoutine());
         MusicManager.instance.PlayMusic(
     "VictoryTheme",
@@ -591,6 +592,7 @@ public class BattleManager : MonoBehaviour
 
     private void Defeat()
     {
+        SaveManager.Instance.DeleteSave();
         StartCoroutine(DefeatRoutine());
         MusicManager.instance.PlayMusic(
     "DefeatTheme",
