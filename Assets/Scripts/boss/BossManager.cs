@@ -233,8 +233,6 @@ public class BossManager : MonoBehaviour
             BossRank.King => defeatedKing == kingBosses.Count,
             _ => false
         };
-
-        return false;
     }
     public void RandomizeJokerSuit()
     {
