@@ -10,7 +10,7 @@ public class TraitSelectionPanelUI : MonoBehaviour
 
     private BossSO currentBoss;
     private readonly List<GameObject> spawnedCards = new();
-    
+
     public void Show(BossSO boss)
     {
 
@@ -67,8 +67,7 @@ public class TraitSelectionPanelUI : MonoBehaviour
     public void SelectTrait(BossTraitSO selectedTrait)
     {
         currentBoss.currentTrait = selectedTrait;
-        
-        currentBoss.currentReward = selectedTrait.reward;
+
         TraitPoolManager.Instance.RemoveTrait(
         currentBoss.rank,
         selectedTrait
@@ -80,6 +79,6 @@ public class TraitSelectionPanelUI : MonoBehaviour
         BattleManager.Instance.StartBattleAfterTraitSelected();
         FindAnyObjectByType<HandManager>()
     .SetInteractable(true);
-       
+
     }
 }

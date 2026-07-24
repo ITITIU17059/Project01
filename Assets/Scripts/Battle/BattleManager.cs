@@ -191,6 +191,11 @@ public class BattleManager : MonoBehaviour
 
         BossManager.Instance.OnBossDefeated(deadBoss);
 
+        if (deadBoss.currentTrait != null)
+        {
+            PlayerReward.Instance.AddReward(deadBoss.currentTrait.reward);
+        }
+
         if (BossManager.Instance.CurrentStageIndex == 1 &&
     deadBoss.rank == BossRank.Jack)
         {
@@ -562,17 +567,6 @@ public class BattleManager : MonoBehaviour
     }
 
     #endregion
-    public void InvokeRewardPlayerTurn()
-    {
-        RewardSkill.InvokePlayerTurn(
-            BossManager.Instance.CurrentBoss.currentReward);
-    }
-
-    public void InvokeRewardDiscard()
-    {
-        RewardSkill.InvokeDiscard(
-            BossManager.Instance.CurrentBoss.currentReward);
-    }
     #region End Battle
 
     private void Victory()

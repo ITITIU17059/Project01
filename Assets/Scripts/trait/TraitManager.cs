@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TraitManager : MonoBehaviour
 {
@@ -33,7 +33,7 @@ public class TraitManager : MonoBehaviour
     public bool HasTrait => CurrentTrait != null;
 
     //====================================================
-    // Event
+    // Trait tạm thời (chỉ trong trận này)
     //====================================================
 
     public int ModifyDrawAmount(int amount)
@@ -51,61 +51,42 @@ public class TraitManager : MonoBehaviour
         return BossSkill.ModifyShieldAmount(CurrentTrait, amount);
     }
 
-    public int ModifyAttackDamage(
-     CardSO card,
-     int originalDamage,
-     int finalDamage)
+    public int ModifyAttackDamage(CardSO card, int originalDamage, int finalDamage)
     {
-        return BossSkill.ModifyAttackDamage(
-            CurrentTrait,
-            card,
-            originalDamage,
-            finalDamage);
+        return BossSkill.ModifyAttackDamage(CurrentTrait, card, originalDamage, finalDamage);
     }
+
+    //====================================================
+    // Reward vĩnh viễn (đã trang bị từ Inventory, tối đa 3)
+    //====================================================
+
     public int ModifyRewardDrawAmount(int amount)
     {
-        return RewardSkill.ModifyDrawAmount(
-            RewardManager.Instance.CurrentReward,
-            amount);
+        return RewardSkill.ModifyDrawAmount(PlayerReward.Instance.EquippedRewards, amount);
     }
 
     public int ModifyRewardHealAmount(int amount)
     {
-        return RewardSkill.ModifyHealAmount(
-            RewardManager.Instance.CurrentReward,
-            amount);
+        return RewardSkill.ModifyHealAmount(PlayerReward.Instance.EquippedRewards, amount);
     }
 
     public int ModifyRewardShieldAmount(int amount)
     {
-        return RewardSkill.ModifyShieldAmount(
-            RewardManager.Instance.CurrentReward,
-            amount);
+        return RewardSkill.ModifyShieldAmount(PlayerReward.Instance.EquippedRewards, amount);
     }
 
-    public int ModifyRewardAttackDamage(
-        CardSO card,
-        int original,
-        int finalDamage)
+    public int ModifyRewardAttackDamage(CardSO card, int original, int finalDamage)
     {
-        return RewardSkill.ModifyAttackDamage(
-            RewardManager.Instance.CurrentReward,
-            card,
-            original,
-            finalDamage);
+        return RewardSkill.ModifyAttackDamage(PlayerReward.Instance.EquippedRewards, card, original, finalDamage);
     }
 
     public void InvokeRewardPlayerTurn()
     {
-        RewardSkill.InvokePlayerTurn(
-            RewardManager.Instance.CurrentReward);
+        RewardSkill.InvokePlayerTurn(PlayerReward.Instance.EquippedRewards);
     }
 
     public void InvokeRewardDiscard()
     {
-        RewardSkill.InvokeDiscard(
-            RewardManager.Instance.CurrentReward);
+        RewardSkill.InvokeDiscard(PlayerReward.Instance.EquippedRewards);
     }
-
-
 }

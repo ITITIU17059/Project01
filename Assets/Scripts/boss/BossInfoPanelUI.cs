@@ -18,7 +18,7 @@ public class BossInfoPanelUI : MonoBehaviour
         traitTitleText.text = boss.currentTrait.traitName;
         traitDescriptionText.text = boss.currentTrait.description;
 
-        rewardTitleText.text = boss.currentReward.rewardName;
-        rewardDescriptionText.text = boss.currentReward.description;
+        rewardTitleText.text = boss.currentTrait.reward.rewardName;
+        rewardDescriptionText.text = boss.currentTrait.reward.description;
     }
 }
