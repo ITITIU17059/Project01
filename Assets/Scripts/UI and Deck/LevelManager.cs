@@ -65,4 +65,32 @@ public class LevelManager : MonoBehaviour
     {
         LoadScene("BattleScene", "CrossFade");
     }
+
+    public void LoadSceneAdditive(string sceneName)
+    {
+        StartCoroutine(LoadSceneAdditiveAsync(sceneName));
+    }
+
+    private IEnumerator LoadSceneAdditiveAsync(string sceneName)
+    {
+        if (SceneManager.GetSceneByName(sceneName).isLoaded)
+            yield break;
+
+        yield return SceneManager.LoadSceneAsync(
+            sceneName,
+            LoadSceneMode.Additive);
+    }
+
+    public void UnloadSceneAdditive(string sceneName)
+    {
+        StartCoroutine(UnloadSceneAdditiveAsync(sceneName));
+    }
+
+    private IEnumerator UnloadSceneAdditiveAsync(string sceneName)
+    {
+        if (!SceneManager.GetSceneByName(sceneName).isLoaded)
+            yield break;
+
+        yield return SceneManager.UnloadSceneAsync(sceneName);
+    }
 }
