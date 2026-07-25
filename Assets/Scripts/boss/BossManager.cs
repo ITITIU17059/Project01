@@ -20,7 +20,7 @@ public class BossManager : MonoBehaviour
     public Transform BossTransform => bossDisplay.transform;
 
     private readonly List<BossSO> bossSequence = new();
-
+    private bool initialized;
     public int CurrentBossIndex { get; private set; }
     public int CurrentStageIndex { get; private set; }
 
@@ -48,6 +48,10 @@ public class BossManager : MonoBehaviour
 
     public void Initialize()
     {
+        if (initialized)
+            return;
+
+        initialized = true;
         CreateQueue();
         InitializeTraitPools();
 
@@ -138,6 +142,7 @@ public class BossManager : MonoBehaviour
 
     public bool LoadNextBoss()
     {
+        Debug.Log("Load Boss Index = " + CurrentBossIndex);
         if (CurrentBossIndex >= bossSequence.Count)
             return false;
 
@@ -251,7 +256,7 @@ public class BossManager : MonoBehaviour
         CardSO.Suit.Clubs,
         CardSO.Suit.Spades
     };
-
+        
         CardSO.Suit newSuit;
 
         do
@@ -271,6 +276,14 @@ public class BossManager : MonoBehaviour
         {
             bossInfoPanel.Setup(CurrentBoss);
         }
+    }
+    public void MoveNextBoss()
+    {
+        CurrentBossIndex++;
+
+        SaveManager.Instance.SaveProgress(CurrentStageIndex, CurrentBossIndex);
+
+        LoadNextBoss();
     }
     public bool IsDead()
     {

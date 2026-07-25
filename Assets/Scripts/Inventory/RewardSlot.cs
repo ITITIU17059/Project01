@@ -7,7 +7,9 @@ public class RewardSlot :
     MonoBehaviour,
     IBeginDragHandler,
     IDragHandler,
-    IEndDragHandler
+    IEndDragHandler,
+    IPointerEnterHandler,
+    IPointerExitHandler
 {
     [SerializeField] private Image icon;
 
@@ -35,7 +37,7 @@ public class RewardSlot :
 
         canvasGroup.blocksRaycasts = false;
 
-        DragManager.Instance.BeginDrag(reward);
+        DragManager.Instance.BeginDrag(reward, -1);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -48,5 +50,15 @@ public class RewardSlot :
         canvasGroup.blocksRaycasts = true;
 
         DragManager.Instance.EndDrag();
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (reward != null)
+            TooltipUI.Instance.Show(reward);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        TooltipUI.Instance.Hide();
     }
 }

@@ -20,15 +20,13 @@ public class InventoryManager : MonoBehaviour
 
     public void RefreshRewardList()
     {
-        Debug.Log("PlayerReward = " + PlayerReward.Instance);
-        Debug.Log("Prefab = " + rewardSlotPrefab);
-        Debug.Log("Content = " + rewardContent);
+  
 
         ClearRewardList();
 
         foreach (RewardSO reward in PlayerReward.Instance.OwnedRewards)
         {
-            Debug.Log("Create : " + reward.rewardName);
+           
 
             RewardSlot slot = Instantiate(rewardSlotPrefab, rewardContent);
 
@@ -53,7 +51,7 @@ public class InventoryManager : MonoBehaviour
     {
         selectedReward = reward;
 
-        Debug.Log("Selected Reward : " + reward.rewardName);
+  
     }
 
     public void OnEquipSlotClicked(int slotIndex)
@@ -76,28 +74,27 @@ public class InventoryManager : MonoBehaviour
     {
         RewardSO[] equipped = PlayerReward.Instance.EquippedRewards;
 
-
-        for (int i = 0; i < Mathf.Min(equipSlots.Length, equipped.Length); i++)
+        for (int i = 0; i < equipSlots.Length; i++)
         {
-            Debug.Log($"Setup Slot {i}");
-
-            if (equipSlots[i] == null)
-            {
-                Debug.LogError($"EquipSlot {i} is NULL");
-                continue;
-            }
+            Debug.Log($"Refresh Slot {i} = {(equipped[i] == null ? "NULL" : equipped[i].rewardName)}");
 
             equipSlots[i].Setup(equipped[i], this);
         }
     }
     public void OnRewardDropped(RewardSO reward, int slotIndex)
     {
-        if (PlayerReward.Instance.EquipReward(reward, slotIndex))
-        {
-            DragManager.Instance.EndDrag();
+        Debug.Log($"Drop: {reward.rewardName} -> Slot {slotIndex}");
 
+        bool success = PlayerReward.Instance.EquipReward(reward, slotIndex);
+
+        Debug.Log("Equip Success = " + success);
+
+        if (success)
+        {
             RefreshRewardList();
             RefreshEquipSlots();
         }
+
+        DragManager.Instance.EndDrag();
     }
 }

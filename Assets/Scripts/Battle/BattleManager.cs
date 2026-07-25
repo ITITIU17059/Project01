@@ -37,7 +37,7 @@ public class BattleManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void Start()
+    void Start()
     {
         ChangeState(BattleState.StartBattle);
     }
@@ -89,7 +89,14 @@ public class BattleManager : MonoBehaviour
 
     private void StartBattle()
     {
-        BossManager.Instance.Initialize();
+        if (BossManager.Instance.CurrentBoss == null)
+        {
+            BossManager.Instance.Initialize();
+        }
+        else
+        {
+            BossManager.Instance.RefreshBossInfo();
+        }
 
         StartCoroutine(deckManager.AddCardFromFirst());
     }
@@ -220,8 +227,6 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(() => !waitingForInventory);
 
         LevelManager.instance.UnloadSceneAdditive("InventoryScene");
-
-        BossManager.Instance.LoadNextBoss();
 
         // Rút bài trước
 
