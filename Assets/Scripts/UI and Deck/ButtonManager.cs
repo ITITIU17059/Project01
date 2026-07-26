@@ -26,10 +26,12 @@ public class ButtonManager : MonoBehaviour
         SoundManager.instance.PlaySound2D("Hover");
     }
 
-    public void PlayClick()
+    public void PlayClick(string audioName)
     {
-        SoundManager.instance.PlaySound2D("Click");
+        SoundManager.instance.PlaySound2D(audioName);
     }
+
+
 
     public void RefreshState()
     {
