@@ -130,23 +130,37 @@ public class CardFXManager : MonoBehaviour
 
         discardSequence.OnComplete(() =>
         {
-            Destroy(cardObject);
-
-            if (graveyardSpawn != null && graveyardSpawn.parent != null)
+            if (cardObject != null)
             {
-                Transform visualTarget = graveyardSpawn.parent.Find("CardBack");
-
-                if (visualTarget != null)
-                {
-                    visualTarget.DOKill();
-
-                    Vector3 originalCardBackScale = visualTarget.localScale;
-                    Sequence punchSeq = DOTween.Sequence();
-
-                    punchSeq.Append(visualTarget.DOScale(originalCardBackScale * 1.2f, 0.08f).SetEase(Ease.OutQuad));
-                    punchSeq.Append(visualTarget.DOScale(originalCardBackScale, 0.12f).SetEase(Ease.InQuad));
-                }
+                cardObject.transform.DOKill();
+                Destroy(cardObject);
             }
+
+            if (graveyardSpawn == null)
+                return;
+
+            if (graveyardSpawn.parent == null)
+                return;
+
+            Transform visualTarget = graveyardSpawn.parent.Find("CardBack");
+
+            if (visualTarget == null)
+                return;
+
+            if (!visualTarget.gameObject.activeInHierarchy)
+                return;
+
+            visualTarget.DOKill();
+
+            Vector3 originalScale = visualTarget.localScale;
+
+            Sequence punch = DOTween.Sequence();
+
+            punch.Append(
+                visualTarget.DOScale(originalScale * 1.2f, 0.08f));
+
+            punch.Append(
+                visualTarget.DOScale(originalScale, 0.12f));
         });
     }
 }

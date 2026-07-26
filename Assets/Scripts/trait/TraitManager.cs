@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class TraitManager : MonoBehaviour
 {
@@ -46,14 +47,26 @@ public class TraitManager : MonoBehaviour
         return BossSkill.ModifyHealAmount(CurrentTrait, amount);
     }
 
-    public int ModifyShieldAmount(int amount)
+    public int ModifyShieldAmount(
+     List<CardSO> cards,
+     int amount)
     {
-        return BossSkill.ModifyShieldAmount(CurrentTrait, amount);
+        return BossSkill.ModifyShieldAmount(
+            CurrentTrait,
+            cards,
+            amount);
     }
 
-    public int ModifyAttackDamage(CardSO card, int originalDamage, int finalDamage)
+    public int ModifyAttackDamage(
+       List<CardSO> cards,
+       int originalDamage,
+       int finalDamage)
     {
-        return BossSkill.ModifyAttackDamage(CurrentTrait, card, originalDamage, finalDamage);
+        return BossSkill.ModifyAttackDamage(
+            CurrentTrait,
+            cards,
+            originalDamage,
+            finalDamage);
     }
 
     //====================================================
@@ -75,18 +88,25 @@ public class TraitManager : MonoBehaviour
         return RewardSkill.ModifyShieldAmount(PlayerReward.Instance.EquippedRewards, amount);
     }
 
-    public int ModifyRewardAttackDamage(CardSO card, int original, int finalDamage)
+    public int ModifyRewardAttackDamage(
+      CardSO card,
+      int originalDamage,
+      int finalDamage)
     {
-        return RewardSkill.ModifyAttackDamage(PlayerReward.Instance.EquippedRewards, card, original, finalDamage);
+        return RewardSkill.ModifyAttackDamage(
+            PlayerReward.Instance.EquippedRewards,
+            card,
+            originalDamage,
+            finalDamage);
     }
 
-    public void InvokeRewardPlayerTurn()
+    public void InvokeBossEvent(TraitEventType type)
     {
-        RewardSkill.InvokePlayerTurn(PlayerReward.Instance.EquippedRewards);
+        BossSkill.Invoke(type, CurrentTrait);
     }
 
-    public void InvokeRewardDiscard()
+    public void InvokeRewardEvent(TraitEventType type)
     {
-        RewardSkill.InvokeDiscard(PlayerReward.Instance.EquippedRewards);
+        RewardSkill.Invoke(type, PlayerReward.Instance.EquippedRewards);
     }
 }

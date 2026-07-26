@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11584b51d090ff347aa707fa546f3622, type: 3}
   m_Name: Vital Offering
   m_EditorClassIdentifier: Assembly-CSharp::RewardSO
+  traitID: 1
   icon: {fileID: 21300000, guid: ee40d72ece864764f9d17d015aedb524, type: 3}
   rewardName: Vital Offering
   description: "M\u1ED7i l\u1EA7n Discard h\u1ED3i 2 l\xE1."

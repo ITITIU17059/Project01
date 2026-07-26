@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public static class RewardSkill
@@ -7,8 +7,8 @@ public static class RewardSkill
     public delegate int DamageModifier(CardSO card, int originalValue, int finalValue);
     public delegate void RewardEvent();
 
-    private static Dictionary<TraitID, RewardEvent> playerTurnEvents;
-    private static Dictionary<TraitID, RewardEvent> discardEvents;
+    private static Dictionary<TraitID, Dictionary<TraitEventType, RewardEvent>> eventTable;
+
     private static Dictionary<TraitID, ValueModifier> drawModifiers;
     private static Dictionary<TraitID, ValueModifier> healModifiers;
     private static Dictionary<TraitID, ValueModifier> shieldModifiers;
@@ -16,135 +16,288 @@ public static class RewardSkill
 
     static RewardSkill()
     {
+        InitializeEvents();
+
         InitializeDrawModifiers();
         InitializeHealModifiers();
         InitializeShieldModifiers();
         InitializeAttackModifiers();
-        InitializePlayerTurnEvents();
-        InitializeDiscardEvents();
     }
 
-    private static void InitializePlayerTurnEvents()
+    //========================================================
+    // EVENT
+    //========================================================
+
+    private static void InitializeEvents()
     {
-        playerTurnEvents = new();
-        playerTurnEvents.Add(TraitID.J_GREEDY_TRIBUTE, JackGreedyTribute_PlayerTurnReward);
+        eventTable = new();
+
+        RegisterEvent(
+            TraitID.J_GREEDY_TRIBUTE,
+            TraitEventType.PlayerTurn,
+            JackGreedyTribute_PlayerTurnReward);
+
+        RegisterEvent(
+            TraitID.J_WITHERED_BLESSING,
+            TraitEventType.Discard,
+            JackWitheredBlessing_DiscardReward);
     }
 
-    private static void InitializeDiscardEvents()
+    private static void RegisterEvent(
+        TraitID id,
+        TraitEventType type,
+        RewardEvent evt)
     {
-        discardEvents = new();
-        discardEvents.Add(TraitID.J_WITHERED_BLESSING, JackWitheredBlessing_DiscardReward);
+        if (!eventTable.ContainsKey(id))
+            eventTable[id] = new();
+
+        eventTable[id][type] = evt;
     }
 
-    private static void InitializeDrawModifiers() { drawModifiers = new(); }
-    private static void InitializeHealModifiers() { healModifiers = new(); }
+    public static void Invoke(
+        TraitEventType type,
+        IReadOnlyList<RewardSO> rewards)
+    {
+        if (rewards == null)
+            return;
+
+        foreach (RewardSO reward in rewards)
+        {
+            if (reward == null)
+                continue;
+
+            if (!eventTable.ContainsKey(reward.traitID))
+                continue;
+
+            if (eventTable[reward.traitID]
+                .TryGetValue(type, out RewardEvent evt))
+            {
+                evt.Invoke();
+            }
+        }
+    }
+
+    //========================================================
+    // DRAW
+    //========================================================
+
+    private static void InitializeDrawModifiers()
+    {
+        drawModifiers = new();
+
+        drawModifiers.Add(
+            TraitID.J_GREEDY_TRIBUTE,
+            JackGreedyTribute_DrawReward);
+    }
+
+    //========================================================
+    // HEAL
+    //========================================================
+
+    private static void InitializeHealModifiers()
+    {
+        healModifiers = new();
+
+        healModifiers.Add(
+            TraitID.J_WITHERED_BLESSING,
+            JackWitheredBlessing_HealReward);
+    }
+
+    //========================================================
+    // SHIELD
+    //========================================================
 
     private static void InitializeShieldModifiers()
     {
         shieldModifiers = new();
-        shieldModifiers.Add(TraitID.J_HEAVY_GUARD, JackHeavyGuard_ShieldReward);
+
+        shieldModifiers.Add(
+            TraitID.J_HEAVY_GUARD,
+            JackHeavyGuard_ShieldReward);
     }
+
+    //========================================================
+    // ATTACK
+    //========================================================
 
     private static void InitializeAttackModifiers()
     {
         attackModifiers = new();
-        attackModifiers.Add(TraitID.J_BROKEN_FORCE, JackBrokenForce_AttackReward);
+
+        attackModifiers.Add(
+            TraitID.J_BROKEN_FORCE,
+            JackBrokenForce_AttackReward);
     }
 
-    public static int ModifyDrawAmount(IReadOnlyList<RewardSO> equippedRewards, int amount)
+    //========================================================
+    // MODIFY
+    //========================================================
+
+    public static int ModifyDrawAmount(
+        IReadOnlyList<RewardSO> rewards,
+        int amount)
     {
-        if (equippedRewards == null) return amount;
-        foreach (RewardSO reward in equippedRewards)
+        if (rewards == null)
+            return amount;
+
+        foreach (RewardSO reward in rewards)
         {
-            if (reward == null) continue;
-            if (drawModifiers.TryGetValue(reward.traitID, out ValueModifier modifier))
+            if (reward == null)
+                continue;
+
+            if (drawModifiers.TryGetValue(
+                reward.traitID,
+                out ValueModifier modifier))
+            {
                 amount = modifier(amount);
+            }
         }
+
         return amount;
     }
 
-    public static int ModifyHealAmount(IReadOnlyList<RewardSO> equippedRewards, int amount)
+    public static int ModifyHealAmount(
+        IReadOnlyList<RewardSO> rewards,
+        int amount)
     {
-        if (equippedRewards == null) return amount;
-        foreach (RewardSO reward in equippedRewards)
+        if (rewards == null)
+            return amount;
+
+        foreach (RewardSO reward in rewards)
         {
-            if (reward == null) continue;
-            if (healModifiers.TryGetValue(reward.traitID, out ValueModifier modifier))
+            if (reward == null)
+                continue;
+
+            if (healModifiers.TryGetValue(
+                reward.traitID,
+                out ValueModifier modifier))
+            {
                 amount = modifier(amount);
+            }
         }
+
         return amount;
     }
 
-    public static int ModifyShieldAmount(IReadOnlyList<RewardSO> equippedRewards, int amount)
+    public static int ModifyShieldAmount(
+        IReadOnlyList<RewardSO> rewards,
+        int amount)
     {
-        if (equippedRewards == null) return amount;
-        foreach (RewardSO reward in equippedRewards)
+        if (rewards == null)
+            return amount;
+
+        foreach (RewardSO reward in rewards)
         {
-            if (reward == null) continue;
-            if (shieldModifiers.TryGetValue(reward.traitID, out ValueModifier modifier))
+            if (reward == null)
+                continue;
+
+            if (shieldModifiers.TryGetValue(
+                reward.traitID,
+                out ValueModifier modifier))
+            {
                 amount = modifier(amount);
+            }
         }
+
         return amount;
     }
 
-    public static int ModifyAttackDamage(IReadOnlyList<RewardSO> equippedRewards, CardSO card, int originalValue, int finalValue)
+    public static int ModifyAttackDamage(
+        IReadOnlyList<RewardSO> rewards,
+        CardSO card,
+        int originalValue,
+        int finalValue)
     {
-        if (equippedRewards == null) return finalValue;
-        foreach (RewardSO reward in equippedRewards)
+        if (rewards == null)
+            return finalValue;
+
+        foreach (RewardSO reward in rewards)
         {
-            if (reward == null) continue;
-            if (attackModifiers.TryGetValue(reward.traitID, out DamageModifier modifier))
-                finalValue = modifier(card, originalValue, finalValue);
+            if (reward == null)
+                continue;
+
+            if (attackModifiers.TryGetValue(
+                reward.traitID,
+                out DamageModifier modifier))
+            {
+                finalValue =
+                    modifier(
+                        card,
+                        originalValue,
+                        finalValue);
+            }
         }
+
         return finalValue;
     }
 
+    //========================================================
+    // JACK EVENT
+    //========================================================
+
     private static void JackGreedyTribute_PlayerTurnReward()
     {
-        Debug.Log("Reward J1 Activated");
+        Debug.Log("[REWARD] Jack Greedy Tribute Reward Activated (equipped item, not the current boss)");
+
         BattleManager.Instance.DrawBonusCards(1);
     }
 
     private static void JackWitheredBlessing_DiscardReward()
     {
-        Debug.Log("Reward J2 Activated");
+        Debug.Log("[REWARD] Jack Withered Blessing Reward Activated (equipped item, not the current boss)");
+
         BattleManager.Instance.HealDeck(2);
     }
 
+    //========================================================
+    // JACK DRAW
+    //========================================================
+
+    private static int JackGreedyTribute_DrawReward(int amount)
+    {
+        Debug.Log("[REWARD] Jack Greedy Tribute Draw Reward Activated (equipped item, not the current boss)");
+
+        return amount + 1;
+    }
+
+    //========================================================
+    // JACK HEAL
+    //========================================================
+
+    private static int JackWitheredBlessing_HealReward(int amount)
+    {
+        Debug.Log("[REWARD] Jack Withered Blessing Heal Reward Activated (equipped item, not the current boss)");
+
+        return amount + 2;
+    }
+
+    //========================================================
+    // JACK SHIELD
+    //========================================================
+
     private static int JackHeavyGuard_ShieldReward(int amount)
     {
-        Debug.Log("Reward J3 Activated");
         return amount + 3;
     }
 
-    private static int JackBrokenForce_AttackReward(CardSO card, int originalValue, int finalValue)
-    {
-        Debug.Log("Reward J4 Activated");
-        if (card == null) return finalValue;
-        if (card.suit != CardSO.Suit.Clubs) return finalValue;
-        if (card.value >= 6) return finalValue;
-        return originalValue * 3;
-    }
+    //========================================================
+    // JACK ATTACK
+    //========================================================
 
-    public static void InvokePlayerTurn(IReadOnlyList<RewardSO> equippedRewards)
+    private static int JackBrokenForce_AttackReward(
+        CardSO card,
+        int originalValue,
+        int finalValue)
     {
-        if (equippedRewards == null) return;
-        foreach (RewardSO reward in equippedRewards)
-        {
-            if (reward == null) continue;
-            if (playerTurnEvents.TryGetValue(reward.traitID, out RewardEvent evt))
-                evt.Invoke();
-        }
-    }
+        if (card == null)
+            return finalValue;
 
-    public static void InvokeDiscard(IReadOnlyList<RewardSO> equippedRewards)
-    {
-        if (equippedRewards == null) return;
-        foreach (RewardSO reward in equippedRewards)
-        {
-            if (reward == null) continue;
-            if (discardEvents.TryGetValue(reward.traitID, out RewardEvent evt))
-                evt.Invoke();
-        }
+        if (card.suit != CardSO.Suit.Clubs)
+            return finalValue;
+
+        if (card.value >= 6)
+            return finalValue;
+
+        return finalValue + originalValue;
     }
 }
