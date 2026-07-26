@@ -14,9 +14,7 @@ IEndDragHandler,
 
 {
     [SerializeField] private Image icon;
-    [SerializeField] private TMP_Text nameText;
-   
-    
+
     [SerializeField] private int slotIndex;
     private RewardSO currentReward;
 
@@ -41,10 +39,8 @@ IEndDragHandler,
         if (!isEmpty)
         {
             icon.sprite = reward.icon;
-            icon.SetNativeSize(); // thêm dòng này
+            // icon.SetNativeSize(); // thêm dòng này
         }
-
-        nameText.text = isEmpty ? "" : reward.rewardName;
     }
 
 
