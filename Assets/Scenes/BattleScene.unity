@@ -2086,7 +2086,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4.200012, y: 0}
+  m_AnchoredPosition: {x: 1.1499939, y: 0.005004883}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &524623079
@@ -3000,7 +3000,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &618844090
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3072,7 +3072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d80be54a3f6a974db912c84728ae346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TraitSelectionPanelUI
-  traitCardPrefab: {fileID: 5121617534047346291, guid: ec3e7c707c87d5c49b746ce410d6ab90, type: 3}
+  traitCardPrefab: {fileID: 8247724915610875300, guid: ea7aedb4db232d14b97e345a95d7f50f, type: 3}
   traitContainer: {fileID: 677746254}
 --- !u!1 &619394800
 GameObject:
@@ -3328,8 +3328,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.99, y: -28.29}
-  m_SizeDelta: {x: 615, y: 298.43}
+  m_AnchoredPosition: {x: 0.24, y: -10.04}
+  m_SizeDelta: {x: 472.01, y: 244.07}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &677746255
 MonoBehaviour:
@@ -5691,7 +5691,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1580760511
