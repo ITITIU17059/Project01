@@ -637,7 +637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &146146856
 RectTransform:
   m_ObjectHideFlags: 0
@@ -654,8 +654,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 60.867, y: 91.30499}
-  m_SizeDelta: {x: -476.44, y: -345.37}
+  m_AnchoredPosition: {x: 63.69998, y: 74.17699}
+  m_SizeDelta: {x: -476.16, y: -332.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &146146857
 MonoBehaviour:
@@ -1574,6 +1574,7 @@ GameObject:
   - component: {fileID: 416116079}
   - component: {fileID: 416116081}
   - component: {fileID: 416116080}
+  - component: {fileID: 416116082}
   m_Layer: 5
   m_Name: RewardTitle
   m_TagString: Untagged
@@ -1597,8 +1598,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 65.13, y: 114.33002}
-  m_SizeDelta: {x: 91.33, y: 13.97}
+  m_AnchoredPosition: {x: 86.774994, y: 100.35999}
+  m_SizeDelta: {x: 133.69, y: 13.97}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &416116080
 MonoBehaviour:
@@ -1654,7 +1655,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1700,6 +1701,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 416116078}
   m_CullTransparentMesh: 1
+--- !u!114 &416116082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416116078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventTrigger
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 140268366}
+          m_TargetAssemblyTypeName: BossInfoPanelUI, Assembly-CSharp
+          m_MethodName: ShowRewardDescription
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 140268366}
+          m_TargetAssemblyTypeName: BossInfoPanelUI, Assembly-CSharp
+          m_MethodName: HideRewardDescription
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &425262038
 GameObject:
   m_ObjectHideFlags: 0
@@ -3430,7 +3476,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &736100177
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3447,8 +3493,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 61.01, y: 136.2}
-  m_SizeDelta: {x: -476.16, y: -344.37}
+  m_AnchoredPosition: {x: 63.7, y: 119}
+  m_SizeDelta: {x: -476.16, y: -327.58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &736100178
 MonoBehaviour:
@@ -4141,7 +4187,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.115, y: 114.33}
+  m_AnchoredPosition: {x: -2.115, y: 100.36}
   m_SizeDelta: {x: 23.66, y: 24.56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &969544534
@@ -4490,7 +4536,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.115, y: 158.7}
+  m_AnchoredPosition: {x: -2.115, y: 149.94}
   m_SizeDelta: {x: 36.54, y: 30.74}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1075461641
@@ -4692,6 +4738,7 @@ GameObject:
   - component: {fileID: 1136018978}
   - component: {fileID: 1136018980}
   - component: {fileID: 1136018979}
+  - component: {fileID: 1136018981}
   m_Layer: 5
   m_Name: TraitTitle
   m_TagString: Untagged
@@ -4715,8 +4762,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 65.41001, y: 158.70003}
-  m_SizeDelta: {x: 91.33, y: 14.2}
+  m_AnchoredPosition: {x: 86.774994, y: 149.94}
+  m_SizeDelta: {x: 133.69, y: 14.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1136018979
 MonoBehaviour:
@@ -4772,7 +4819,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -4818,6 +4865,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1136018977}
   m_CullTransparentMesh: 1
+--- !u!114 &1136018981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136018977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventTrigger
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 140268366}
+          m_TargetAssemblyTypeName: BossInfoPanelUI, Assembly-CSharp
+          m_MethodName: ShowTraitDescription
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 140268366}
+          m_TargetAssemblyTypeName: BossInfoPanelUI, Assembly-CSharp
+          m_MethodName: HideTraitDescription
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1148251858
 GameObject:
   m_ObjectHideFlags: 0
