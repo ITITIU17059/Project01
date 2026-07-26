@@ -21,4 +21,24 @@ public class BossInfoPanelUI : MonoBehaviour
         rewardTitleText.text = boss.currentTrait.reward.rewardName;
         rewardDescriptionText.text = boss.currentTrait.reward.description;
     }
+
+    public void ShowTraitDescription()
+    {
+        traitDescriptionText.gameObject.SetActive(true);
+    }
+
+    public void ShowRewardDescription()
+    {
+        rewardDescriptionText.gameObject.SetActive(true);
+    }
+
+    public void HideTraitDescription()
+    {
+        traitDescriptionText.gameObject.SetActive(false);
+    }
+
+    public void HideRewardDescription()
+    {
+        rewardDescriptionText.gameObject.SetActive(false);
+    }
 }
