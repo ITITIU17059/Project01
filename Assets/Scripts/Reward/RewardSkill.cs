@@ -101,7 +101,7 @@ public static class RewardSkill
 
     private static void JackGreedyTribute_PlayerTurnReward()
     {
-        Debug.Log("Reward J1 Activated");
+        
         BattleManager.Instance.DrawBonusCards(1);
     }
 
@@ -113,13 +113,13 @@ public static class RewardSkill
 
     private static int JackHeavyGuard_ShieldReward(int amount)
     {
-        Debug.Log("Reward J3 Activated");
+       
         return amount + 3;
     }
 
     private static int JackBrokenForce_AttackReward(CardSO card, int originalValue, int finalValue)
     {
-        Debug.Log("Reward J4 Activated");
+        
         if (card == null) return finalValue;
         if (card.suit != CardSO.Suit.Clubs) return finalValue;
         if (card.value >= 6) return finalValue;
