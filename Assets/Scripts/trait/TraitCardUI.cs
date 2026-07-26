@@ -27,4 +27,10 @@ public class TraitCardUI : MonoBehaviour
         rewardTitle.text = trait.reward.rewardName;
         rewardDescription.text = trait.reward.description;
     }
+
+    public void Setup(RewardSO trait)
+    {
+        traitIcon.sprite = trait.icon;
+        rewardDescription.text = trait.description;
+    }
 }
