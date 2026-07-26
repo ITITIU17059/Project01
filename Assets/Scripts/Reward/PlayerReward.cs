@@ -1,18 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerReward : MonoBehaviour
 {
-   
+
     public static PlayerReward Instance { get; private set; }
 
-     public const int MaxEquipSlots = 3;
+    public const int MaxEquipSlots = 3;
 
-     [SerializeField] private List<RewardSO> ownedRewards = new();
+    [SerializeField] private List<RewardSO> ownedRewards = new();
 
     [SerializeField] private RewardSO[] equippedRewards = new RewardSO[MaxEquipSlots];
     public IReadOnlyList<RewardSO> OwnedRewards => ownedRewards;
     public RewardSO[] EquippedRewards => equippedRewards;
+    public static event Action OnEquipmentChanged;
     private void Awake()
     {
         if (equippedRewards == null || equippedRewards.Length != MaxEquipSlots)
@@ -38,12 +40,12 @@ public class PlayerReward : MonoBehaviour
 
         if (ownedRewards.Contains(reward))
         {
-           
+
             return false;
         }
 
         ownedRewards.Add(reward);
-        
+
         return true;
     }
 
@@ -92,10 +94,11 @@ public class PlayerReward : MonoBehaviour
         equippedRewards[slotIndex] = reward;
 
         Debug.Log("Equip thành công!");
+        OnEquipmentChanged?.Invoke();
 
         return true;
-    
-}
+
+    }
 
     public bool UnequipReward(int slotIndex)
     {
@@ -103,6 +106,7 @@ public class PlayerReward : MonoBehaviour
             return false;
 
         equippedRewards[slotIndex] = null;
+        OnEquipmentChanged?.Invoke();
         return true;
     }
     public void SwapReward(int fromSlot, int toSlot)
@@ -113,5 +117,6 @@ public class PlayerReward : MonoBehaviour
         RewardSO temp = equippedRewards[fromSlot];
         equippedRewards[fromSlot] = equippedRewards[toSlot];
         equippedRewards[toSlot] = temp;
+        OnEquipmentChanged?.Invoke();
     }
 }
