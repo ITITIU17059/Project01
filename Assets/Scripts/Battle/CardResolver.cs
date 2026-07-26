@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,13 +36,15 @@ public static class CardResolver
             if (card.suit != CardSO.Suit.Clubs)
                 continue;
 
-            damage = TraitManager.Instance.ModifyAttackDamage(
+            // Reward trước
+            damage = TraitManager.Instance.ModifyRewardAttackDamage(
                 card,
                 originalDamage,
                 damage);
 
-            damage = TraitManager.Instance.ModifyRewardAttackDamage(
-                card,
+            // Boss luôn xử lý cuối
+            damage = TraitManager.Instance.ModifyAttackDamage(
+                cards,
                 originalDamage,
                 damage);
 
@@ -50,6 +52,7 @@ public static class CardResolver
         }
 
         return damage;
+
     }
 
     //====================================================
@@ -84,6 +87,34 @@ public static class CardResolver
             }
         }
 
+        // Kháng chất: chất mà boss đang kháng thì HIỆU ỨNG của chất đó
+        // (heal/draw/giảm đòn) không có tác dụng — damage không bị ảnh hưởng.
+        BossSO currentBoss = BossManager.Instance != null
+            ? BossManager.Instance.CurrentBoss
+            : null;
+
+        CardSO.Suit resistedSuit = currentBoss != null
+            ? currentBoss.resistanceSuit
+            : CardSO.Suit.None;
+
+        if (resistedSuit == CardSO.Suit.Hearts && hasHeart)
+        {
+            Debug.Log("Boss kháng chất Hearts -> hiệu ứng hồi máu không có tác dụng");
+            hasHeart = false;
+        }
+
+        if (resistedSuit == CardSO.Suit.Diamonds && hasDiamond)
+        {
+            Debug.Log("Boss kháng chất Diamonds -> hiệu ứng rút bài không có tác dụng");
+            hasDiamond = false;
+        }
+
+        if (resistedSuit == CardSO.Suit.Spades && hasSpade)
+        {
+            Debug.Log("Boss kháng chất Spades -> hiệu ứng giảm đòn không có tác dụng");
+            hasSpade = false;
+        }
+
         //---------------- HEART ----------------
 
         if (hasHeart)
@@ -116,7 +147,10 @@ public static class CardResolver
         {
             int reduceAmount = total;
 
-            reduceAmount = TraitManager.Instance.ModifyShieldAmount(reduceAmount);
+            reduceAmount =
+     TraitManager.Instance.ModifyShieldAmount(
+         cards,
+         reduceAmount);
 
             foreach (CardSO card in cards)
             {
@@ -183,5 +217,57 @@ public static class CardResolver
             return true;
 
         return total <= 10;
+    }
+    //====================================================
+    // CARD FX
+    //====================================================
+
+    public static IEnumerator PlaySuitFX(List<GameObject> cards)
+    {
+        foreach (GameObject obj in cards)
+        {
+            if (obj == null)
+                continue;
+
+            CardDisplay display = obj.GetComponent<CardDisplay>();
+
+            if (display == null)
+                continue;
+
+            yield return BossFXManager.Instance.PlayCardSuitFX(
+                display.cardScriptableObject,
+                display.transform);
+        }
+    }
+    //====================================================
+    // DISCARD
+    //====================================================
+
+    public static IEnumerator DiscardCards(
+        List<GameObject> selectedCards,
+        HandManager handManager,
+        Transform graveyardSpawnPoint)
+    {
+        foreach (GameObject obj in selectedCards)
+        {
+            if (obj == null)
+                continue;
+
+            handManager.handCards.Remove(obj);
+
+            CardDisplay display = obj.GetComponent<CardDisplay>();
+
+            if (display != null)
+            {
+                GraveyardManager.Instance.AddToGraveyard(
+                    display.cardScriptableObject);
+            }
+
+            CardFXManager.Instance.PlayAnimateToGraveyardFX(
+                obj,
+                graveyardSpawnPoint);
+        }
+
+        yield return new WaitForSeconds(0.55f);
     }
 }

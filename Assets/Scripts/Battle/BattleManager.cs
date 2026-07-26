@@ -285,32 +285,28 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ResolveSelectedCards()
     {
         handManager.SetInteractable(false);
-        handWasEmptyAfterPlay = handManager.handCards.Count == 0;
+
+        handWasEmptyAfterPlay =
+            handManager.handCards.Count == 0;
 
         List<CardSO> cards = new();
 
         foreach (GameObject obj in handManager.selectedCards)
         {
             if (obj.TryGetComponent(out CardDisplay display))
-                cards.Add(display.cardScriptableObject);
-        }
-
-        yield return StartCoroutine(ResolveCombo(cards));
-
-        foreach (GameObject obj in handManager.selectedCards)
-        {
-            handManager.handCards.Remove(obj);
-            if (obj.TryGetComponent(out CardDisplay display))
             {
-                GraveyardManager.Instance.AddToGraveyard(display.cardScriptableObject);
+                cards.Add(display.cardScriptableObject);
             }
-
-            CardFXManager.Instance.PlayAnimateToGraveyardFX(
-                obj,
-                graveyardSpawnPoint);
         }
 
-        yield return new WaitForSeconds(0.55f);
+        yield return StartCoroutine(
+            ResolveCombo(cards));
+
+        yield return StartCoroutine(
+            CardResolver.DiscardCards(
+                handManager.selectedCards,
+                handManager,
+                graveyardSpawnPoint));
 
         handManager.ClearSelection();
 
@@ -320,32 +316,22 @@ public class BattleManager : MonoBehaviour
     {
         TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayCard);
         TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayCard);
-        
 
-        int total = 0;
-     
-        
         int damage = CardResolver.ResolveDamage(cards);
-        BossManager.Instance.TakeDamage(damage);
         TraitManager.Instance.InvokeBossEvent(TraitEventType.BossDamaged);
         TraitManager.Instance.InvokeRewardEvent(TraitEventType.BossDamaged);
+        BossManager.Instance.TakeDamage(damage);
+
+        
 
         TraitManager.Instance.InvokeBossEvent(TraitEventType.AfterAttack);
         TraitManager.Instance.InvokeRewardEvent(TraitEventType.AfterAttack);
 
-   
+        yield return StartCoroutine(
+            CardResolver.ResolveEffects(cards));
 
-        // ===== EFFECT ANIMATION =====
-        foreach (GameObject obj in handManager.selectedCards)
-        {
-            CardDisplay display = obj.GetComponent<CardDisplay>();
-
-            yield return BossFXManager.Instance.PlayCardSuitFX(
-                display.cardScriptableObject,
-                display.transform);
-        }
-
-        yield break;
+        yield return StartCoroutine(
+    CardResolver.PlaySuitFX(handManager.selectedCards));
     }
 
     private IEnumerator FinishDiscardRoutine(bool success)
@@ -410,55 +396,7 @@ public class BattleManager : MonoBehaviour
 
         StartCoroutine(ResolveSelectedCards());
     }
-    private bool IsValidCombo(List<CardSO> cards)
-    {
-        if (cards.Count == 0)
-            return false;
-
-        // 1 lá luôn hợp lệ (kể cả J, Q, K)
-        if (cards.Count == 1)
-            return true;
-
-        List<CardSO> aces = new();
-        List<CardSO> normals = new();
-
-        foreach (CardSO card in cards)
-        {
-            if (card.value == 1)
-                aces.Add(card);
-            else
-                normals.Add(card);
-        }
-
-        // Chỉ toàn Ace
-        if (normals.Count == 0)
-        {
-            int totalAce = aces.Count;
-            return totalAce <= 10;
-        }
-
-        // Chỉ được 1 Ace Companion
-        if (aces.Count > 1)
-            return false;
-
-        int rank = normals[0].value;
-        int total = 0;
-
-        foreach (CardSO card in normals)
-        {
-            if (card.value != rank)
-                return false;
-
-            total += card.value;
-        }
-
-        // Có Ace Companion thì bỏ qua giới hạn <=10
-        if (aces.Count == 1)
-            return true;
-
-        // Không có Ace thì tổng phải <=10
-        return total <= 10;
-    }
+   
     public void FinishDiscard(bool success)
     {
         StartCoroutine(FinishDiscardRoutine(success));
