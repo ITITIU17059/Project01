@@ -7,8 +7,7 @@ public static class RewardSkill
     public delegate int DamageModifier(CardSO card, int originalValue, int finalValue);
     public delegate void RewardEvent();
 
-    private static Dictionary<TraitID, RewardEvent> playerTurnEvents;
-    private static Dictionary<TraitID, RewardEvent> discardEvents;
+    private static Dictionary<TraitID, Dictionary<TraitEventType, RewardEvent>> eventTable;
     private static Dictionary<TraitID, ValueModifier> drawModifiers;
     private static Dictionary<TraitID, ValueModifier> healModifiers;
     private static Dictionary<TraitID, ValueModifier> shieldModifiers;
@@ -16,24 +15,59 @@ public static class RewardSkill
 
     static RewardSkill()
     {
+        InitializeEvents();
+
         InitializeDrawModifiers();
         InitializeHealModifiers();
         InitializeShieldModifiers();
         InitializeAttackModifiers();
-        InitializePlayerTurnEvents();
-        InitializeDiscardEvents();
     }
 
-    private static void InitializePlayerTurnEvents()
+    private static void InitializeEvents()
     {
-        playerTurnEvents = new();
-        playerTurnEvents.Add(TraitID.J_GREEDY_TRIBUTE, JackGreedyTribute_PlayerTurnReward);
-    }
+        eventTable = new();
 
-    private static void InitializeDiscardEvents()
+        RegisterEvent(
+            TraitID.J_GREEDY_TRIBUTE,
+            TraitEventType.PlayerTurn,
+            JackGreedyTribute_PlayerTurnReward);
+
+        RegisterEvent(
+            TraitID.J_WITHERED_BLESSING,
+            TraitEventType.Discard,
+            JackWitheredBlessing_DiscardReward);
+    }
+    private static void RegisterEvent(
+    TraitID id,
+    TraitEventType type,
+    RewardEvent evt)
     {
-        discardEvents = new();
-        discardEvents.Add(TraitID.J_WITHERED_BLESSING, JackWitheredBlessing_DiscardReward);
+        if (!eventTable.ContainsKey(id))
+            eventTable[id] = new();
+
+        eventTable[id][type] = evt;
+    }
+    public static void Invoke(
+    TraitEventType type,
+    IReadOnlyList<RewardSO> rewards)
+    {
+        if (rewards == null)
+            return;
+
+        foreach (RewardSO reward in rewards)
+        {
+            if (reward == null)
+                continue;
+
+            if (!eventTable.ContainsKey(reward.traitID))
+                continue;
+
+            if (eventTable[reward.traitID]
+                .TryGetValue(type, out RewardEvent evt))
+            {
+                evt.Invoke();
+            }
+        }
     }
 
     private static void InitializeDrawModifiers() { drawModifiers = new(); }
@@ -107,7 +141,6 @@ public static class RewardSkill
 
     private static void JackWitheredBlessing_DiscardReward()
     {
-        Debug.Log("Reward J2 Activated");
         BattleManager.Instance.HealDeck(2);
     }
 
@@ -126,25 +159,5 @@ public static class RewardSkill
         return originalValue * 3;
     }
 
-    public static void InvokePlayerTurn(IReadOnlyList<RewardSO> equippedRewards)
-    {
-        if (equippedRewards == null) return;
-        foreach (RewardSO reward in equippedRewards)
-        {
-            if (reward == null) continue;
-            if (playerTurnEvents.TryGetValue(reward.traitID, out RewardEvent evt))
-                evt.Invoke();
-        }
-    }
-
-    public static void InvokeDiscard(IReadOnlyList<RewardSO> equippedRewards)
-    {
-        if (equippedRewards == null) return;
-        foreach (RewardSO reward in equippedRewards)
-        {
-            if (reward == null) continue;
-            if (discardEvents.TryGetValue(reward.traitID, out RewardEvent evt))
-                evt.Invoke();
-        }
-    }
+    
 }

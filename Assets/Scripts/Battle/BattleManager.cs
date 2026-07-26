@@ -109,7 +109,8 @@ public class BattleManager : MonoBehaviour
             BossManager.Instance.RandomizeJokerSuit();
 
         handManager.SetInteractable(true);
-        TraitManager.Instance.InvokeRewardPlayerTurn();
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayerTurn);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayerTurn);
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -122,6 +123,9 @@ public class BattleManager : MonoBehaviour
 
     private void StartBossTurn()
     {
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.BossTurn);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.BossTurn);
+
         TurnUIController.Instance.ShowEnemyTurn();
 
         DOVirtual.DelayedCall(1.2f, () =>
@@ -314,103 +318,22 @@ public class BattleManager : MonoBehaviour
     }
     private IEnumerator ResolveCombo(List<CardSO> cards)
     {
-        CardSO.Suit resist = BossManager.Instance.CurrentBoss.resistanceSuit;
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayCard);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayCard);
+        
 
         int total = 0;
-        int damage = 0;
-
-        bool hasHeart = false;
-        bool hasDiamond = false;
-        bool hasClub = false;
-        bool hasSpade = false;
-
-        foreach (CardSO card in cards)
-        {
-            total += card.value;
-            damage += card.value;
-
-            if (card.suit == resist)
-                continue;
-
-            switch (card.suit)
-            {
-                case CardSO.Suit.Hearts:
-                    hasHeart = true;
-                    break;
-
-                case CardSO.Suit.Diamonds:
-                    hasDiamond = true;
-                    break;
-
-                case CardSO.Suit.Clubs:
-                    hasClub = true;
-                    break;
-
-                case CardSO.Suit.Spades:
-                    hasSpade = true;
-                    break;
-            }
-        }
-
-        if (hasClub)
-        {
-            int originalDamage = damage;
-
-            damage *= 2;
-
-            foreach (CardSO card in cards)
-            {
-                if (card.suit == CardSO.Suit.Clubs)
-                {
-                    damage = TraitManager.Instance.ModifyAttackDamage(
-                        card,
-                        originalDamage,
-                        damage);
-
-                    damage = TraitManager.Instance.ModifyRewardAttackDamage(
-                        card,
-                        originalDamage,
-                        damage);
-
-                    break;
-                }
-            }
-        }
-
+     
+        
+        int damage = CardResolver.ResolveDamage(cards);
         BossManager.Instance.TakeDamage(damage);
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.BossDamaged);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.BossDamaged);
 
-        if (hasHeart)
-        {
-            total = TraitManager.Instance.ModifyHealAmount(total);
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.AfterAttack);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.AfterAttack);
 
-            HealDeck(total);
-        }
-
-        if (hasDiamond)
-        {
-            total = TraitManager.Instance.ModifyDrawAmount(total);
-
-            DrawBonusCards(total);
-        }
-
-        if (hasSpade)
-        {
-            int reduceAmount = total;
-
-            reduceAmount = TraitManager.Instance.ModifyShieldAmount(reduceAmount);
-
-            foreach (CardSO card in cards)
-            {
-                if (card.suit == CardSO.Suit.Spades &&
-                    card.value < 6)
-                {
-                    reduceAmount = TraitManager.Instance.ModifyRewardShieldAmount(reduceAmount);
-                    break;
-                }
-            }
-
-            BossManager.Instance.ReduceAttack(reduceAmount);
-        }
+   
 
         // ===== EFFECT ANIMATION =====
         foreach (GameObject obj in handManager.selectedCards)
@@ -431,7 +354,8 @@ public class BattleManager : MonoBehaviour
 
         if (success)
         {
-            TraitManager.Instance.InvokeRewardDiscard();
+            TraitManager.Instance.InvokeBossEvent(TraitEventType.Discard);
+            TraitManager.Instance.InvokeRewardEvent(TraitEventType.Discard);
 
             yield return StartCoroutine(
                 BossFXManager.Instance.PlayBlockSuccessFX());
@@ -455,6 +379,7 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < amount; i++)
         {
             deckManager.DrawCard(handManager);
+
         }
     }
 
@@ -474,7 +399,7 @@ public class BattleManager : MonoBehaviour
                 cards.Add(display.cardScriptableObject);
         }
 
-        if (!IsValidCombo(cards))
+        if (!CardResolver.IsValidCombo(cards))
         {
             Debug.Log("Invalid Combo");
             return;
@@ -570,6 +495,7 @@ public class BattleManager : MonoBehaviour
         );
 
         deckManager.RefreshDeckBar();
+
     }
 
     #endregion

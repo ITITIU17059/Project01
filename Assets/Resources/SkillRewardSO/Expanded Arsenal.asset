@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11584b51d090ff347aa707fa546f3622, type: 3}
   m_Name: Expanded Arsenal
   m_EditorClassIdentifier: Assembly-CSharp::RewardSO
+  traitID: 6
   icon: {fileID: 21300000, guid: bb67b03c2969d104caba950c446f8c8d, type: 3}
   rewardName: Expanded Arsenal
   description: "+1 gi\u1EDBi h\u1EA1n b\xE0i tr\xEAn tay."

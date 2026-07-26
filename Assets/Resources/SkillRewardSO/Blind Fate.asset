@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11584b51d090ff347aa707fa546f3622, type: 3}
   m_Name: Blind Fate
   m_EditorClassIdentifier: Assembly-CSharp::RewardSO
+  traitID: 9
   icon: {fileID: 21300000, guid: 37de44bcb59b8174497def1957cc490b, type: 3}
   rewardName: Foresight
   description: "Nh\xECn tr\u01B0\u1EDBc 4 l\xE1 ti\u1EBFp theo c\u1EE7a b\u1ED9 b\xE0i."

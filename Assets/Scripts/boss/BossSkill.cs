@@ -11,6 +11,7 @@ public static class BossSkill
     int finalDamage);
 
     public delegate void TraitEvent();
+    private static Dictionary<TraitID, Dictionary<TraitEventType, TraitEvent>> eventTable;
 
     private static Dictionary<TraitID, ValueModifier> drawModifiers;
 
@@ -20,25 +21,16 @@ public static class BossSkill
 
     private static Dictionary<TraitID, DamageModifier> attackModifiers;
 
-    private static Dictionary<TraitID, TraitEvent> playerTurnEvents;
-
-    private static Dictionary<TraitID, TraitEvent> bossTurnEvents;
-
-    private static Dictionary<TraitID, TraitEvent> discardEvents;
-
-    private static Dictionary<TraitID, TraitEvent> cardPlayedEvents;
-        static BossSkill()
+    static BossSkill()
     {
+        InitializeEvents();
+
         InitializeDrawModifiers();
         InitializeHealModifiers();
         InitializeShieldModifiers();
         InitializeAttackModifiers();
-
-        InitializePlayerTurnEvents();
-        InitializeBossTurnEvents();
-        InitializeDiscardEvents();
-        InitializeCardPlayedEvents();
     }
+
     private static void InitializeDrawModifiers()
     {
         drawModifiers = new Dictionary<TraitID, ValueModifier>();
@@ -72,30 +64,53 @@ public static class BossSkill
             JackBrokenForce_Damage);
     }
 
-
-
-    private static void InitializePlayerTurnEvents()
+    private static void InitializeEvents()
     {
-        playerTurnEvents = new Dictionary<TraitID, TraitEvent>();
-    }
+        eventTable = new Dictionary<
+            TraitID,
+            Dictionary<TraitEventType, TraitEvent>>();
 
-    private static void InitializeBossTurnEvents()
-    {
-        bossTurnEvents = new Dictionary<TraitID, TraitEvent>();
-    }
+        RegisterEvent(
+            TraitID.J_GREEDY_TRIBUTE,
+            TraitEventType.PlayerTurn,
+            JackGreedyTribute_PlayerTurn);
 
-    private static void InitializeDiscardEvents()
-    {
-        discardEvents = new Dictionary<TraitID, TraitEvent>();
-    }
-
-    private static void InitializeCardPlayedEvents()
-    {
-        cardPlayedEvents = new Dictionary<TraitID, TraitEvent>();
+        RegisterEvent(
+            TraitID.J_WITHERED_BLESSING,
+            TraitEventType.Discard,
+            JackWitheredBlessing_Discard);
     }
 
 
+    public static void Invoke(
+TraitEventType type,
+BossTraitSO trait)
+    {
+        if (trait == null)
+            return;
 
+        if (!eventTable.ContainsKey(trait.traitID))
+            return;
+
+        if (eventTable[trait.traitID]
+            .TryGetValue(type, out TraitEvent evt))
+        {
+            evt.Invoke();
+        }
+    }
+    private static void RegisterEvent(
+    TraitID id,
+    TraitEventType type,
+    TraitEvent evt)
+    {
+        if (!eventTable.ContainsKey(id))
+        {
+            eventTable[id] =
+                new Dictionary<TraitEventType, TraitEvent>();
+        }
+
+        eventTable[id][type] = evt;
+    }
     public static int ModifyDrawAmount(BossTraitSO trait, int amount)
     {
         if (trait == null)
@@ -162,7 +177,18 @@ public static class BossSkill
     //==================================================
     // JACK
     //==================================================
+    private static void JackGreedyTribute_PlayerTurn()
+    {
+        Debug.Log("Boss Trait Event : Greedy Tribute");
 
+        BattleManager.Instance.DrawBonusCards(1);
+    }
+    private static void JackWitheredBlessing_Discard()
+    {
+        Debug.Log("Boss Trait Event : Withered Blessing");
+
+        BattleManager.Instance.HealDeck(2);
+    }
     private static int JackGreedyTribute_Draw(int amount)
     {
         Debug.Log("Jack Greedy Tribute Activated");

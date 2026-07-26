@@ -80,13 +80,13 @@ public class TraitManager : MonoBehaviour
         return RewardSkill.ModifyAttackDamage(PlayerReward.Instance.EquippedRewards, card, original, finalDamage);
     }
 
-    public void InvokeRewardPlayerTurn()
+    public void InvokeBossEvent(TraitEventType type)
     {
-        RewardSkill.InvokePlayerTurn(PlayerReward.Instance.EquippedRewards);
+        BossSkill.Invoke(type, CurrentTrait);
     }
 
-    public void InvokeRewardDiscard()
+    public void InvokeRewardEvent(TraitEventType type)
     {
-        RewardSkill.InvokeDiscard(PlayerReward.Instance.EquippedRewards);
+        RewardSkill.Invoke(type, PlayerReward.Instance.EquippedRewards);
     }
 }
