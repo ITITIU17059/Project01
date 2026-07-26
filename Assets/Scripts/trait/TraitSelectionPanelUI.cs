@@ -7,6 +7,7 @@ public class TraitSelectionPanelUI : MonoBehaviour
 {
     [SerializeField] private GameObject traitCardPrefab;
     [SerializeField] private Transform traitContainer;
+    [SerializeField] private HandManager hand;
 
     private BossSO currentBoss;
     private readonly List<GameObject> spawnedCards = new();
@@ -15,7 +16,6 @@ public class TraitSelectionPanelUI : MonoBehaviour
     {
 
         currentBoss = boss;
-        HandManager hand = FindAnyObjectByType<HandManager>();
 
         hand.SetInteractable(false);
         hand.ResetAllCardHover();
@@ -80,5 +80,11 @@ public class TraitSelectionPanelUI : MonoBehaviour
         FindAnyObjectByType<HandManager>()
     .SetInteractable(true);
 
+    }
+
+    public void SetVisible(bool visible)
+    {
+        gameObject.SetActive(visible);
+        hand.SetInteractable(true);
     }
 }

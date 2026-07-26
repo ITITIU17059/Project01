@@ -3196,6 +3196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TraitSelectionPanelUI
   traitCardPrefab: {fileID: 8247724915610875300, guid: ea7aedb4db232d14b97e345a95d7f50f, type: 3}
   traitContainer: {fileID: 677746254}
+  hand: {fileID: 44184947}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
