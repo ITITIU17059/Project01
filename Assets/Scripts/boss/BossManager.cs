@@ -157,7 +157,16 @@ public class BossManager : MonoBehaviour
         bossDisplay.UpdateHP(CurrentHP);
         bossDisplay.UpdateATK(CurrentATK);
 
-        traitSelectionPanel.Show(CurrentBoss);
+        if (CurrentBoss.rank == BossRank.Joker)
+        {
+            traitSelectionPanel.SetVisible(false);
+            BattleManager.Instance.StartBattleAfterTraitSelected();
+        }
+        else
+        {
+            traitSelectionPanel.SetVisible(true);
+            traitSelectionPanel.Show(CurrentBoss);
+        }
 
         if (!string.IsNullOrEmpty(CurrentBoss.spawnSoundID))
             SoundManager.instance?.PlaySound2D(CurrentBoss.spawnSoundID);
@@ -256,7 +265,7 @@ public class BossManager : MonoBehaviour
         CardSO.Suit.Clubs,
         CardSO.Suit.Spades
     };
-        
+
         CardSO.Suit newSuit;
 
         do

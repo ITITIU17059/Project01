@@ -13,9 +13,8 @@ public class GameplayMenu : MonoBehaviour
 
         Time.timeScale = 0f;
 
-        pausePanel.transform.localScale = Vector3.zero;
-
         pausePanel.SetActive(true);
+        pausePanel.transform.SetAsLastSibling();
 
         pausePanel.transform
             .DOScale(1f, 0.25f)
