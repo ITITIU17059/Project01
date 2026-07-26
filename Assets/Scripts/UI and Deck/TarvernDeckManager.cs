@@ -60,7 +60,7 @@ public class TarvernDeckManager : MonoBehaviour
             DrawCard(handManager);
         }
 
-        BattleManager.Instance.ChangeState(BattleState.PlayerTurn);
+        // BattleManager.Instance.ChangeState(BattleState.PlayerTurn);
     }
 
     public List<string> GetDeckSaveData()
