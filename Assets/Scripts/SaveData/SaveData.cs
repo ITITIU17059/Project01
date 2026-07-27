@@ -12,4 +12,7 @@ public class SaveData
     public List<string> handCards = new();
     public List<string> deckCards = new();
     public List<string> graveyardCards = new();
+
+    public List<string> ownedRewards = new();
+    public List<string> equippedRewards = new();
 }

@@ -119,4 +119,60 @@ public class PlayerReward : MonoBehaviour
         equippedRewards[toSlot] = temp;
         OnEquipmentChanged?.Invoke();
     }
+
+    public List<string> GetOwnedRewardNames()
+    {
+        List<string> list = new();
+
+        foreach (RewardSO reward in ownedRewards)
+            list.Add(reward.rewardName);
+
+        return list;
+    }
+
+    public List<string> GetEquippedRewardNames()
+    {
+        List<string> list = new();
+
+        foreach (RewardSO reward in equippedRewards)
+        {
+            if (reward == null)
+                list.Add("");
+            else
+                list.Add(reward.rewardName);
+        }
+
+        return list;
+    }
+
+    public void LoadRewards(List<string> owned, List<string> equipped)
+    {
+        ownedRewards.Clear();
+
+        RewardSO[] database = Resources.LoadAll<RewardSO>("");
+
+        foreach (string rewardName in owned)
+        {
+            RewardSO reward = System.Array.Find(database,
+                r => r.rewardName == rewardName);
+
+            if (reward != null)
+                ownedRewards.Add(reward);
+        }
+
+        equippedRewards = new RewardSO[MaxEquipSlots];
+
+        for (int i = 0; i < equipped.Count && i < MaxEquipSlots; i++)
+        {
+            if (string.IsNullOrEmpty(equipped[i]))
+                continue;
+
+            RewardSO reward = System.Array.Find(database,
+                r => r.rewardName == equipped[i]);
+
+            equippedRewards[i] = reward;
+        }
+
+        OnEquipmentChanged?.Invoke();
+    }
 }
