@@ -319,29 +319,40 @@ public class BattleManager : MonoBehaviour
 
         ChangeState(BattleState.CheckBattle);
     }
+
     private IEnumerator ResolveCombo(List<CardSO> cards)
     {
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayCard,0);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayCard,0);
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayCard, 0);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayCard, 0);
 
         int damage = CardResolver.ResolveDamage(cards);
 
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.BossDamaged,0);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.BossDamaged,0);
-
-        BossManager.Instance.TakeDamage(damage);
-
-        if (BossManager.Instance.IsDead())
-            yield break;
-
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.AfterAttack,0);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.AfterAttack,0);
-
+        // Hiệu ứng lá bài
         yield return StartCoroutine(
             CardResolver.ResolveEffects(cards));
 
+        // Animation chất bài
         yield return StartCoroutine(
-    CardResolver.PlaySuitFX(handManager.selectedCards));
+            CardResolver.PlaySuitFX(handManager.selectedCards));
+
+        // Sau cùng mới gây sát thương
+        BossManager.Instance.TakeDamage(damage);
+
+        TraitManager.Instance.InvokeBossEvent(
+            TraitEventType.BossDamaged,
+            damage);
+
+        TraitManager.Instance.InvokeRewardEvent(
+            TraitEventType.BossDamaged,
+            damage);
+
+        TraitManager.Instance.InvokeBossEvent(
+            TraitEventType.AfterAttack,
+            damage);
+
+        TraitManager.Instance.InvokeRewardEvent(
+            TraitEventType.AfterAttack,
+            damage);
     }
 
     private IEnumerator FinishDiscardRoutine(bool success)
