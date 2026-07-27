@@ -15,4 +15,5 @@ public class SaveData
 
     public List<string> ownedRewards = new();
     public List<string> equippedRewards = new();
+
 }

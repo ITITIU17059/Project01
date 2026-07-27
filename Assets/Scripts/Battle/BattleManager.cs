@@ -98,7 +98,20 @@ public class BattleManager : MonoBehaviour
             BossManager.Instance.RefreshBossInfo();
         }
 
-        StartCoroutine(deckManager.AddCardFromFirst());
+        SaveData save = SaveManager.Instance.LoadProgress();
+
+        if (save != null)
+        {
+            deckManager.LoadDeck(save.deckCards);
+
+            GraveyardManager.Instance.LoadData(save.graveyardCards);
+
+            handManager.LoadHand(save.handCards);
+        }
+        else
+        {
+            StartCoroutine(deckManager.AddCardFromFirst());
+        }
     }
 
     private void StartPlayerTurn()

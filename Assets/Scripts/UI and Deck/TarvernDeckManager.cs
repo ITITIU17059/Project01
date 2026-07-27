@@ -7,6 +7,16 @@ public class TarvernDeckManager : MonoBehaviour
     public List<CardSO> allCards = new();
     [SerializeField] private HandManager handManager;
     [SerializeField] private DeckBarUI drawDeckBar;
+    public static TarvernDeckManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+
     private void Start()
     {
         CardSO[] cards = Resources.LoadAll<CardSO>("CardSO");

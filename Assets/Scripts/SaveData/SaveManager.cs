@@ -27,6 +27,12 @@ public class SaveManager : MonoBehaviour
             stageIndex = stageIndex,
             bossIndex = bossIndex,
 
+            handCards = HandManager.Instance.GetSaveData(),
+            deckCards = TarvernDeckManager.Instance.GetDeckSaveData(),
+            graveyardCards = GraveyardManager.Instance.GetSaveData(),
+
+            bossSequence = BossManager.Instance.GetBossSequence(),
+
             ownedRewards = PlayerReward.Instance.GetOwnedRewardNames(),
             equippedRewards = PlayerReward.Instance.GetEquippedRewardNames()
         };
