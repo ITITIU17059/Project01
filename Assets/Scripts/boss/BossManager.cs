@@ -66,6 +66,18 @@ public class BossManager : MonoBehaviour
             save.ownedRewards,
             save.equippedRewards);
 
+            TraitPoolManager.Instance.LoadPool(
+                BossRank.Jack,
+                save.jackTraitPool);
+
+            TraitPoolManager.Instance.LoadPool(
+                BossRank.Queen,
+                save.queenTraitPool);
+
+            TraitPoolManager.Instance.LoadPool(
+                BossRank.King,
+                save.kingTraitPool);
+
             defeatedJack = Mathf.Min(CurrentBossIndex, jackBosses.Count);
 
             if (CurrentBossIndex >= jackBosses.Count)
@@ -183,6 +195,15 @@ public class BossManager : MonoBehaviour
 
     public void OnBossDefeated(BossSO deadBoss)
     {
+        if (deadBoss.currentTrait != null)
+        {
+            TraitPoolManager.Instance.RemoveTrait(
+                deadBoss.rank,
+                deadBoss.currentTrait);
+        }
+
+        TraitSelectionPanelUI.Instance.ClearCurrentTraits();
+
         CurrentBossIndex++;
 
         switch (deadBoss.rank)
