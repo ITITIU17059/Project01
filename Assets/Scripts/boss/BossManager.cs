@@ -220,7 +220,24 @@ public class BossManager : MonoBehaviour
 
         bossDisplay.UpdateHP(CurrentHP);
     }
+    public void TakeTraitDamage(int damage)
+    {
+        CurrentHP -= damage;
 
+        if (CurrentHP < 0)
+            CurrentHP = 0;
+
+        bossDisplay.UpdateHP(CurrentHP);
+    }
+    public void Heal(int amount)
+    {
+        CurrentHP += amount;
+
+        if (CurrentHP > CurrentBoss.hp)
+            CurrentHP = CurrentBoss.hp;
+
+        bossDisplay.UpdateHP(CurrentHP);
+    }
     public void ReduceAttack(int value)
     {
         CurrentBoss.currentATK -= value;

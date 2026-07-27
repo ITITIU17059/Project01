@@ -22,7 +22,7 @@ public class BattleManager : MonoBehaviour
     public Transform PlayerHitPoint => playerHitPoint;
     private bool handWasEmptyAfterPlay;
     private bool waitingForInventory;
-
+    public int LastDrawAmount { get; private set; }
     public void ContinueFromInventory()
     {
         waitingForInventory = false;
@@ -109,8 +109,8 @@ public class BattleManager : MonoBehaviour
             BossManager.Instance.RandomizeJokerSuit();
 
         handManager.SetInteractable(true);
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayerTurn);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayerTurn);
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayerTurn, 0);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayerTurn, 0);
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -123,8 +123,8 @@ public class BattleManager : MonoBehaviour
 
     private void StartBossTurn()
     {
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.BossTurn);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.BossTurn);
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.BossTurn, 0);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.BossTurn, 0);
 
         TurnUIController.Instance.ShowEnemyTurn();
 
@@ -138,7 +138,6 @@ public class BattleManager : MonoBehaviour
     {
         handManager.CancelCurrentSelection();
 
-        // Boss tấn công trước
         yield return StartCoroutine(
             BossFXManager.Instance.PlayBossAttackFX());
 
@@ -224,7 +223,6 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-        // Vào Inventory Scene (additive, không mất deck/hand hiện tại)
         waitingForInventory = true;
         LevelManager.instance.LoadSceneAdditive("InventoryScene");
 
@@ -232,7 +230,6 @@ public class BattleManager : MonoBehaviour
 
         LevelManager.instance.UnloadSceneAdditive("InventoryScene");
 
-        // Rút bài trước
 
         if (handWasEmptyAfterPlay)
         {
@@ -242,7 +239,6 @@ public class BattleManager : MonoBehaviour
                 deckManager.DrawCard(handManager);
             }
         }
-        // Còn bài -> chỉ rút 2 lá
         else
         {
             for (int i = 0; i < 2; i++)
@@ -257,7 +253,6 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        // Thêm Reward Card sau khi rút xong
         if (BossManager.Instance.LastKillWasPerfect)
         {
             deckManager.allCards.Insert(0, deadBoss.bossCard);
@@ -268,7 +263,6 @@ public class BattleManager : MonoBehaviour
             GraveyardManager.Instance.AddToGraveyard(deadBoss.bossCard);
         }
 
-        // Kiểm tra còn bài trên tay
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -314,18 +308,21 @@ public class BattleManager : MonoBehaviour
     }
     private IEnumerator ResolveCombo(List<CardSO> cards)
     {
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayCard);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayCard);
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayCard,0);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayCard,0);
 
         int damage = CardResolver.ResolveDamage(cards);
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.BossDamaged);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.BossDamaged);
+
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.BossDamaged,0);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.BossDamaged,0);
+
         BossManager.Instance.TakeDamage(damage);
 
-        
+        if (BossManager.Instance.IsDead())
+            yield break;
 
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.AfterAttack);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.AfterAttack);
+        TraitManager.Instance.InvokeBossEvent(TraitEventType.AfterAttack,0);
+        TraitManager.Instance.InvokeRewardEvent(TraitEventType.AfterAttack,0);
 
         yield return StartCoroutine(
             CardResolver.ResolveEffects(cards));
@@ -340,8 +337,13 @@ public class BattleManager : MonoBehaviour
 
         if (success)
         {
-            TraitManager.Instance.InvokeBossEvent(TraitEventType.Discard);
-            TraitManager.Instance.InvokeRewardEvent(TraitEventType.Discard);
+            TraitManager.Instance.InvokeBossEvent(
+         TraitEventType.Discard,
+         0);
+
+            TraitManager.Instance.InvokeRewardEvent(
+                TraitEventType.Discard,
+                0);
 
             yield return StartCoroutine(
                 BossFXManager.Instance.PlayBlockSuccessFX());
@@ -361,12 +363,21 @@ public class BattleManager : MonoBehaviour
 
     public void DrawBonusCards(int amount)
     {
+        int actualDraw = 0;
 
         for (int i = 0; i < amount; i++)
         {
-            deckManager.DrawCard(handManager);
+            if (deckManager.allCards.Count == 0)
+                break;
 
+            if (handManager.handCards.Count >= handManager.maxHandSize)
+                break;
+
+            deckManager.DrawCard(handManager);
+            actualDraw++;
         }
+
+        LastDrawAmount = actualDraw;
     }
 
     public void ConfirmPlayCards()
@@ -387,7 +398,6 @@ public class BattleManager : MonoBehaviour
 
         if (!CardResolver.IsValidCombo(cards))
         {
-            Debug.Log("Invalid Combo");
             return;
         }
         SoundManager.instance?.PlaySound2D("CardPlay");

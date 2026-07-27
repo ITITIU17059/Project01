@@ -14,6 +14,29 @@ public static class RewardSkill
     private static Dictionary<TraitID, ValueModifier> shieldModifiers;
     private static Dictionary<TraitID, DamageModifier> attackModifiers;
 
+
+    private static readonly Dictionary<TraitID, CardSO.Suit> traitSuitMap = new()
+    {
+        { TraitID.J_GREEDY_TRIBUTE, CardSO.Suit.Diamonds },
+        { TraitID.J_WITHERED_BLESSING, CardSO.Suit.Hearts },
+        { TraitID.J_HEAVY_GUARD, CardSO.Suit.Spades },
+    };
+
+    private static bool IsResistedByCurrentBoss(TraitID traitID)
+    {
+        if (!traitSuitMap.TryGetValue(traitID, out CardSO.Suit requiredSuit))
+            return false;
+
+        BossSO currentBoss = BossManager.Instance != null
+            ? BossManager.Instance.CurrentBoss
+            : null;
+
+        if (currentBoss == null)
+            return false;
+
+        return currentBoss.resistanceSuit == requiredSuit;
+    }
+
     static RewardSkill()
     {
         InitializeEvents();
@@ -41,6 +64,10 @@ public static class RewardSkill
             TraitID.J_WITHERED_BLESSING,
             TraitEventType.Discard,
             JackWitheredBlessing_DiscardReward);
+        RegisterEvent(
+        TraitID.Q_LIFE_LEECH,
+        TraitEventType.Draw,
+            () => QueenLifeLeech_Draw(1));
     }
 
     private static void RegisterEvent(
@@ -56,7 +83,8 @@ public static class RewardSkill
 
     public static void Invoke(
         TraitEventType type,
-        IReadOnlyList<RewardSO> rewards)
+        IReadOnlyList<RewardSO> rewards,
+        int value)
     {
         if (rewards == null)
             return;
@@ -67,6 +95,9 @@ public static class RewardSkill
                 continue;
 
             if (!eventTable.ContainsKey(reward.traitID))
+                continue;
+
+            if (IsResistedByCurrentBoss(reward.traitID))
                 continue;
 
             if (eventTable[reward.traitID]
@@ -129,6 +160,7 @@ public static class RewardSkill
             JackBrokenForce_AttackReward);
     }
 
+
     //========================================================
     // MODIFY
     //========================================================
@@ -143,6 +175,9 @@ public static class RewardSkill
         foreach (RewardSO reward in rewards)
         {
             if (reward == null)
+                continue;
+
+            if (IsResistedByCurrentBoss(reward.traitID))
                 continue;
 
             if (drawModifiers.TryGetValue(
@@ -168,6 +203,9 @@ public static class RewardSkill
             if (reward == null)
                 continue;
 
+            if (IsResistedByCurrentBoss(reward.traitID))
+                continue;
+
             if (healModifiers.TryGetValue(
                 reward.traitID,
                 out ValueModifier modifier))
@@ -189,6 +227,9 @@ public static class RewardSkill
         foreach (RewardSO reward in rewards)
         {
             if (reward == null)
+                continue;
+
+            if (IsResistedByCurrentBoss(reward.traitID))
                 continue;
 
             if (shieldModifiers.TryGetValue(
@@ -237,14 +278,12 @@ public static class RewardSkill
 
     private static void JackGreedyTribute_PlayerTurnReward()
     {
-        Debug.Log("[REWARD] Jack Greedy Tribute Reward Activated (equipped item, not the current boss)");
 
         BattleManager.Instance.DrawBonusCards(1);
     }
 
     private static void JackWitheredBlessing_DiscardReward()
     {
-        Debug.Log("[REWARD] Jack Withered Blessing Reward Activated (equipped item, not the current boss)");
 
         BattleManager.Instance.HealDeck(2);
     }
@@ -255,7 +294,6 @@ public static class RewardSkill
 
     private static int JackGreedyTribute_DrawReward(int amount)
     {
-        Debug.Log("[REWARD] Jack Greedy Tribute Draw Reward Activated (equipped item, not the current boss)");
 
         return amount + 1;
     }
@@ -266,7 +304,6 @@ public static class RewardSkill
 
     private static int JackWitheredBlessing_HealReward(int amount)
     {
-        Debug.Log("[REWARD] Jack Withered Blessing Heal Reward Activated (equipped item, not the current boss)");
 
         return amount + 2;
     }
@@ -299,5 +336,9 @@ public static class RewardSkill
             return finalValue;
 
         return finalValue + originalValue;
+    }
+    private static void QueenLifeLeech_Draw(int value)
+    {
+        BossManager.Instance.TakeTraitDamage(1);
     }
 }
