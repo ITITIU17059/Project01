@@ -312,14 +312,6 @@ public class BossManager : MonoBehaviour
             bossInfoPanel.Setup(CurrentBoss);
         }
     }
-    public void MoveNextBoss()
-    {
-        CurrentBossIndex++;
-
-        SaveManager.Instance.SaveProgress(CurrentStageIndex, CurrentBossIndex);
-
-        LoadNextBoss();
-    }
     public bool IsDead()
     {
         return CurrentHP <= 0;
