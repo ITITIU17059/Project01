@@ -28,27 +28,35 @@ public static class CardResolver
             return damage;
 
         int originalDamage = damage;
+        bool clubResisted =
+    BossManager.Instance.CurrentBoss != null &&
+    BossManager.Instance.CurrentBoss.resistanceSuit == CardSO.Suit.Clubs;
 
-        damage *= 2;
+        if (!clubResisted)
+        {
+            damage *= 2;
+        }
 
         foreach (CardSO card in cards)
         {
             if (card.suit != CardSO.Suit.Clubs)
                 continue;
 
-            // Reward trước
-            damage = TraitManager.Instance.ModifyRewardAttackDamage(
-                card,
-                originalDamage,
-                damage);
+            if (!clubResisted)
+            {
+                damage = TraitManager.Instance.ModifyRewardAttackDamage(
+                    card,
+                    originalDamage,
+                    damage);
 
-            // Boss luôn xử lý cuối
-            damage = TraitManager.Instance.ModifyAttackDamage(
-                cards,
-                originalDamage,
-                damage);
+                damage = TraitManager.Instance.ModifyAttackDamage(
+                    cards,
+                    originalDamage,
+                    damage);
+            }
 
             break;
+        
         }
 
         return damage;
@@ -87,31 +95,25 @@ public static class CardResolver
             }
         }
 
-        // Kháng chất: chất mà boss đang kháng thì HIỆU ỨNG của chất đó
-        // (heal/draw/giảm đòn) không có tác dụng — damage không bị ảnh hưởng.
-        BossSO currentBoss = BossManager.Instance != null
-            ? BossManager.Instance.CurrentBoss
-            : null;
-
-        CardSO.Suit resistedSuit = currentBoss != null
-            ? currentBoss.resistanceSuit
+        CardSO.Suit resistedSuit = BossManager.Instance != null && BossManager.Instance.CurrentBoss != null
+            ? BossManager.Instance.CurrentBoss.resistanceSuit
             : CardSO.Suit.None;
 
-        if (resistedSuit == CardSO.Suit.Hearts && hasHeart)
+        bool IsResisted(CardSO.Suit suit) =>
+            suit != CardSO.Suit.None && suit == resistedSuit;
+
+        if (IsResisted(CardSO.Suit.Hearts) && hasHeart)
         {
-            Debug.Log("Boss kháng chất Hearts -> hiệu ứng hồi máu không có tác dụng");
             hasHeart = false;
         }
 
-        if (resistedSuit == CardSO.Suit.Diamonds && hasDiamond)
+        if (IsResisted(CardSO.Suit.Diamonds) && hasDiamond)
         {
-            Debug.Log("Boss kháng chất Diamonds -> hiệu ứng rút bài không có tác dụng");
             hasDiamond = false;
         }
 
-        if (resistedSuit == CardSO.Suit.Spades && hasSpade)
+        if (IsResisted(CardSO.Suit.Spades) && hasSpade)
         {
-            Debug.Log("Boss kháng chất Spades -> hiệu ứng giảm đòn không có tác dụng");
             hasSpade = false;
         }
 
@@ -124,8 +126,13 @@ public static class CardResolver
 
             BattleManager.Instance.HealDeck(total);
 
-            TraitManager.Instance.InvokeBossEvent(TraitEventType.HealDeck);
-            TraitManager.Instance.InvokeRewardEvent(TraitEventType.HealDeck);
+            TraitManager.Instance.InvokeBossEvent(
+         TraitEventType.HealDeck,
+         total);
+
+            TraitManager.Instance.InvokeRewardEvent(
+                TraitEventType.HealDeck,
+                total);
         }
 
         //---------------- DIAMOND ----------------
@@ -137,8 +144,7 @@ public static class CardResolver
 
             BattleManager.Instance.DrawBonusCards(total);
 
-            TraitManager.Instance.InvokeBossEvent(TraitEventType.Draw);
-            TraitManager.Instance.InvokeRewardEvent(TraitEventType.Draw);
+         
         }
 
         //---------------- SPADE ----------------
@@ -166,8 +172,13 @@ public static class CardResolver
 
             BossManager.Instance.ReduceAttack(reduceAmount);
 
-            TraitManager.Instance.InvokeBossEvent(TraitEventType.ReduceAttack);
-            TraitManager.Instance.InvokeRewardEvent(TraitEventType.ReduceAttack);
+            TraitManager.Instance.InvokeBossEvent(
+      TraitEventType.ReduceAttack,
+      reduceAmount);
+
+            TraitManager.Instance.InvokeRewardEvent(
+                TraitEventType.ReduceAttack,
+                reduceAmount);
         }
 
         yield break;

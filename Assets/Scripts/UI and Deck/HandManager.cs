@@ -170,7 +170,13 @@ public class HandManager : MonoBehaviour
         GameObject newCard = Instantiate(cardPrefab, cardSpawnPoint.position, cardSpawnPoint.rotation);
         SoundManager.instance?.PlaySound2D("CardDraw");
         handCards.Add(newCard);
+        TraitManager.Instance.InvokeBossEvent(
+    TraitEventType.Draw,
+    1);
 
+        TraitManager.Instance.InvokeRewardEvent(
+            TraitEventType.Draw,
+            1);
         newCard.GetComponent<CardDisplay>().cardScriptableObject = cardData;
 
         RepositionAllCards(null);
