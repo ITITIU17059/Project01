@@ -25,7 +25,10 @@ public class SaveManager : MonoBehaviour
         SaveData data = new SaveData()
         {
             stageIndex = stageIndex,
-            bossIndex = bossIndex
+            bossIndex = bossIndex,
+
+            ownedRewards = PlayerReward.Instance.GetOwnedRewardNames(),
+            equippedRewards = PlayerReward.Instance.GetEquippedRewardNames()
         };
 
         string json = JsonUtility.ToJson(data, true);

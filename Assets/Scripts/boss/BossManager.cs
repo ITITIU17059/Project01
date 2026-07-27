@@ -62,6 +62,10 @@ public class BossManager : MonoBehaviour
             CurrentStageIndex = save.stageIndex;
             CurrentBossIndex = save.bossIndex;
 
+            PlayerReward.Instance.LoadRewards(
+            save.ownedRewards,
+            save.equippedRewards);
+
             defeatedJack = Mathf.Min(CurrentBossIndex, jackBosses.Count);
 
             if (CurrentBossIndex >= jackBosses.Count)
