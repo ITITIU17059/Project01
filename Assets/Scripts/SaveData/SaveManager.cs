@@ -34,7 +34,12 @@ public class SaveManager : MonoBehaviour
             bossSequence = BossManager.Instance.GetBossSequence(),
 
             ownedRewards = PlayerReward.Instance.GetOwnedRewardNames(),
-            equippedRewards = PlayerReward.Instance.GetEquippedRewardNames()
+            equippedRewards = PlayerReward.Instance.GetEquippedRewardNames(),
+
+            currentTraitSelection = TraitSelectionPanelUI.Instance.GetCurrentTraitNames(),
+            jackTraitPool = TraitPoolManager.Instance.GetPoolSaveData(BossRank.Jack),
+            queenTraitPool = TraitPoolManager.Instance.GetPoolSaveData(BossRank.Queen),
+            kingTraitPool = TraitPoolManager.Instance.GetPoolSaveData(BossRank.King)
         };
 
         string json = JsonUtility.ToJson(data, true);

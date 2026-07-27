@@ -16,4 +16,8 @@ public class SaveData
     public List<string> ownedRewards = new();
     public List<string> equippedRewards = new();
 
+    public List<string> currentTraitSelection = new();
+    public List<string> jackTraitPool = new();
+    public List<string> queenTraitPool = new();
+    public List<string> kingTraitPool = new();
 }

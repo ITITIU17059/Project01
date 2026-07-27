@@ -56,4 +56,48 @@ public class TraitPoolManager : MonoBehaviour
 
         return traitPools[rank].Count;
     }
+
+    public BossTraitSO GetTraitByName(string name)
+    {
+        foreach (var pool in traitPools.Values)
+        {
+            foreach (BossTraitSO trait in pool)
+            {
+                if (trait.name == name)
+                    return trait;
+            }
+        }
+
+        return null;
+    }
+
+    public List<string> GetPoolSaveData(BossRank rank)
+    {
+        List<string> data = new();
+
+        if (!traitPools.ContainsKey(rank))
+            return data;
+
+        foreach (BossTraitSO trait in traitPools[rank])
+        {
+            data.Add(trait.name);
+        }
+
+        return data;
+    }
+
+    public void LoadPool(BossRank rank, List<string> data)
+    {
+        List<BossTraitSO> pool = new();
+
+        foreach (string traitName in data)
+        {
+            BossTraitSO trait = GetTraitByName(traitName);
+
+            if (trait != null)
+                pool.Add(trait);
+        }
+
+        traitPools[rank] = pool;
+    }
 }
