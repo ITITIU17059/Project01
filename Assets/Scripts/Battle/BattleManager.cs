@@ -402,6 +402,16 @@ public class BattleManager : MonoBehaviour
         }
 
         LastDrawAmount = actualDraw;
+        if (actualDraw > 0)
+        {
+            TraitManager.Instance.InvokeBossEvent(
+                TraitEventType.Draw,
+                actualDraw);
+
+            TraitManager.Instance.InvokeRewardEvent(
+                TraitEventType.Draw,
+                actualDraw);
+        }
     }
 
     public void ConfirmPlayCards()

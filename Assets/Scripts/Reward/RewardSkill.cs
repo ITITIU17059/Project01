@@ -97,15 +97,13 @@ public static class RewardSkill
             if (!eventTable.ContainsKey(reward.traitID))
                 continue;
 
-            if (IsResistedByCurrentBoss(reward.traitID))
-                continue;
-
             if (eventTable[reward.traitID]
                 .TryGetValue(type, out RewardEvent evt))
             {
                 evt.Invoke();
             }
         }
+    
     }
 
     //========================================================
@@ -177,8 +175,6 @@ public static class RewardSkill
             if (reward == null)
                 continue;
 
-            if (IsResistedByCurrentBoss(reward.traitID))
-                continue;
 
             if (drawModifiers.TryGetValue(
                 reward.traitID,
