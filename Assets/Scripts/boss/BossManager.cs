@@ -52,13 +52,13 @@ public class BossManager : MonoBehaviour
             return;
 
         initialized = true;
-        CreateQueue();
         InitializeTraitPools();
 
         SaveData save = SaveManager.Instance.LoadProgress();
 
         if (save != null)
         {
+            LoadBossSequence(save.bossSequence);
             CurrentStageIndex = save.stageIndex;
             CurrentBossIndex = save.bossIndex;
 
@@ -80,6 +80,7 @@ public class BossManager : MonoBehaviour
         {
             CurrentBossIndex = 0;
             CurrentStageIndex = 0;
+            CreateQueue();
         }
 
         StageManager.Instance.ApplyStage(CurrentStageIndex);
@@ -301,5 +302,28 @@ public class BossManager : MonoBehaviour
     public bool IsDead()
     {
         return CurrentHP <= 0;
+    }
+
+    public List<string> GetBossSequence()
+    {
+        List<string> data = new();
+
+        foreach (BossSO boss in bossSequence)
+            data.Add(boss.name);
+
+        return data;
+    }
+
+    public void LoadBossSequence(List<string> data)
+    {
+        bossSequence.Clear();
+
+        foreach (string bossName in data)
+        {
+            BossSO boss = Resources.Load<BossSO>("BossSO/" + bossName);
+
+            if (boss != null)
+                bossSequence.Add(boss);
+        }
     }
 }

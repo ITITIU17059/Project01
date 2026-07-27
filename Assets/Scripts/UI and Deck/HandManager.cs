@@ -6,6 +6,7 @@ using System;
 using UnityEngine.UI;
 public class HandManager : MonoBehaviour
 {
+    public static HandManager Instance { get; private set; }
     public int maxHandSize = 8;
     [SerializeField] private int spacingValue;
     [SerializeField] private GameObject cardPrefab;
@@ -21,6 +22,14 @@ public class HandManager : MonoBehaviour
 
     [NonSerialized] public List<GameObject> handCards = new();
     public List<GameObject> selectedCards = new();
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
