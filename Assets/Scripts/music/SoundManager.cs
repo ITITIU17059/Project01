@@ -41,14 +41,4 @@ public class SoundManager : MonoBehaviour
     {
         audioSource.PlayOneShot(soundLibrary.GetClipFromName(soundName));
     }
-
-    public void PlayHover()
-    {
-        PlaySound2D("Hover");
-    }
-
-    public void PlayClick()
-    {
-        PlaySound2D("Click");
-    }
 }
