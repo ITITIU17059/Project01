@@ -74,24 +74,56 @@ public static class CardResolver
         bool hasSpade = false;
 
         int total = 0;
+        int effectValue = 0;
 
+        bool firstSuitOnly =
+    BossManager.Instance != null &&
+    BossManager.Instance.CurrentBoss != null &&
+    BossManager.Instance.CurrentBoss.currentTrait != null &&
+    BossManager.Instance.CurrentBoss.currentTrait.traitID == TraitID.K_ABSOLUTE_AUTHORITY;
         foreach (CardSO card in cards)
         {
             total += card.value;
-
-            switch (card.suit)
+        }
+        effectValue = total;
+        if (firstSuitOnly)
+        {
+            if (cards.Count > 0)
             {
-                case CardSO.Suit.Hearts:
-                    hasHeart = true;
-                    break;
+                switch (cards[0].suit)
+                {
+                    case CardSO.Suit.Hearts:
+                        hasHeart = true;
+                        break;
 
-                case CardSO.Suit.Diamonds:
-                    hasDiamond = true;
-                    break;
+                    case CardSO.Suit.Diamonds:
+                        hasDiamond = true;
+                        break;
 
-                case CardSO.Suit.Spades:
-                    hasSpade = true;
-                    break;
+                    case CardSO.Suit.Spades:
+                        hasSpade = true;
+                        break;
+                }
+            }
+        }
+        else
+        {
+            foreach (CardSO card in cards)
+            {
+                switch (card.suit)
+                {
+                    case CardSO.Suit.Hearts:
+                        hasHeart = true;
+                        break;
+
+                    case CardSO.Suit.Diamonds:
+                        hasDiamond = true;
+                        break;
+
+                    case CardSO.Suit.Spades:
+                        hasSpade = true;
+                        break;
+                }
             }
         }
 
@@ -121,37 +153,36 @@ public static class CardResolver
 
         if (hasHeart)
         {
-            total = TraitManager.Instance.ModifyHealAmount(total);
-            total = TraitManager.Instance.ModifyRewardHealAmount(total);
+            effectValue = TraitManager.Instance.ModifyHealAmount(effectValue);
+            effectValue = TraitManager.Instance.ModifyRewardHealAmount(effectValue);
 
-            BattleManager.Instance.HealDeck(total);
+            BattleManager.Instance.HealDeck(effectValue);
 
             TraitManager.Instance.InvokeBossEvent(
-         TraitEventType.HealDeck,
-         total);
+                TraitEventType.HealDeck,
+                effectValue);
 
             TraitManager.Instance.InvokeRewardEvent(
                 TraitEventType.HealDeck,
-                total);
+                effectValue);
         }
 
         //---------------- DIAMOND ----------------
 
         if (hasDiamond)
         {
-            total = TraitManager.Instance.ModifyDrawAmount(total);
-            total = TraitManager.Instance.ModifyRewardDrawAmount(total);
+            effectValue = TraitManager.Instance.ModifyDrawAmount(effectValue);
+            effectValue = TraitManager.Instance.ModifyRewardDrawAmount(effectValue);
 
-            BattleManager.Instance.DrawBonusCards(total);
+            BattleManager.Instance.DrawBonusCards(effectValue);
 
-         
         }
 
         //---------------- SPADE ----------------
 
         if (hasSpade)
         {
-            int reduceAmount = total;
+            int reduceAmount = effectValue;
 
             reduceAmount =
      TraitManager.Instance.ModifyShieldAmount(
