@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed23775ffb7ca1040b126c9c15ebaced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandManager
+  defaultMaxHandSize: 8
   maxHandSize: 8
   spacingValue: 10
   cardPrefab: {fileID: 3419911141167198513, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
@@ -4363,7 +4364,7 @@ GameObject:
   - component: {fileID: 997981770}
   - component: {fileID: 997981769}
   m_Layer: 5
-  m_Name: Button
+  m_Name: SettingButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5366,8 +5367,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 100.32, y: 153.2}
-  m_SizeDelta: {x: 90.85, y: 32.45}
+  m_AnchoredPosition: {x: 1.91, y: 157.04}
+  m_SizeDelta: {x: 56.96, y: 13.47}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1267138848
 MonoBehaviour:
@@ -5389,7 +5390,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Traits
+  m_text: 'Traits '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5524686cc4061764281b8889539f4448, type: 2}
   m_sharedMaterial: {fileID: 941737753076473185, guid: 5524686cc4061764281b8889539f4448, type: 2}
@@ -5416,8 +5417,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6503,8 +6504,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 101.42, y: 97.855}
-  m_SizeDelta: {x: 111.35, y: 78.24}
+  m_AnchoredPosition: {x: 101.28, y: 114.34}
+  m_SizeDelta: {x: 111.63, y: 112.89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2003002709
 MonoBehaviour:
