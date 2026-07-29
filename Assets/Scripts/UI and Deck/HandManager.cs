@@ -6,8 +6,10 @@ using System;
 using UnityEngine.UI;
 public class HandManager : MonoBehaviour
 {
+    public GameObject LockedCard { get; private set; }
     public static HandManager Instance { get; private set; }
-    public int maxHandSize = 8;
+    [SerializeField] private int defaultMaxHandSize = 8;
+    public int maxHandSize;
     [SerializeField] private int spacingValue;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private SplineContainer splineContainer;
@@ -25,13 +27,13 @@ public class HandManager : MonoBehaviour
 
     private void Awake()
     {
+        maxHandSize = defaultMaxHandSize;
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         spacingValue = Mathf.Max(maxHandSize, spacingValue);
@@ -53,12 +55,16 @@ public class HandManager : MonoBehaviour
     }
     public void SelectCard(GameObject cardObject)
     {
-        if (!canInteract && !isDiscardMode)
-            return;
-
         if (isDiscardMode)
         {
             SelectDiscardCard(cardObject);
+            return;
+        }
+
+        // Chỉ giới hạn ở lượt đánh thêm
+        if (BattleManager.Instance.IsExtraAttack &&
+            selectedCards.Count >= 1)
+        {
             return;
         }
 
@@ -135,7 +141,6 @@ public class HandManager : MonoBehaviour
         }
     }
 
-    // Logic xếp các lá bài nằm chờ ở giữa bàn (Dàn hàng ngang đều nhau)
     public void RearrangeSelectedCards()
     {
         if (selectedCards.Count == 0) return;
@@ -154,8 +159,6 @@ public class HandManager : MonoBehaviour
             selectedCards[i].transform.DORotate(Vector3.zero, 0.3f).SetEase(Ease.OutCubic);
             selectedCards[i].transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutCubic);
 
-            // --- BỔ SUNG: Cập nhật Layer tăng dần cho các lá ở giữa bàn ---
-            // Đặt mốc layer bắt đầu từ 100 để chắc chắn đè lên toàn bộ bài dưới tay (layer dưới 50)
             if (selectedCards[i].TryGetComponent<CardDisplay>(out var display))
             {
                 display.SetSortingOrder(100 + i);
@@ -228,10 +231,8 @@ public class HandManager : MonoBehaviour
             Vector3 up = spline.EvaluateUpVector(p);
             Quaternion rotation = Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
 
-            // Giao cho Display quản lý layer
             display.SetSortingOrder(i);
 
-            // Giao cho Interaction quản lý di chuyển vật lý
             if (handCards[i] == ignoreCard)
             {
                 interaction.splineLocalPosition = localPos;
@@ -286,9 +287,6 @@ public class HandManager : MonoBehaviour
 
         discardCurrent += value;
 
-        //     confirmDiscardButton.interactable =
-        // discardCurrent >= discardTarget;
-
         RearrangeSelectedCards();
 
         Debug.Log($"Discard = {discardCurrent}/{discardTarget}");
@@ -337,6 +335,11 @@ public class HandManager : MonoBehaviour
     }
     private void FinishDiscard()
     {
+        if (PlayerReward.Instance.HasReward(TraitID.Q_ROYAL_TAX)
+    && selectedCards.Count > 1)
+        {
+            ReturnRandomSelectedCard();
+        }
         foreach (GameObject card in selectedCards)
         {
             CardSO so = card.GetComponent<CardDisplay>().cardScriptableObject;
@@ -348,7 +351,11 @@ public class HandManager : MonoBehaviour
                 BattleManager.Instance.graveyardSpawnPoint
             );
         }
-
+        if (PlayerReward.Instance.HasReward(TraitID.Q_ROYAL_TAX)
+    && selectedCards.Count > 1)
+        {
+            ReturnRandomSelectedCard();
+        }
         selectedCards.Clear();
         totalCardValue = 0;
 
@@ -480,5 +487,83 @@ public class HandManager : MonoBehaviour
 
             AddCardToHand(card);
         }
+    }
+    public void LockHighestCard()
+    {
+        UnlockCard();
+
+        GameObject highest = null;
+        int highestValue = -1;
+
+        foreach (GameObject obj in handCards)
+        {
+            if (obj == null)
+                continue;
+
+            CardDisplay display = obj.GetComponent<CardDisplay>();
+
+            if (display == null)
+                continue;
+
+            if (display.cardScriptableObject.value > highestValue)
+            {
+                highestValue = display.cardScriptableObject.value;
+                highest = obj;
+            }
+        }
+
+        if (highest == null)
+            return;
+
+        LockedCard = highest;
+
+        CardInteraction interaction =
+            highest.GetComponent<CardInteraction>();
+
+        if (interaction != null)
+            interaction.IsLocked = true;
+    }
+    public void UnlockCard()
+    {
+        if (LockedCard == null)
+            return;
+
+        CardInteraction interaction =
+            LockedCard.GetComponent<CardInteraction>();
+
+        if (interaction != null)
+            interaction.IsLocked = false;
+
+        LockedCard = null;
+    }
+    public CardSO ReturnRandomSelectedCard()
+    {
+        if (selectedCards.Count <= 1)
+            return null;
+
+        int index = UnityEngine.Random.Range(0, selectedCards.Count);
+
+        GameObject obj = selectedCards[index];
+
+        CardSO card =
+            obj.GetComponent<CardDisplay>().cardScriptableObject;
+
+        selectedCards.RemoveAt(index);
+
+        handCards.Add(obj);
+
+        obj.transform.DOKill();
+        obj.transform.localScale = Vector3.one;
+        obj.transform.rotation = Quaternion.identity;
+
+        if (obj.TryGetComponent<CardInteraction>(out var interact))
+            interact.HandleDeselect();
+
+        if (obj.TryGetComponent<CardDisplay>(out var display))
+            display.SetSortingOrder(10 + handCards.Count);
+
+        RepositionAllCards(null);
+
+        return card;
     }
 }

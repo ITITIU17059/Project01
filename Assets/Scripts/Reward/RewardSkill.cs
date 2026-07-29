@@ -68,6 +68,10 @@ public static class RewardSkill
         TraitID.Q_LIFE_LEECH,
         TraitEventType.Draw,
             () => QueenLifeLeech_Draw(1));
+        RegisterEvent(
+    TraitID.Q_ROYAL_TAX,
+    TraitEventType.Discard,
+    QueenRoyalTax_DiscardReward);
     }
 
     private static void RegisterEvent(
@@ -335,6 +339,10 @@ public static class RewardSkill
     }
     private static void QueenLifeLeech_Draw(int value)
     {
-        BossManager.Instance.TakeTraitDamage(1);
+        BossManager.Instance.TakeTraitDamage(value);
+    }
+    private static void QueenRoyalTax_DiscardReward()
+    {
+        BattleManager.Instance.Hand.ReturnRandomSelectedCard();
     }
 }
