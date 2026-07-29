@@ -75,10 +75,16 @@ public static class BossSkill
         eventTable = new Dictionary<
             TraitID,
             Dictionary<TraitEventType, TraitEvent>>();
+
         RegisterEvent(
      TraitID.Q_LIFE_LEECH,
      TraitEventType.Draw,
      QueenLifeLeech_Draw);
+
+        RegisterEvent(
+    TraitID.Q_SEAL_OF_SILENCE,
+    TraitEventType.PlayerTurn,
+    QueenSeal_PlayerTurn);
     }
 
 
@@ -241,4 +247,14 @@ public static class BossSkill
     {
         BossManager.Instance.Heal(value);
     }
-}
+    private static void QueenSeal_PlayerTurn(int value)
+    {
+        HandManager hand =
+            Object.FindAnyObjectByType<HandManager>();
+
+        if (hand == null)
+            return;
+
+        hand.LockHighestCard();
+    }
+}   
