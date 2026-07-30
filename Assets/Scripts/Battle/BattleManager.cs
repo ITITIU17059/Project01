@@ -320,11 +320,10 @@ public class BattleManager : MonoBehaviour
 
         yield return StartCoroutine(
             ResolveCombo(cards));
-        CardSO returnCard = null;
 
         if (PlayerReward.Instance.HasReward(TraitID.K_ABSOLUTE_AUTHORITY))
         {
-            returnCard = handManager.ReturnRandomSelectedCard();
+            handManager.ReturnRandomSelectedCard();
         }
         yield return StartCoroutine(
             CardResolver.DiscardCards(

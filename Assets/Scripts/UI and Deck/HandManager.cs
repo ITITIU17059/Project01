@@ -351,11 +351,7 @@ public class HandManager : MonoBehaviour
                 BattleManager.Instance.graveyardSpawnPoint
             );
         }
-        if (PlayerReward.Instance.HasReward(TraitID.Q_ROYAL_TAX)
-    && selectedCards.Count > 1)
-        {
-            ReturnRandomSelectedCard();
-        }
+   
         selectedCards.Clear();
         totalCardValue = 0;
 
