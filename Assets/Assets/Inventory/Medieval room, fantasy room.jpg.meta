@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8f33895ddf006ad46a328f72cea1bc0d
+guid: f450564372249094d9bd51c717930d6f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3794550611322748858
-    second: play_0
+      213: 814343571024923156
+    second: Medieval room, fantasy room_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: play_0
+      name: Medieval room, fantasy room_0
       rect:
         serializedVersion: 2
-        x: 545
-        y: 1140
-        width: 1010
-        height: 260
+        x: 0
+        y: 0
+        width: 736
+        height: 414
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: abf32263da3f8a430800000000000000
-      internalID: 3794550611322748858
+      spriteID: 41a401cc9212d4b00800000000000000
+      internalID: 814343571024923156
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      play_0: 3794550611322748858
+      Medieval room, fantasy room_0: 814343571024923156
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
