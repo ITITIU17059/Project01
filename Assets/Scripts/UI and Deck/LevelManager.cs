@@ -66,6 +66,12 @@ public class LevelManager : MonoBehaviour
         LoadScene("BattleScene", "CrossFade");
     }
 
+    public void LoadIntro()
+    {
+        LoadScene("IntroScene", "CrossFade");
+    }
+
+
     public void LoadSceneAdditive(string sceneName)
     {
         StartCoroutine(LoadSceneAdditiveAsync(sceneName));
