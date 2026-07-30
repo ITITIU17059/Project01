@@ -77,14 +77,19 @@ public static class BossSkill
             Dictionary<TraitEventType, TraitEvent>>();
 
         RegisterEvent(
-     TraitID.Q_LIFE_LEECH,
-     TraitEventType.Draw,
-     QueenLifeLeech_Draw);
+    TraitID.Q_LIFE_LEECH,
+    TraitEventType.GainCard,
+    QueenLifeLeech_Draw);
 
         RegisterEvent(
     TraitID.Q_SEAL_OF_SILENCE,
     TraitEventType.PlayerTurn,
     QueenSeal_PlayerTurn);
+
+        RegisterEvent(
+    TraitID.K_ENDLESS_WRATH,
+    TraitEventType.BossTurn,
+    KingEndlessWrath_BossTurn);
     }
 
 
@@ -256,5 +261,22 @@ public static class BossSkill
             return;
 
         hand.LockHighestCard();
+    }
+    private static void KingEndlessWrath_BossTurn(int value)
+    {
+        BossSO boss = BossManager.Instance.CurrentBoss;
+
+        if (boss == null)
+            return;
+
+        boss.turnCounter++;
+
+        boss.currentATK += boss.turnCounter;
+
+        BossManager.Instance.BossDisplay.UpdateATK(
+            boss.currentATK);
+
+        Debug.Log(
+            $"K Rising Might +{boss.turnCounter} -> {boss.currentATK}");
     }
 }   

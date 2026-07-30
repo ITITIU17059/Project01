@@ -74,7 +74,7 @@ public static class CardResolver
         bool hasSpade = false;
 
         int total = 0;
-        int effectValue = 0;
+        
 
         bool firstSuitOnly =
     BossManager.Instance != null &&
@@ -85,7 +85,9 @@ public static class CardResolver
         {
             total += card.value;
         }
-        effectValue = total;
+        int healValue = total;
+        int drawValue = total;
+        int shieldValue = total;
         if (firstSuitOnly)
         {
             if (cards.Count > 0)
@@ -153,28 +155,28 @@ public static class CardResolver
 
         if (hasHeart)
         {
-            effectValue = TraitManager.Instance.ModifyHealAmount(effectValue);
-            effectValue = TraitManager.Instance.ModifyRewardHealAmount(effectValue);
+            healValue = TraitManager.Instance.ModifyHealAmount(healValue);
+            healValue = TraitManager.Instance.ModifyRewardHealAmount(healValue);
 
-            BattleManager.Instance.HealDeck(effectValue);
+            BattleManager.Instance.HealDeck(healValue);
 
             TraitManager.Instance.InvokeBossEvent(
                 TraitEventType.HealDeck,
-                effectValue);
+                healValue);
 
             TraitManager.Instance.InvokeRewardEvent(
                 TraitEventType.HealDeck,
-                effectValue);
+                healValue);
         }
 
         //---------------- DIAMOND ----------------
 
         if (hasDiamond)
         {
-            effectValue = TraitManager.Instance.ModifyDrawAmount(effectValue);
-            effectValue = TraitManager.Instance.ModifyRewardDrawAmount(effectValue);
+            drawValue = TraitManager.Instance.ModifyDrawAmount(drawValue);
+            drawValue = TraitManager.Instance.ModifyRewardDrawAmount(drawValue);
 
-            BattleManager.Instance.DrawBonusCards(effectValue);
+            BattleManager.Instance.DrawBonusCards(drawValue);
 
         }
 
@@ -182,7 +184,7 @@ public static class CardResolver
 
         if (hasSpade)
         {
-            int reduceAmount = effectValue;
+            int reduceAmount = shieldValue;
 
             reduceAmount =
      TraitManager.Instance.ModifyShieldAmount(

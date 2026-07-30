@@ -26,6 +26,7 @@ public class BattleManager : MonoBehaviour
     private bool extraAttackUsed = false;
     private bool waitingExtraAttack = false;
     private bool waitingExtraDiscard = false;
+    public int LastDiscardOverflow { get; set; }
     public bool IsExtraAttack => waitingExtraAttack;
     public int LastDrawAmount { get; private set; }
     public void ContinueFromInventory()
@@ -320,11 +321,10 @@ public class BattleManager : MonoBehaviour
 
         yield return StartCoroutine(
             ResolveCombo(cards));
-        CardSO returnCard = null;
 
         if (PlayerReward.Instance.HasReward(TraitID.K_ABSOLUTE_AUTHORITY))
         {
-            returnCard = handManager.ReturnRandomSelectedCard();
+            handManager.ReturnRandomSelectedCard();
         }
         yield return StartCoroutine(
             CardResolver.DiscardCards(
