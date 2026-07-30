@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40fee21677203da438e6b3b7aab3b738, type: 3}
   m_Name: J Heart
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
-  cardSprite: {fileID: 1073748191054202273, guid: 37e1b83fb10f47344853eb1c022aa681, type: 3}
+  cardSprite: {fileID: -4641394141059741634, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   value: 10
   suit: 1
   type: 2

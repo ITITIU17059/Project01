@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Joker
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
   bossName: The Joker
-  cardSprite: {fileID: -8005283275252551782, guid: 37e1b83fb10f47344853eb1c022aa681, type: 3}
+  cardSprite: {fileID: 4365758969843650344, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 0
   hp: 50
   atk: 30
