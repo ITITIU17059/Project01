@@ -25,6 +25,7 @@ public class HandManager : MonoBehaviour
     [NonSerialized] public List<GameObject> handCards = new();
     public List<GameObject> selectedCards = new();
 
+    
     private void Awake()
     {
         maxHandSize = defaultMaxHandSize;
@@ -174,11 +175,19 @@ public class HandManager : MonoBehaviour
         SoundManager.instance?.PlaySound2D("CardDraw");
         handCards.Add(newCard);
         TraitManager.Instance.InvokeBossEvent(
-    TraitEventType.Draw,
-    1);
+            TraitEventType.Draw,
+            1);
 
         TraitManager.Instance.InvokeRewardEvent(
             TraitEventType.Draw,
+            1);
+
+        TraitManager.Instance.InvokeBossEvent(
+            TraitEventType.GainCard,
+            1);
+
+        TraitManager.Instance.InvokeRewardEvent(
+            TraitEventType.GainCard,
             1);
         newCard.GetComponent<CardDisplay>().cardScriptableObject = cardData;
 
@@ -361,7 +370,12 @@ public class HandManager : MonoBehaviour
         isDiscardMode = false;
 
         RepositionAllCards(null);
+        BattleManager.Instance.LastDiscardOverflow =
+    Mathf.Max(0, discardCurrent - discardTarget);
 
+        TraitManager.Instance.InvokeRewardEvent(
+            TraitEventType.Discard,
+            0);
         BattleManager.Instance.FinishDiscard(true);
         confirmDiscardButton.gameObject.SetActive(false);
     }
@@ -547,7 +561,13 @@ public class HandManager : MonoBehaviour
         selectedCards.RemoveAt(index);
 
         handCards.Add(obj);
+        TraitManager.Instance.InvokeBossEvent(
+    TraitEventType.GainCard,
+    1);
 
+        TraitManager.Instance.InvokeRewardEvent(
+            TraitEventType.GainCard,
+            1);
         obj.transform.DOKill();
         obj.transform.localScale = Vector3.one;
         obj.transform.rotation = Quaternion.identity;
@@ -562,4 +582,6 @@ public class HandManager : MonoBehaviour
 
         return card;
     }
+
+
 }
