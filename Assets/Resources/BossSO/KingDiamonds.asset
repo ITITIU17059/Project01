@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: KingDiamonds
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
   bossName: King of Diamonds
-  cardSprite: {fileID: -611116401464331423, guid: 37e1b83fb10f47344853eb1c022aa681, type: 3}
+  cardSprite: {fileID: 645457689055715373, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 2
   hp: 40
   atk: 20
@@ -23,7 +23,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e8721aca72dcadc41bc9d9b6c3d9d625, type: 2}
   - {fileID: 11400000, guid: 373216b0a5b1bce4ea87c3055666623e, type: 2}
   currentTrait: {fileID: 0}
-  currentReward: {fileID: 0}
   bossCard: {fileID: 11400000, guid: 40dd95d11a357e04ca22e86a1b5b3a77, type: 2}
   isJoker: 0
   resistanceSuit: 2
