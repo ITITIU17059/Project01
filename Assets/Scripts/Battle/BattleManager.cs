@@ -26,6 +26,7 @@ public class BattleManager : MonoBehaviour
     private bool extraAttackUsed = false;
     private bool waitingExtraAttack = false;
     private bool waitingExtraDiscard = false;
+    public int LastDiscardOverflow { get; set; }
     public bool IsExtraAttack => waitingExtraAttack;
     public int LastDrawAmount { get; private set; }
     public void ContinueFromInventory()

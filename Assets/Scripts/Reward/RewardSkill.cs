@@ -55,23 +55,30 @@ public static class RewardSkill
     {
         eventTable = new();
 
-        RegisterEvent(
-            TraitID.J_GREEDY_TRIBUTE,
-            TraitEventType.PlayerTurn,
-            JackGreedyTribute_PlayerTurnReward);
+    RegisterEvent(
+        TraitID.J_GREEDY_TRIBUTE,
+        TraitEventType.PlayerTurn,
+        JackGreedyTribute_PlayerTurnReward);
 
-        RegisterEvent(
-            TraitID.J_WITHERED_BLESSING,
-            TraitEventType.Discard,
-            JackWitheredBlessing_DiscardReward);
-        RegisterEvent(
+    RegisterEvent(
+        TraitID.J_WITHERED_BLESSING,
+        TraitEventType.Discard,
+        JackWitheredBlessing_DiscardReward);
+
+    RegisterEvent(
         TraitID.Q_LIFE_LEECH,
-        TraitEventType.Draw,
-            () => QueenLifeLeech_Draw(1));
-        RegisterEvent(
-    TraitID.Q_ROYAL_TAX,
-    TraitEventType.Discard,
-    QueenRoyalTax_DiscardReward);
+        TraitEventType.GainCard,
+        () => QueenLifeLeech_Draw(1));
+
+    RegisterEvent(
+        TraitID.Q_ROYAL_TAX,
+        TraitEventType.Discard,
+        QueenRoyalTax_DiscardReward);
+
+    RegisterEvent(
+        TraitID.K_ENDLESS_WRATH,
+        TraitEventType.Discard,
+        KingCrushingDiscard_DiscardReward);
     }
 
     private static void RegisterEvent(
@@ -344,5 +351,14 @@ public static class RewardSkill
     private static void QueenRoyalTax_DiscardReward()
     {
         BattleManager.Instance.Hand.ReturnRandomSelectedCard();
+    }
+    private static void KingCrushingDiscard_DiscardReward()
+    {
+        int overflow = BattleManager.Instance.LastDiscardOverflow;
+
+        if (overflow <= 0)
+            return;
+
+        BossManager.Instance.ReduceAttack(overflow);
     }
 }

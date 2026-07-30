@@ -6,6 +6,8 @@ public enum TraitEventType
     Draw,
     DrawOneCard,
 
+    GainCard,
+
     Heal,
     HealDeck,
 

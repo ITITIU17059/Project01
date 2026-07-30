@@ -45,6 +45,8 @@ public class BossSO : ScriptableObject
     public string attackSoundID;
     public float attackFlyTime = 0.4f;
 
+    [HideInInspector] public int turnCounter;
+
     [Header("Stage")]
     public BossRank rank;
 
