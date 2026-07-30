@@ -62,23 +62,19 @@ public class PlayerReward : MonoBehaviour
 
     public bool EquipReward(RewardSO reward, int slotIndex)
     {
-        Debug.Log($"Equip {reward.rewardName} -> Slot {slotIndex}");
 
         if (reward == null)
         {
-            Debug.Log("Reward NULL");
             return false;
         }
 
         if (!ownedRewards.Contains(reward))
         {
-            Debug.Log("Reward chưa sở hữu");
             return false;
         }
 
         if (slotIndex < 0 || slotIndex >= MaxEquipSlots)
         {
-            Debug.Log("Slot không hợp lệ");
             return false;
         }
 
@@ -92,8 +88,7 @@ public class PlayerReward : MonoBehaviour
         }
 
         equippedRewards[slotIndex] = reward;
-
-        Debug.Log("Equip thành công!");
+        RefreshHandSize();
         OnEquipmentChanged?.Invoke();
 
         return true;
@@ -106,6 +101,7 @@ public class PlayerReward : MonoBehaviour
             return false;
 
         equippedRewards[slotIndex] = null;
+        RefreshHandSize();
         OnEquipmentChanged?.Invoke();
         return true;
     }
@@ -117,6 +113,7 @@ public class PlayerReward : MonoBehaviour
         RewardSO temp = equippedRewards[fromSlot];
         equippedRewards[fromSlot] = equippedRewards[toSlot];
         equippedRewards[toSlot] = temp;
+        RefreshHandSize();
         OnEquipmentChanged?.Invoke();
     }
 
@@ -174,5 +171,33 @@ public class PlayerReward : MonoBehaviour
         }
 
         OnEquipmentChanged?.Invoke();
+    }
+    public void RefreshHandSize()
+    {
+        HandManager.Instance.maxHandSize = 8;
+
+        foreach (RewardSO reward in equippedRewards)
+        {
+            if (reward == null)
+                continue;
+
+            if (reward.traitID == TraitID.Q_SEAL_OF_SILENCE)
+            {
+                HandManager.Instance.maxHandSize++;
+            }
+        }
+    }
+    public bool HasReward(TraitID traitID)
+    {
+        foreach (RewardSO reward in equippedRewards)
+        {
+            if (reward == null)
+                continue;
+
+            if (reward.traitID == traitID)
+                return true;
+        }
+
+        return false;
     }
 }

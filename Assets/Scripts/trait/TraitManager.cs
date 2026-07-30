@@ -13,9 +13,6 @@ public class TraitManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    //====================================================
-    // Current Trait
-    //====================================================
 
     public BossTraitSO CurrentTrait
     {
@@ -33,9 +30,6 @@ public class TraitManager : MonoBehaviour
 
     public bool HasTrait => CurrentTrait != null;
 
-    //====================================================
-    // Trait tạm thời (chỉ trong trận này)
-    //====================================================
 
     public int ModifyDrawAmount(int amount)
     {
@@ -69,9 +63,6 @@ public class TraitManager : MonoBehaviour
             finalDamage);
     }
 
-    //====================================================
-    // Reward vĩnh viễn (đã trang bị từ Inventory, tối đa 3)
-    //====================================================
 
     public int ModifyRewardDrawAmount(int amount)
     {
@@ -100,13 +91,13 @@ public class TraitManager : MonoBehaviour
             finalDamage);
     }
 
-    public void InvokeBossEvent(TraitEventType type)
+    public void InvokeBossEvent(TraitEventType type, int value = 0)
     {
-        BossSkill.Invoke(type, CurrentTrait);
+        BossSkill.Invoke(type, CurrentTrait, value);
     }
 
-    public void InvokeRewardEvent(TraitEventType type)
+    public void InvokeRewardEvent(TraitEventType type, int value = 0)
     {
-        RewardSkill.Invoke(type, PlayerReward.Instance.EquippedRewards);
+        RewardSkill.Invoke(type, PlayerReward.Instance.EquippedRewards, value);
     }
 }

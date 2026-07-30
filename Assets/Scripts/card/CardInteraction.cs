@@ -17,7 +17,7 @@ public class CardInteraction : MonoBehaviour
 
     public bool isSelectedInCenter = false;
     [HideInInspector] public Vector3 splineLocalPosition;
-
+    public bool IsLocked;
     void Awake()
     {
         originalScale = transform.localScale;
@@ -47,7 +47,9 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleMouseEnter()
     {
-        
+
+        if (IsLocked)
+            return;
         if (!handManager.CanInteract && !handManager.IsDiscardMode)
             return;
         if (SoundManager.instance != null)
@@ -97,6 +99,8 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleDragStart()
     {
+        if (IsLocked)
+            return;
         if (!handManager.CanInteract && !handManager.IsDiscardMode)
             return;
         isDragging = true;
@@ -167,6 +171,8 @@ public class CardInteraction : MonoBehaviour
 
     private void ToggleCardSelection()
     {
+        if (IsLocked)
+            return;
         if (!handManager.CanInteract && !handManager.IsDiscardMode)
             return;
         if (!handManager) return;

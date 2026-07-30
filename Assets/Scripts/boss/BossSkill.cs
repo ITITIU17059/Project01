@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public static class BossSkill
@@ -14,7 +15,7 @@ public static class BossSkill
        int original,
        int final);
 
-    public delegate void TraitEvent();
+    public delegate void TraitEvent(int value);
     private static Dictionary<TraitID, Dictionary<TraitEventType, TraitEvent>> eventTable;
 
     private static Dictionary<TraitID, ValueModifier> drawModifiers;
@@ -75,20 +76,22 @@ public static class BossSkill
             TraitID,
             Dictionary<TraitEventType, TraitEvent>>();
 
-        // Lưu ý: Greedy Tribute và Withered Blessing KHÔNG đăng ký event
-        // PlayerTurn/Discard ở đây nữa, vì hiệu ứng "+1 draw mỗi lượt" /
-        // "+2 heal khi discard" là phần thưởng (RewardSkill) chỉ dành cho
-        // người chơi ĐÃ hạ boss và equip reward tương ứng.
-        // Lời nguyền (curse) của 2 trait này chỉ nên tác dụng qua
-        // JackGreedyTribute_Draw / JackWitheredBlessing_Heal (giới hạn
-        // draw/heal khi chơi combo bài), không phải cho không lợi ích
-        // giống hệt reward ngay trong lúc đang đánh boss.
+        RegisterEvent(
+     TraitID.Q_LIFE_LEECH,
+     TraitEventType.Draw,
+     QueenLifeLeech_Draw);
+
+        RegisterEvent(
+    TraitID.Q_SEAL_OF_SILENCE,
+    TraitEventType.PlayerTurn,
+    QueenSeal_PlayerTurn);
     }
 
 
     public static void Invoke(
-TraitEventType type,
-BossTraitSO trait)
+     TraitEventType type,
+     BossTraitSO trait,
+     int value)
     {
         if (trait == null)
             return;
@@ -99,7 +102,7 @@ BossTraitSO trait)
         if (eventTable[trait.traitID]
             .TryGetValue(type, out TraitEvent evt))
         {
-            evt.Invoke();
+            evt.Invoke(value);
         }
     }
     private static void RegisterEvent(
@@ -240,4 +243,18 @@ BossTraitSO trait)
 
         return finalDamage;
     }
-}
+    private static void QueenLifeLeech_Draw(int value)
+    {
+        BossManager.Instance.Heal(value);
+    }
+    private static void QueenSeal_PlayerTurn(int value)
+    {
+        HandManager hand =
+            Object.FindAnyObjectByType<HandManager>();
+
+        if (hand == null)
+            return;
+
+        hand.LockHighestCard();
+    }
+}   
