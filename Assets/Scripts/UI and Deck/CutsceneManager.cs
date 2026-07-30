@@ -142,7 +142,7 @@ public class CutsceneManager : MonoBehaviour
             MusicManager.instance.SetMusicMultiplier(1f);
 
         if (LevelManager.instance != null)
-            LevelManager.instance.LoadMainMenu();
+            LevelManager.instance.LoadIntro();
     }
 
     private IEnumerator ChangeImage(Sprite nextSprite)
