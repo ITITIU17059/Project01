@@ -75,7 +75,7 @@ public static class RewardSkill
         TraitEventType.Discard,
         QueenRoyalTax_DiscardReward);
 
-    RegisterEvent(
+        RegisterEvent(
         TraitID.K_ENDLESS_WRATH,
         TraitEventType.Discard,
         KingCrushingDiscard_DiscardReward);
@@ -361,4 +361,5 @@ public static class RewardSkill
 
         BossManager.Instance.ReduceAttack(overflow);
     }
+   
 }
