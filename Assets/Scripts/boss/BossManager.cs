@@ -167,7 +167,7 @@ public class BossManager : MonoBehaviour
 
         CurrentHP = CurrentBoss.hp;
         CurrentBoss.currentATK = CurrentBoss.atk;
-
+        CurrentBoss.turnCounter = 0;
         bossDisplay.Setup(CurrentBoss);
         bossInfoPanel.Setup(CurrentBoss);
 
