@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - PlayZone
+  - TraitItems
   layers:
   - Default
   - TransparentFX
@@ -47,6 +48,9 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 2612692067
+    locked: 0
+  - name: Menu
+    uniqueID: 2639104861
     locked: 0
   m_RenderingLayers:
   - Default
