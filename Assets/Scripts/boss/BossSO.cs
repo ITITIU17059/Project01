@@ -43,7 +43,7 @@ public class BossSO : ScriptableObject
     public GameObject attackVFX;
     public GameObject hitVFX;
     public string attackSoundID;
-    public float attackFlyTime = 0.4f;
+    public float attackFlyTime = 0.6f;
 
     [HideInInspector] public int turnCounter;
 

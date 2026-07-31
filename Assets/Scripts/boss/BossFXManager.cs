@@ -78,10 +78,10 @@ public class BossFXManager : MonoBehaviour
 
         fx.transform.DOMove(
             boss.position,
-            0.35f)
+            0.6f)
             .SetEase(Ease.InQuad);
 
-        yield return new WaitForSeconds(0.35f);
+        yield return new WaitForSeconds(0.6f);
 
         Destroy(fx);
 
@@ -190,7 +190,7 @@ public class BossFXManager : MonoBehaviour
 
         Animator animator = fx.GetComponent<Animator>();
 
-        float duration = 0.5f;
+        float duration = 0.6f;
 
         if (animator != null)
         {

@@ -43,19 +43,19 @@ public class TurnUIController : MonoBehaviour
 
     public void ShowYourTurn()
     {
-        Show(yourTurn, "YourTurn");
+        StartCoroutine(Show(yourTurn, "YourTurn"));
         ShowTurn(yourTurnControl);
     }
 
     public void ShowEnemyTurn()
     {
-        Show(enemyTurn, "EnemyTurn");
+        StartCoroutine(Show(enemyTurn, "EnemyTurn"));
         ShowTurn(enemyTurnControl);
     }
 
     public void ShowDiscardTurn()
     {
-        Show(discardTurn, "DiscardTurn");
+        StartCoroutine(Show(discardTurn, "DiscardTurn"));
         ShowTurn(discardTurnControl);
     }
 
@@ -169,8 +169,9 @@ public class TurnUIController : MonoBehaviour
         banner.gameObject.SetActive(false);
     }
 
-    private void Show(Sprite sprite, string soundId)
+    private IEnumerator Show(Sprite sprite, string soundId)
     {
+        HandManager.Instance.SetInteractable(false);
         bannerImage.enabled = true;
         currentSequence?.Kill();
 
@@ -188,7 +189,7 @@ public class TurnUIController : MonoBehaviour
 
         // Trượt vào
         currentSequence.Append(
-            banner.DOAnchorPosX(CenterX, 0.4f)
+            banner.DOAnchorPosX(CenterX, 0.5f)
                   .SetEase(Ease.OutCubic));
 
         // Nảy nhẹ
@@ -204,11 +205,15 @@ public class TurnUIController : MonoBehaviour
 
         // Trượt ra
         currentSequence.Append(
-            banner.DOAnchorPosX(EndX, 0.35f)
+            banner.DOAnchorPosX(EndX, 0.45f)
                   .SetEase(Ease.InCubic));
 
         currentSequence.Join(
             canvasGroup.DOFade(0, 0.35f));
+
+        yield return currentSequence.WaitForCompletion();
+
+        HandManager.Instance.SetInteractable(true);
     }
 
     private void ShowTurn(Sprite sprite)
