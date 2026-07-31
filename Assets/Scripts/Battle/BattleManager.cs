@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
@@ -141,7 +142,7 @@ public class BattleManager : MonoBehaviour
         }
 
         TurnUIController.Instance.ShowYourTurn();
-        confirmButton.interactable = true;
+        InteractConfirmButton(true);
     }
 
     private void StartBossTurn()
@@ -183,7 +184,7 @@ public class BattleManager : MonoBehaviour
     }
     private void CheckBattle()
     {
-        confirmButton.interactable = false;
+        InteractConfirmButton(false);
 
         if (BossManager.Instance.IsDead())
         {
@@ -199,7 +200,7 @@ public class BattleManager : MonoBehaviour
         handManager.UnlockCard();
         handManager.SetInteractable(false);
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
-        
+
         yield return BossFXManager.Instance.PlayDeathFX(
         BossManager.Instance.BossTransform);
 
@@ -331,7 +332,7 @@ public class BattleManager : MonoBehaviour
                 handManager.selectedCards,
                 handManager,
                 graveyardSpawnPoint));
-       
+
         handManager.ClearSelection();
         bool playerHasExtraAttackReward =
     PlayerReward.Instance.HasReward(TraitID.Q_LONE_DUEL);
@@ -348,7 +349,7 @@ public class BattleManager : MonoBehaviour
             waitingExtraAttack = true;
 
             handManager.SetInteractable(true);
-            confirmButton.interactable = true;
+            InteractConfirmButton(true);
             yield break;
         }
         ChangeState(BattleState.CheckBattle);
@@ -529,7 +530,7 @@ public class BattleManager : MonoBehaviour
         SoundManager.instance?.PlaySound2D("CardPlay");
 
         handManager.SetInteractable(false);
-        confirmButton.interactable = false;
+        InteractConfirmButton(false);
 
         StartCoroutine(ResolveSelectedCards());
     }
@@ -587,7 +588,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator VictoryRoutine()
     {
-        confirmButton.interactable = false;
+        InteractConfirmButton(false);
         handManager.enabled = false;
 
         yield return TurnUIController.Instance.ShowVictory();
@@ -608,7 +609,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator DefeatRoutine()
     {
-        confirmButton.interactable = false;
+        InteractConfirmButton(false);
         handManager.enabled = false;
 
         yield return TurnUIController.Instance.ShowDefeat();
@@ -618,4 +619,19 @@ public class BattleManager : MonoBehaviour
         LevelManager.instance.LoadScene("MenuScene", "CrossFade");
     }
     #endregion
+
+    public void InteractConfirmButton(bool isInteract)
+    {
+        EventTrigger eventTrigger = confirmButton.GetComponent<EventTrigger>();
+        if (isInteract)
+        {
+            eventTrigger.enabled = true;
+            confirmButton.interactable = true;
+        }
+        else
+        {
+            eventTrigger.enabled = false;
+            confirmButton.interactable = false;
+        }
+    }
 }
