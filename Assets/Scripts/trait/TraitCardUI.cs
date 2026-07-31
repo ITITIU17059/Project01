@@ -1,19 +1,29 @@
-﻿using TMPro;
+﻿using System;
+using System.Security.Cryptography;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TraitCardUI : MonoBehaviour
+public class TraitCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI")]
-    [SerializeField] private Image traitIcon;
+    public Image traitIcon;
     [SerializeField] private TMP_Text traitName;
     [SerializeField] private TMP_Text traitDescription;
     [SerializeField] private TMP_Text rewardTitle;
     [SerializeField] private TMP_Text rewardDescription;
+    [NonSerialized] public string rewardText;
 
     private BossTraitSO traitData;
 
     public BossTraitSO TraitData => traitData;
+
+    private void Awake()
+    {
+
+    }
 
     public void Setup(BossTraitSO trait)
     {
@@ -31,6 +41,19 @@ public class TraitCardUI : MonoBehaviour
     public void Setup(RewardSO trait)
     {
         traitIcon.sprite = trait.icon;
-        rewardDescription.text = trait.description;
+        rewardText = trait.description;
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (traitIcon.sprite == null || rewardText == null) return;
+
+        RewardInfoUI.Instance.Show(traitIcon.sprite, rewardText);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        RewardInfoUI.Instance.Hide();
+    }
+
 }
