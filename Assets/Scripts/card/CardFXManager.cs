@@ -52,9 +52,9 @@ public class CardFXManager : MonoBehaviour
 
             Sequence cardSequence = DOTween.Sequence();
 
-            cardSequence.Append(ghostCard.transform.DOMove(targetPos, 0.6f).SetEase(Ease.OutQuad));
-            cardSequence.Join(ghostCard.transform.DORotate(new Vector3(0, 0, Random.Range(-45f, 45f)), 0.6f));
-            cardSequence.Join(ghostCard.transform.DOScale(Vector3.zero, 0.6f).SetEase(Ease.InQuad));
+            cardSequence.Append(ghostCard.transform.DOMove(targetPos, 0.8f).SetEase(Ease.OutQuad));
+            cardSequence.Join(ghostCard.transform.DORotate(new Vector3(0, 0, Random.Range(-45f, 45f)), 0.8f));
+            cardSequence.Join(ghostCard.transform.DOScale(Vector3.zero, 0.8f).SetEase(Ease.InQuad));
 
             cardSequence.OnComplete(() =>
             {
@@ -121,12 +121,12 @@ public class CardFXManager : MonoBehaviour
         Vector3 targetPos = graveyardSpawn != null ? graveyardSpawn.position : Vector3.zero;
         Sequence discardSequence = DOTween.Sequence();
 
-        discardSequence.Append(cardObject.transform.DOMove(targetPos, 0.5f).SetEase(Ease.OutQuad));
+        discardSequence.Append(cardObject.transform.DOMove(targetPos, 0.8f).SetEase(Ease.OutQuad));
 
         float randomTilt = Random.Range(-35f, 35f);
 
-        discardSequence.Join(cardObject.transform.DORotate(new Vector3(0, 0, randomTilt), 0.5f).SetEase(Ease.OutCubic));
-        discardSequence.Join(cardObject.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InQuad));
+        discardSequence.Join(cardObject.transform.DORotate(new Vector3(0, 0, randomTilt), 0.8f).SetEase(Ease.OutCubic));
+        discardSequence.Join(cardObject.transform.DOScale(Vector3.zero, 0.8f).SetEase(Ease.InQuad));
 
         discardSequence.OnComplete(() =>
         {
