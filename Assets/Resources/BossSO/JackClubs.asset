@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: JackClubs
   m_EditorClassIdentifier: Assembly-CSharp::BossSO
   bossName: Jack of Clubs
-  cardSprite: {fileID: -5910148341155441232, guid: 37e1b83fb10f47344853eb1c022aa681, type: 3}
+  cardSprite: {fileID: 8155656575593630016, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 3
   hp: 20
   atk: 10
@@ -22,8 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8b4b0c50f406fb041b6c5956b8405c57, type: 2}
   - {fileID: 11400000, guid: 7ba2675673164ff45ab8d730dd2289f4, type: 2}
   - {fileID: 11400000, guid: 4e5f99ef7d9bc7a41af4fd3e0c68e8cc, type: 2}
-  currentTrait: {fileID: 11400000, guid: 8b4b0c50f406fb041b6c5956b8405c57, type: 2}
-  currentReward: {fileID: 11400000, guid: ce3d5d7962e118849986f86ff187f0bd, type: 2}
+  currentTrait: {fileID: 11400000, guid: 4e5f99ef7d9bc7a41af4fd3e0c68e8cc, type: 2}
   bossCard: {fileID: 11400000, guid: 1cfa6d749ddbd254ba56f7d0fb5f7a88, type: 2}
   isJoker: 0
   resistanceSuit: 3

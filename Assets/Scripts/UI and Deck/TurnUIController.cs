@@ -9,13 +9,19 @@ public class TurnUIController : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private RectTransform banner;
+    [SerializeField] private RectTransform turn;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Image bannerImage;
+    [SerializeField] private Image turnImage;
 
     [Header("Sprites")]
     [SerializeField] private Sprite yourTurn;
     [SerializeField] private Sprite enemyTurn;
     [SerializeField] private Sprite discardTurn;
+
+    [SerializeField] private Sprite yourTurnControl;
+    [SerializeField] private Sprite enemyTurnControl;
+    [SerializeField] private Sprite discardTurnControl;
 
     private Sequence currentSequence;
 
@@ -38,16 +44,19 @@ public class TurnUIController : MonoBehaviour
     public void ShowYourTurn()
     {
         Show(yourTurn, "YourTurn");
+        ShowTurn(yourTurnControl);
     }
 
     public void ShowEnemyTurn()
     {
         Show(enemyTurn, "EnemyTurn");
+        ShowTurn(enemyTurnControl);
     }
 
     public void ShowDiscardTurn()
     {
         Show(discardTurn, "DiscardTurn");
+        ShowTurn(discardTurnControl);
     }
 
     public IEnumerator ShowVictory()
@@ -200,5 +209,20 @@ public class TurnUIController : MonoBehaviour
 
         currentSequence.Join(
             canvasGroup.DOFade(0, 0.35f));
+    }
+
+    private void ShowTurn(Sprite sprite)
+    {
+        if (turnImage.sprite == null)
+        {
+            turnImage.sprite = yourTurnControl;
+            return;
+        }
+
+        Sequence currentSequence = DOTween.Sequence();
+
+        currentSequence.Append(turn.DOScale(new Vector2(0f, 0f), 0.4f).SetEase(Ease.InOutSine));
+        turnImage.sprite = sprite;
+        currentSequence.Append(turn.DOScale(new Vector2(1f, 1f), 0.4f).SetEase(Ease.InOutSine));
     }
 }

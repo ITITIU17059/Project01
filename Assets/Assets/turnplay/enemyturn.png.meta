@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f450564372249094d9bd51c717930d6f
+guid: 26550750db5082b4fba7ec36113fa19c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 814343571024923156
-    second: Medieval room, fantasy room_0
+      213: -366998940408312370
+    second: enemyturn_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1700
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Medieval room, fantasy room_0
+      name: enemyturn_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 11
         y: 0
-        width: 736
-        height: 414
+        width: 1515
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 41a401cc9212d4b00800000000000000
-      internalID: 814343571024923156
+      spriteID: ecd840c786828eaf0800000000000000
+      internalID: -366998940408312370
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Medieval room, fantasy room_0: 814343571024923156
+      enemyturn_0: -366998940408312370
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
