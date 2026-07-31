@@ -19,6 +19,7 @@ public class GameplayMenu : MonoBehaviour
         pausePanel.transform
             .DOScale(1f, 0.25f)
             .SetEase(Ease.OutBack);
+        HandManager.Instance.SetInteractable(false);
     }
 
     public void Resume()
@@ -32,6 +33,7 @@ public class GameplayMenu : MonoBehaviour
             .OnComplete(() =>
         {
             pausePanel.SetActive(false);
+            HandManager.Instance.SetInteractable(true);
         });
     }
 
