@@ -409,10 +409,6 @@ public class BattleManager : MonoBehaviour
                 TraitManager.Instance.InvokeBossEvent(
                     TraitEventType.Discard,
                     0);
-
-                TraitManager.Instance.InvokeRewardEvent(
-                    TraitEventType.Discard,
-                    0);
             }
 
             // Sau phase 1 thì bắt discard thêm

@@ -4,6 +4,8 @@ using UnityEngine.Splines;
 using DG.Tweening;
 using System;
 using UnityEngine.UI;
+
+
 public class HandManager : MonoBehaviour
 {
     public GameObject LockedCard { get; private set; }
@@ -260,7 +262,9 @@ public class HandManager : MonoBehaviour
 
         discardTarget = targetValue;
         discardCurrent = 0;
+        int overflow = Mathf.Max(0, discardCurrent - discardTarget);
 
+        BattleManager.Instance.LastDiscardOverflow = overflow;
         selectedCards.Clear();
         totalCardValue = 0;
 
@@ -268,6 +272,9 @@ public class HandManager : MonoBehaviour
 
         foreach (GameObject card in handCards)
         {
+            if (card == LockedCard)
+                continue;
+
             totalValue += card.GetComponent<CardDisplay>()
                               .cardScriptableObject.value;
         }
@@ -286,6 +293,8 @@ public class HandManager : MonoBehaviour
 
     private void SelectDiscardCard(GameObject cardObject)
     {
+        if (cardObject == LockedCard)
+            return;
         if (selectedCards.Contains(cardObject))
             return;
 
@@ -343,8 +352,13 @@ public class HandManager : MonoBehaviour
 
         FinishDiscard();
     }
+
     private void FinishDiscard()
     {
+        int overflow = Mathf.Max(0, discardCurrent - discardTarget);
+
+        BattleManager.Instance.LastDiscardOverflow = overflow;
+
         if (PlayerReward.Instance.HasReward(TraitID.Q_ROYAL_TAX)
     && selectedCards.Count > 1)
         {
@@ -371,12 +385,10 @@ public class HandManager : MonoBehaviour
         isDiscardMode = false;
 
         RepositionAllCards(null);
-        BattleManager.Instance.LastDiscardOverflow =
-    Mathf.Max(0, discardCurrent - discardTarget);
 
         TraitManager.Instance.InvokeRewardEvent(
             TraitEventType.Discard,
-            0);
+            overflow);
         BattleManager.Instance.FinishDiscard(true);
         confirmDiscardButton.gameObject.SetActive(false);
     }

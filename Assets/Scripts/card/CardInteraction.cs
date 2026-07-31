@@ -109,7 +109,8 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleDragging(Vector3 targetWorldPos)
     {
-       
+        if (IsLocked)
+            return;
         if (!handManager.CanInteract && !handManager.IsDiscardMode)
             return;
         transform.position = targetWorldPos;
@@ -123,6 +124,8 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleDragEnd(bool isClick, Vector3 mouseWorldPos)
     {
+        if (IsLocked)
+            return;
         if (!handManager.CanInteract && !handManager.IsDiscardMode)
             return;
         if (!isDragging) return;
