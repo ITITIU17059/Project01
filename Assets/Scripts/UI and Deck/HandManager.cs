@@ -17,6 +17,7 @@ public class HandManager : MonoBehaviour
     [SerializeField] private SplineContainer splineContainer;
     [SerializeField] private Transform cardSpawnPoint;
     [SerializeField] private Button confirmDiscardButton;
+    [SerializeField] private Transform cardsContainer;
     private bool isDiscardMode = false;
     private int discardTarget = 0;
     private int discardCurrent = 0;
@@ -27,7 +28,7 @@ public class HandManager : MonoBehaviour
     [NonSerialized] public List<GameObject> handCards = new();
     public List<GameObject> selectedCards = new();
 
-    
+
     private void Awake()
     {
         maxHandSize = defaultMaxHandSize;
@@ -173,7 +174,7 @@ public class HandManager : MonoBehaviour
     {
         if (handCards.Count >= maxHandSize) return;
 
-        GameObject newCard = Instantiate(cardPrefab, cardSpawnPoint.position, cardSpawnPoint.rotation);
+        GameObject newCard = Instantiate(cardPrefab, cardSpawnPoint.position, cardSpawnPoint.rotation, cardsContainer);
         SoundManager.instance?.PlaySound2D("CardDraw");
         handCards.Add(newCard);
         TraitManager.Instance.InvokeBossEvent(
@@ -374,7 +375,7 @@ public class HandManager : MonoBehaviour
                 BattleManager.Instance.graveyardSpawnPoint
             );
         }
-   
+
         selectedCards.Clear();
         totalCardValue = 0;
 
