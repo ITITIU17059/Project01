@@ -52,4 +52,6 @@ public class BossSO : ScriptableObject
 
     [Header("Sound")]
     public string spawnSoundID;
+
+ 
 }

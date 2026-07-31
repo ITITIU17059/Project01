@@ -74,6 +74,8 @@ public class BossDisplay : MonoBehaviour
 
         resistanceIcon.enabled = true;
     }
+
+  
     public void ResetUI()
     {
         hpText.gameObject.SetActive(true);

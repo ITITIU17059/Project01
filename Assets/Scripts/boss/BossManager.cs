@@ -28,7 +28,7 @@ public class BossManager : MonoBehaviour
     private int defeatedQueen;
     private int defeatedKing;
 
-
+    [SerializeField] private List<BossSO> illusionBosses;
     public BossSO CurrentBoss { get; private set; }
 
     public int CurrentHP { get; private set; }
@@ -356,4 +356,5 @@ public class BossManager : MonoBehaviour
                 bossSequence.Add(boss);
         }
     }
+
 }

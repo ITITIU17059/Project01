@@ -90,6 +90,8 @@ public static class BossSkill
     TraitID.K_ENDLESS_WRATH,
     TraitEventType.BossTurn,
     KingEndlessWrath_BossTurn);
+
+
     }
 
 
@@ -197,8 +199,6 @@ public static class BossSkill
     //==================================================
     private static int JackGreedyTribute_Draw(int amount)
     {
-        Debug.Log("Jack Greedy Tribute Activated");
-
         return Mathf.Min(amount, 3);
     }
     private static int JackHeavyGuard_Shield(
@@ -213,8 +213,6 @@ public static class BossSkill
             if (card.suit == CardSO.Suit.Spades &&
                 card.value >= 6)
             {
-                Debug.Log("Jack Heavy Guard Activated");
-
                 return amount - 3;
             }
         }
@@ -223,8 +221,6 @@ public static class BossSkill
     }
     private static int JackWitheredBlessing_Heal(int amount)
     {
-        Debug.Log("Jack Withered Blessing Activated");
-
         return 1;
     }
 
@@ -241,7 +237,6 @@ public static class BossSkill
             if (card.suit == CardSO.Suit.Clubs &&
                 card.value >= 6)
             {
-                Debug.Log("Jack Broken Force Activated");
                 return finalDamage - originalDamage;
             }
         }
@@ -276,7 +271,6 @@ public static class BossSkill
         BossManager.Instance.BossDisplay.UpdateATK(
             boss.currentATK);
 
-        Debug.Log(
-            $"K Rising Might +{boss.turnCounter} -> {boss.currentATK}");
     }
+
 }   

@@ -314,4 +314,5 @@ public static class CardResolver
 
         yield return new WaitForSeconds(0.55f);
     }
+
 }
