@@ -31,8 +31,6 @@ public class DragManager : MonoBehaviour
 
     public void Drag(Vector2 position)
     {
-      
-
         dragIcon.rectTransform.position = position;
     }
 

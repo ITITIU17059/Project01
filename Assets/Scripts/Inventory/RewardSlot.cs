@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class RewardSlot :
@@ -12,6 +13,7 @@ public class RewardSlot :
     IPointerExitHandler
 {
     [SerializeField] private Image icon;
+    private Color imageColor;
 
     private RewardSO reward;
 
@@ -20,6 +22,7 @@ public class RewardSlot :
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
+        imageColor = icon.color;
     }
 
     public void Setup(RewardSO reward, InventoryManager owner)
@@ -43,11 +46,15 @@ public class RewardSlot :
     public void OnDrag(PointerEventData eventData)
     {
         DragManager.Instance.Drag(eventData.position);
+        imageColor.a = 0.2f;
+        icon.color = imageColor;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true;
+        imageColor.a = 1f;
+        icon.color = imageColor;
 
         DragManager.Instance.EndDrag();
     }
