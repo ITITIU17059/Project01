@@ -16,6 +16,30 @@ public static class CardResolver
         int damage = 0;
         bool hasClub = false;
 
+        BossSO boss = BossManager.Instance.CurrentBoss;
+
+        if (boss != null &&
+            boss.currentTrait != null &&
+            boss.currentTrait.traitID == TraitID.K_ROYAL_DECREE
+)
+        {
+            bool matched = false;
+
+            foreach (CardSO card in cards)
+            {
+                if (card.suit == boss.requiredSuit)
+                {
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (!matched)
+            {
+                Debug.Log("Wrong suit. Damage = 0");
+                return 0;
+            }
+        }
         foreach (CardSO card in cards)
         {
             damage += card.value;

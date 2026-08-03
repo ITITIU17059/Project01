@@ -74,8 +74,11 @@ public class BossDisplay : MonoBehaviour
 
         resistanceIcon.enabled = true;
     }
+    public void SetBossSprite(Sprite sprite)
+    {
+        artwork.sprite = sprite;
+    }
 
-  
     public void ResetUI()
     {
         hpText.gameObject.SetActive(true);

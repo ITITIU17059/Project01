@@ -17,6 +17,9 @@ public class BossManager : MonoBehaviour
     [SerializeField] private TraitSelectionPanelUI traitSelectionPanel;
     public BossDisplay BossDisplay => bossDisplay;
 
+    [SerializeField]
+    private List<BossSO> disguisePool;
+    public List<BossSO> DisguisePool => disguisePool;
     public Transform BossTransform => bossDisplay.transform;
 
     private readonly List<BossSO> bossSequence = new();

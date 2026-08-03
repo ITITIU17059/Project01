@@ -91,6 +91,10 @@ public static class BossSkill
     TraitEventType.BossTurn,
     KingEndlessWrath_BossTurn);
 
+        RegisterEvent(
+    TraitID.K_ROYAL_DECREE,
+    TraitEventType.PlayerTurn,
+    KingDisguise_PlayerTurn);
 
     }
 
@@ -272,5 +276,33 @@ public static class BossSkill
             boss.currentATK);
 
     }
+    private static void KingDisguise_PlayerTurn(int value)
+    {
+        BossManager manager = BossManager.Instance;
 
+        BossSO boss = manager.CurrentBoss;
+
+        if (boss == null)
+            return;
+
+        List<BossSO> pool = manager.DisguisePool;
+
+        if (pool == null || pool.Count == 0)
+            return;
+
+        BossSO disguise =
+            pool[Random.Range(0, pool.Count)];
+
+        boss.requiredSuit = disguise.resistanceSuit;
+
+        boss.currentDisguiseSprite =
+            disguise.cardSprite;
+
+        manager.BossDisplay.SetBossSprite(
+            disguise.cardSprite);
+
+        Debug.Log(
+            "Required Suit = " +
+            boss.requiredSuit);
+    }
 }   

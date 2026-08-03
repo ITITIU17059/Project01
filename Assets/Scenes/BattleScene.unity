@@ -1959,6 +1959,22 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 5876212369996818958, guid: 95a17ccbbeadf8a4a9b088c1feb527ae, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 5876212369996818958, guid: 95a17ccbbeadf8a4a9b088c1feb527ae, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 5929304645580147684, guid: 95a17ccbbeadf8a4a9b088c1feb527ae, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 5929304645580147684, guid: 95a17ccbbeadf8a4a9b088c1feb527ae, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 6548602310560624695, guid: 95a17ccbbeadf8a4a9b088c1feb527ae, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -2738,8 +2754,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -0.000061035156}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -2.619995, y: -0.000030517578}
+  m_SizeDelta: {x: 5.24, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &618844091
 MonoBehaviour:
@@ -4218,6 +4234,16 @@ MonoBehaviour:
   bossDisplay: {fileID: 848775553}
   bossInfoPanel: {fileID: 140268366}
   traitSelectionPanel: {fileID: 618844093}
+  disguisePool:
+  - {fileID: 11400000, guid: ff4c123f4570e524a85ef59fff852628, type: 2}
+  - {fileID: 11400000, guid: bac3790c86e24744dbeba7efaab5fa2a, type: 2}
+  - {fileID: 11400000, guid: eb0d479eb9892aa4d9dce1fe61c043d0, type: 2}
+  - {fileID: 11400000, guid: 353bd01e09f0586429e4bc904cabf53b, type: 2}
+  illusionBosses:
+  - {fileID: 11400000, guid: ff4c123f4570e524a85ef59fff852628, type: 2}
+  - {fileID: 11400000, guid: bac3790c86e24744dbeba7efaab5fa2a, type: 2}
+  - {fileID: 11400000, guid: eb0d479eb9892aa4d9dce1fe61c043d0, type: 2}
+  - {fileID: 11400000, guid: 353bd01e09f0586429e4bc904cabf53b, type: 2}
 --- !u!1 &1061128433
 GameObject:
   m_ObjectHideFlags: 0
