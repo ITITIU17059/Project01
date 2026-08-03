@@ -619,6 +619,7 @@ public class BattleManager : MonoBehaviour
     public void InteractConfirmButton(bool isInteract)
     {
         EventTrigger eventTrigger = confirmButton.GetComponent<EventTrigger>();
+        Image image = confirmButton.GetComponent<Image>();
         if (isInteract)
         {
             eventTrigger.enabled = true;
@@ -628,6 +629,7 @@ public class BattleManager : MonoBehaviour
         {
             eventTrigger.enabled = false;
             confirmButton.interactable = false;
+            image.color = Color.white;
         }
     }
 }

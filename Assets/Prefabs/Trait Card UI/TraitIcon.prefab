@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 23.34, y: 23.09}
+  m_AnchoredPosition: {x: 2.6572876, y: -3.1002197}
+  m_SizeDelta: {x: 28.6546, y: 29.2904}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7821202961001420764
 MonoBehaviour:
@@ -54,7 +54,6 @@ MonoBehaviour:
   traitDescription: {fileID: 0}
   rewardTitle: {fileID: 0}
   rewardDescription: {fileID: 0}
-  rewardInfo: {fileID: 0}
 --- !u!1 &7074606743851658137
 GameObject:
   m_ObjectHideFlags: 0
