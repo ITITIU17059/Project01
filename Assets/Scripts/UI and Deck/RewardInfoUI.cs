@@ -6,7 +6,6 @@ public class RewardInfoUI : MonoBehaviour
 {
     public static RewardInfoUI Instance;
 
-    [SerializeField] private Image icon;
     [SerializeField] private TMP_Text description;
 
     private void Awake()
@@ -15,9 +14,8 @@ public class RewardInfoUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Show(Sprite sprite, string text)
+    public void Show(string text)
     {
-        icon.sprite = sprite;
         description.text = text;
 
         gameObject.SetActive(true);
@@ -25,7 +23,6 @@ public class RewardInfoUI : MonoBehaviour
 
     public void Hide()
     {
-        icon.sprite = null;
         description.text = null;
 
 
