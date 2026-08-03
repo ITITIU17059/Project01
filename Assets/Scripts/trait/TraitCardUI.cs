@@ -48,7 +48,7 @@ public class TraitCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (traitIcon.sprite == null || rewardText == null) return;
 
-        RewardInfoUI.Instance.Show(traitIcon.sprite, rewardText);
+        RewardInfoUI.Instance.Show(rewardText);
     }
 
     public void OnPointerExit(PointerEventData eventData)
