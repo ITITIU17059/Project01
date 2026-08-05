@@ -79,6 +79,11 @@ public static class RewardSkill
         TraitID.K_ENDLESS_WRATH,
         TraitEventType.Discard,
         KingCrushingDiscard_DiscardReward);
+
+        RegisterEvent(
+    TraitID.K_ROYAL_DECREE,
+    TraitEventType.PlayCard,
+    KingRoyalDecree_PlayCardReward);
     }
 
     private static void RegisterEvent(
@@ -361,5 +366,23 @@ public static class RewardSkill
 
         BossManager.Instance.ReduceAttack(overflow);
     }
-   
+    private static void KingRoyalDecree_PlayCardReward()
+    {
+        HandManager hand = BattleManager.Instance.Hand;
+
+        if (hand.selectedCards.Count != 1)
+            return;
+
+        CardDisplay display =
+            hand.selectedCards[0].GetComponent<CardDisplay>();
+
+        if (display == null)
+            return;
+
+        BattleManager.Instance.OverrideSuit =
+            (CardSO.Suit)Random.Range(1, 5);
+
+        Debug.Log("Reward Random Suit = "
+            + BattleManager.Instance.OverrideSuit);
+    }
 }

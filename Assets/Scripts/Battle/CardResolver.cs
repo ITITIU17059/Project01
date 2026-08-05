@@ -27,7 +27,7 @@ public static class CardResolver
 
             foreach (CardSO card in cards)
             {
-                if (card.suit == boss.requiredSuit)
+                if (BattleManager.Instance.GetSuit(card) == boss.requiredSuit)
                 {
                     matched = true;
                     break;
@@ -44,7 +44,7 @@ public static class CardResolver
         {
             damage += card.value;
 
-            if (card.suit == CardSO.Suit.Clubs)
+            if (BattleManager.Instance.GetSuit(card) == CardSO.Suit.Clubs)
                 hasClub = true;
         }
 
@@ -63,7 +63,7 @@ public static class CardResolver
 
         foreach (CardSO card in cards)
         {
-            if (card.suit != CardSO.Suit.Clubs)
+            if (BattleManager.Instance.GetSuit(card) != CardSO.Suit.Clubs)
                 continue;
 
             if (!clubResisted)
@@ -136,7 +136,7 @@ public static class CardResolver
         {
             foreach (CardSO card in cards)
             {
-                switch (card.suit)
+                switch (BattleManager.Instance.GetSuit(card))
                 {
                     case CardSO.Suit.Hearts:
                         hasHeart = true;
@@ -217,8 +217,8 @@ public static class CardResolver
 
             foreach (CardSO card in cards)
             {
-                if (card.suit == CardSO.Suit.Spades &&
-                    card.value < 6)
+                if (BattleManager.Instance.GetSuit(card) == CardSO.Suit.Spades &&
+     card.value < 6)
                 {
                     reduceAmount =
                         TraitManager.Instance.ModifyRewardShieldAmount(reduceAmount);
@@ -302,8 +302,11 @@ public static class CardResolver
             if (display == null)
                 continue;
 
+            CardSO.Suit suit =
+                BattleManager.Instance.GetSuit(display.cardScriptableObject);
+
             yield return BossFXManager.Instance.PlayCardSuitFX(
-                display.cardScriptableObject,
+                suit,
                 display.transform);
         }
     }

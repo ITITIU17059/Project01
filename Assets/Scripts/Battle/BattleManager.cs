@@ -30,6 +30,8 @@ public class BattleManager : MonoBehaviour
     public int LastDiscardOverflow { get; set; }
     public bool IsExtraAttack => waitingExtraAttack;
     public int LastDrawAmount { get; private set; }
+
+    public CardSO.Suit OverrideSuit = CardSO.Suit.None;
     public void ContinueFromInventory()
     {
         waitingForInventory = false;
@@ -200,6 +202,7 @@ public class BattleManager : MonoBehaviour
         handManager.UnlockCard();
         handManager.SetInteractable(false);
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
+        BossManager.Instance.BossDisplay.ResetBossSprite();
 
         yield return BossFXManager.Instance.PlayDeathFX(
         BossManager.Instance.BossTransform);
@@ -359,7 +362,7 @@ public class BattleManager : MonoBehaviour
     {
         TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayCard, 0);
         TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayCard, 0);
-
+        ApplyRewardK3(cards);
         int damage = CardResolver.ResolveDamage(cards);
 
         // Hiệu ứng lá bài
@@ -388,6 +391,7 @@ public class BattleManager : MonoBehaviour
         TraitManager.Instance.InvokeRewardEvent(
             TraitEventType.AfterAttack,
             damage);
+        BattleManager.Instance.OverrideSuit = CardSO.Suit.None;
     }
 
     private IEnumerator FinishDiscardRoutine(bool success)
@@ -631,5 +635,27 @@ public class BattleManager : MonoBehaviour
             confirmButton.interactable = false;
             image.color = Color.white;
         }
+    }
+    private void ApplyRewardK3(List<CardSO> cards)
+    {
+        if (!PlayerReward.Instance.HasReward(TraitID.K_ROYAL_DECREE))
+            return;
+
+        if (cards.Count != 1)
+            return;
+
+        BattleManager.Instance.OverrideSuit =
+            (CardSO.Suit)Random.Range(1, 5);
+
+        Debug.Log("Reward K3 -> " + BattleManager.Instance.OverrideSuit);
+    }
+
+
+    public CardSO.Suit GetSuit(CardSO card)
+    {
+        if (OverrideSuit != CardSO.Suit.None)
+            return OverrideSuit;
+
+        return card.suit;
     }
 }

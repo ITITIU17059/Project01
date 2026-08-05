@@ -18,7 +18,7 @@ public class BossDisplay : MonoBehaviour
     public SpriteRenderer Artwork => artwork;
 
     private BossSO boss;
-
+    private Sprite originalSprite;
     public void Setup(BossSO data)
     {
         ResetUI();
@@ -27,8 +27,8 @@ public class BossDisplay : MonoBehaviour
         transform.rotation = Quaternion.identity;
 
         boss = data;
-
-        artwork.sprite = boss.cardSprite;
+        originalSprite = boss.cardSprite;
+        artwork.sprite = originalSprite;
         hpText.text = boss.hp.ToString();
         atkText.text = boss.atk.ToString();
         bossNameText.text = GetBossName(boss);
@@ -84,5 +84,9 @@ public class BossDisplay : MonoBehaviour
         hpText.gameObject.SetActive(true);
         atkText.gameObject.SetActive(true);
         bossNameText.gameObject.SetActive(true);
+    }
+    public void ResetBossSprite()
+    {
+        artwork.sprite = originalSprite;
     }
 }

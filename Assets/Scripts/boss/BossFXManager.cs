@@ -42,11 +42,13 @@ public class BossFXManager : MonoBehaviour
         return null;
     }
 
-    public IEnumerator PlayCardSuitFX(CardSO card, Transform cardTransform)
+    public IEnumerator PlayCardSuitFX(
+     CardSO.Suit suit,
+     Transform cardTransform)
     {
         GameObject prefab = null;
 
-        switch (card.suit)
+        switch (suit)
         {
             case CardSO.Suit.Hearts:
                 prefab = heartVFX;
@@ -73,7 +75,6 @@ public class BossFXManager : MonoBehaviour
             cardTransform.position,
             Quaternion.identity);
 
-
         Transform boss = BossManager.Instance.BossTransform;
 
         fx.transform.DOMove(
@@ -85,12 +86,10 @@ public class BossFXManager : MonoBehaviour
 
         Destroy(fx);
 
-        string soundID = GetAttackSound(card.suit);
+        string soundID = GetAttackSound(suit);
 
         if (!string.IsNullOrEmpty(soundID))
-        {
             SoundManager.instance?.PlaySound2D(soundID);
-        }
 
         PlayHitFX(boss);
     }
