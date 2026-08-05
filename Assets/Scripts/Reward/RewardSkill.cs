@@ -341,7 +341,7 @@ public static class RewardSkill
         if (card == null)
             return finalValue;
 
-        if (card.suit != CardSO.Suit.Clubs)
+        if (BattleManager.Instance.GetSuit(card) != CardSO.Suit.Clubs)
             return finalValue;
 
         if (card.value >= 6)

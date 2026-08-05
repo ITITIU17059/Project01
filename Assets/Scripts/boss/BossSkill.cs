@@ -214,8 +214,8 @@ public static class BossSkill
 
         foreach (CardSO card in cards)
         {
-            if (card.suit == CardSO.Suit.Spades &&
-                card.value >= 6)
+            if (BattleManager.Instance.GetSuit(card) == CardSO.Suit.Spades &&
+      card.value >= 6)
             {
                 return amount - 3;
             }
@@ -238,8 +238,8 @@ public static class BossSkill
 
         foreach (CardSO card in cards)
         {
-            if (card.suit == CardSO.Suit.Clubs &&
-                card.value >= 6)
+            if (BattleManager.Instance.GetSuit(card) == CardSO.Suit.Clubs &&
+     card.value >= 6)
             {
                 return finalDamage - originalDamage;
             }

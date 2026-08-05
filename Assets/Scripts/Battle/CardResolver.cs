@@ -116,7 +116,10 @@ public static class CardResolver
         {
             if (cards.Count > 0)
             {
-                switch (cards[0].suit)
+                CardSO.Suit suit =
+                    BattleManager.Instance.GetSuit(cards[0]);
+
+                switch (suit)
                 {
                     case CardSO.Suit.Hearts:
                         hasHeart = true;

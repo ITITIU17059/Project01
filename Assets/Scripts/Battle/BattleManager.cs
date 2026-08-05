@@ -646,7 +646,8 @@ public class BattleManager : MonoBehaviour
 
         BattleManager.Instance.OverrideSuit =
             (CardSO.Suit)Random.Range(1, 5);
-
+        SuitChangedUI.Instance.Show(
+        BattleManager.Instance.OverrideSuit);
         Debug.Log("Reward K3 -> " + BattleManager.Instance.OverrideSuit);
     }
 
