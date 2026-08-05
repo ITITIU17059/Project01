@@ -52,4 +52,11 @@ public class BossSO : ScriptableObject
 
     [Header("Sound")]
     public string spawnSoundID;
+
+    [HideInInspector]
+    public CardSO.Suit requiredSuit = CardSO.Suit.None;
+
+    [HideInInspector]
+    public Sprite currentDisguiseSprite;
+
 }

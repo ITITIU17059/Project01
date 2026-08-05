@@ -16,11 +16,35 @@ public static class CardResolver
         int damage = 0;
         bool hasClub = false;
 
+        BossSO boss = BossManager.Instance.CurrentBoss;
+
+        if (boss != null &&
+            boss.currentTrait != null &&
+            boss.currentTrait.traitID == TraitID.K_ROYAL_DECREE
+)
+        {
+            bool matched = false;
+
+            foreach (CardSO card in cards)
+            {
+                if (BattleManager.Instance.GetSuit(card) == boss.requiredSuit)
+                {
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (!matched)
+            {
+                Debug.Log("Wrong suit. Damage = 0");
+                return 0;
+            }
+        }
         foreach (CardSO card in cards)
         {
             damage += card.value;
 
-            if (card.suit == CardSO.Suit.Clubs)
+            if (BattleManager.Instance.GetSuit(card) == CardSO.Suit.Clubs)
                 hasClub = true;
         }
 
@@ -39,7 +63,7 @@ public static class CardResolver
 
         foreach (CardSO card in cards)
         {
-            if (card.suit != CardSO.Suit.Clubs)
+            if (BattleManager.Instance.GetSuit(card) != CardSO.Suit.Clubs)
                 continue;
 
             if (!clubResisted)
@@ -92,7 +116,10 @@ public static class CardResolver
         {
             if (cards.Count > 0)
             {
-                switch (cards[0].suit)
+                CardSO.Suit suit =
+                    BattleManager.Instance.GetSuit(cards[0]);
+
+                switch (suit)
                 {
                     case CardSO.Suit.Hearts:
                         hasHeart = true;
@@ -112,7 +139,7 @@ public static class CardResolver
         {
             foreach (CardSO card in cards)
             {
-                switch (card.suit)
+                switch (BattleManager.Instance.GetSuit(card))
                 {
                     case CardSO.Suit.Hearts:
                         hasHeart = true;
@@ -193,8 +220,8 @@ public static class CardResolver
 
             foreach (CardSO card in cards)
             {
-                if (card.suit == CardSO.Suit.Spades &&
-                    card.value < 6)
+                if (BattleManager.Instance.GetSuit(card) == CardSO.Suit.Spades &&
+     card.value < 6)
                 {
                     reduceAmount =
                         TraitManager.Instance.ModifyRewardShieldAmount(reduceAmount);
@@ -278,8 +305,11 @@ public static class CardResolver
             if (display == null)
                 continue;
 
+            CardSO.Suit suit =
+                BattleManager.Instance.GetSuit(display.cardScriptableObject);
+
             yield return BossFXManager.Instance.PlayCardSuitFX(
-                display.cardScriptableObject,
+                suit,
                 display.transform);
         }
     }
@@ -314,4 +344,5 @@ public static class CardResolver
 
         yield return new WaitForSeconds(0.55f);
     }
+
 }
