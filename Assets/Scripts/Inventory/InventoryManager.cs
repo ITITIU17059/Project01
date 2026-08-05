@@ -20,13 +20,13 @@ public class InventoryManager : MonoBehaviour
 
     public void RefreshRewardList()
     {
-  
+
 
         ClearRewardList();
 
         foreach (RewardSO reward in PlayerReward.Instance.OwnedRewards)
         {
-           
+
 
             RewardSlot slot = Instantiate(rewardSlotPrefab, rewardContent);
 
@@ -45,29 +45,6 @@ public class InventoryManager : MonoBehaviour
         }
 
         rewardSlots.Clear();
-    }
-
-    public void OnRewardClicked(RewardSO reward)
-    {
-        selectedReward = reward;
-
-  
-    }
-
-    public void OnEquipSlotClicked(int slotIndex)
-    {
-        if (selectedReward == null)
-        {
-            PlayerReward.Instance.UnequipReward(slotIndex);
-        }
-        else
-        {
-            PlayerReward.Instance.EquipReward(selectedReward, slotIndex);
-            selectedReward = null;
-        }
-
-        RefreshRewardList();
-        RefreshEquipSlots();
     }
 
     public void RefreshEquipSlots()
