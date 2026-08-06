@@ -595,7 +595,7 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        LevelManager.instance.LoadScene("MenuScene", "CrossFade");
+        LevelManager.instance.LoadScene("MenuScene");
     }
 
     private void Defeat()
@@ -616,7 +616,7 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        LevelManager.instance.LoadScene("MenuScene", "CrossFade");
+        LevelManager.instance.LoadScene("MenuScene");
     }
     #endregion
 
