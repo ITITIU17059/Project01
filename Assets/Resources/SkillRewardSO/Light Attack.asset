@@ -15,4 +15,4 @@ MonoBehaviour:
   traitID: 2
   icon: {fileID: 21300000, guid: 08c71e4e0565fe4469d1e0a593047156, type: 3}
   rewardName: Light Attack
-  description: "L\xE1 B\xEDch < 6 \u0111\u01B0\u1EE3c - 3 ATK boss"
+  description: A Spade card lower than 6 will reduce the boss's ATK by 3

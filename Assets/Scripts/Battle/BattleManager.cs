@@ -595,6 +595,9 @@ public class BattleManager : MonoBehaviour
     {
         InteractConfirmButton(false);
         handManager.enabled = false;
+        GameObject cardContainer = GameObject.FindGameObjectWithTag("CardContainer");
+        cardContainer.SetActive(false);
+
 
         yield return TurnUIController.Instance.ShowVictory();
 

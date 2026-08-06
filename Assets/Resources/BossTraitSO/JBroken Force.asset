@@ -15,5 +15,5 @@ MonoBehaviour:
   traitID: 3
   icon: {fileID: 21300000, guid: 0389074d1deba1c448d45812db40c0df, type: 3}
   traitName: Broken Force
-  description: "Chu\u1ED3ng kh\xF4ng nh\xE2n 2 v\u1EDBi l\xE1 > 6"
+  description: Clubs do not multiply by 2 with cards higher than 6
   reward: {fileID: 11400000, guid: ae0998b0e967f6a4088bff6393ceeef0, type: 2}

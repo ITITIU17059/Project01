@@ -15,5 +15,5 @@ MonoBehaviour:
   traitID: 4
   icon: {fileID: 21300000, guid: bbe833a9207e7fa41bbd3ce71ad09605, type: 3}
   rewardName: Scavenger
-  description: "Discard nhi\u1EC1u h\u01A1n 1 l\xE1 s\u1EBD nh\u1EADn l\u1EA1i ng\u1EABu
-    nhi\xEAn 1 l\xE1."
+  description: If you discard more than 1 card, you will receive 1 random card in
+    return

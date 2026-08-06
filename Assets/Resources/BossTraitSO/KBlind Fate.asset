@@ -15,7 +15,6 @@ MonoBehaviour:
   traitID: 9
   icon: {fileID: 21300000, guid: 37de44bcb59b8174497def1957cc490b, type: 3}
   traitName: Blind Fate
-  description: "Tr\xEAn tay s\u1EBD lu\xF4n c\xF3 2 l\xE1 \xFAp m\u1EB7t khi r\xFAt
-    b\xE0i, l\u1EADp l\u1EA1i hi\u1EC7u \u1EE9ng khi 1 ho\u1EB7c 2 l\xE1 \u0111\xF3
-    kh\xF4ng c\xF2n tr\xEAn tay"
+  description: You will always hold 2 face-down cards; the effect repeats when one
+    or both of those cards are no longer in your hand
   reward: {fileID: 11400000, guid: d3ce5d06371778c44b334cbfd58043a4, type: 2}

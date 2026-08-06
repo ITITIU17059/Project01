@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11584b51d090ff347aa707fa546f3622, type: 3}
   m_Name: Royal Supply
   m_EditorClassIdentifier: Assembly-CSharp::RewardSO
+  traitID: 0
   icon: {fileID: 21300000, guid: 0825dfa25de4551469e65496af7b3c71, type: 3}
   rewardName: Royal Supply
-  description: "M\u1ED7i l\u01B0\u1EE3t r\xFAt th\xEAm 1 l\xE1."
+  description: Draw one additional card per turn

@@ -15,5 +15,4 @@ MonoBehaviour:
   traitID: 10
   icon: {fileID: 21300000, guid: eed44235dcbd621438f7c0c4f05e2356, type: 3}
   rewardName: Suit Shift
-  description: "C\xF3 th\u1EC3 \u0111\u1ED5i ch\u1EA5t c\u1EE7a m\u1ED9t l\xE1 khi
-    \u0111\xE1nh."
+  description: You can change the suit of a card when playing it

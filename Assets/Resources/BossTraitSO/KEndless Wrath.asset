@@ -15,6 +15,6 @@ MonoBehaviour:
   traitID: 11
   icon: {fileID: 21300000, guid: 125bb49b217257347be09ede099b888d, type: 3}
   traitName: Endless Wrath
-  description: "M\u1ED7i l\u01B0\u1EE3t t\u0103ng ATK theo c\u1EA5p s\u1ED1 c\u1ED9ng
-    (1 + X)."
+  description: With each turn, the boss's ATK increases according to an arithmetic
+    progression (1 + turn number)
   reward: {fileID: 11400000, guid: 6d6d99a7b51ac2842902754b6ec07fcd, type: 2}
