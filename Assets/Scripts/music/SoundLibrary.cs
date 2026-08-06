@@ -5,6 +5,7 @@ public struct SoundEffect
 {
     public string groupId;
     public AudioClip[] clips;
+    public float volume;
 }
 
 public class SoundLibrary : MonoBehaviour
@@ -21,5 +22,17 @@ public class SoundLibrary : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public float GetVolumeFromName(string name)
+    {
+        foreach (var soundeffect in soundEffects)
+        {
+            if (soundeffect.groupId == name)
+            {
+                return soundeffect.volume;
+            }
+        }
+        return 1;
     }
 }
