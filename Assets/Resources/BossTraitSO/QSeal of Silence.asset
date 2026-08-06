@@ -15,6 +15,5 @@ MonoBehaviour:
   traitID: 6
   icon: {fileID: 21300000, guid: bb67b03c2969d104caba950c446f8c8d, type: 3}
   traitName: Seal of Silence
-  description: "Kh\xF3a l\xE1 b\xE0i c\xF3 gi\xE1 tr\u1ECB l\u1EDBn nh\u1EA5t cho
-    \u0111\u1EBFn khi Boss ch\u1EBFt."
+  description: Lock the highest-value card until the Boss dies
   reward: {fileID: 11400000, guid: acddde95a63fc764daad9092faf0ea48, type: 2}

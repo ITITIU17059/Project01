@@ -15,5 +15,6 @@ MonoBehaviour:
   traitID: 5
   icon: {fileID: 21300000, guid: eecb85004343b0e4d8b78fd7f9877b32, type: 3}
   traitName: Life Leech
-  description: "M\u1ED7i l\xE1 th\xEAm v\xE0o tay khi\u1EBFn Boss h\u1ED3i X HP."
+  description: Each card added to the hand causes the Boss to recover an amount of
+    HP equal to the number of cards added
   reward: {fileID: 11400000, guid: 5697adb849b5849408bf9825a4ebfbc9, type: 2}

@@ -15,5 +15,5 @@ MonoBehaviour:
   traitID: 4
   icon: {fileID: 21300000, guid: bbe833a9207e7fa41bbd3ce71ad09605, type: 3}
   traitName: Royal Tax
-  description: "Discard ph\u1EA3i b\u1ECF th\xEAm 1 l\xE1."
+  description: You must discard an additional card
   reward: {fileID: 11400000, guid: 07a22f9e7ab9c364ea358bb4bba78769, type: 2}
