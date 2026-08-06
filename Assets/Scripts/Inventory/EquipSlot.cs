@@ -9,8 +9,9 @@ IDropHandler,
 IBeginDragHandler,
 IDragHandler,
 IEndDragHandler,
-    IPointerEnterHandler,
-    IPointerExitHandler
+IPointerEnterHandler,
+IPointerExitHandler,
+IPointerClickHandler
 
 {
     [SerializeField] private Image icon;
@@ -19,13 +20,10 @@ IEndDragHandler,
     private RewardSO currentReward;
 
     public RewardSO CurrentReward => currentReward;
-
-    private void Awake()
-    {
-
-    }
+    [SerializeField] private CanvasGroup canvasGroup;
 
     private InventoryManager owner;
+    public RectTransform IconRect => icon.rectTransform;
 
     public void Setup(RewardSO reward, InventoryManager inventory)
     {
@@ -79,6 +77,9 @@ IEndDragHandler,
         if (currentReward == null)
             return;
 
+
+        canvasGroup.alpha = 0f;
+
         DragManager.Instance.BeginDrag(currentReward, slotIndex);
     }
     public void OnDrag(PointerEventData eventData)
@@ -87,6 +88,8 @@ IEndDragHandler,
     }
     public void OnEndDrag(PointerEventData eventData)
     {
+        canvasGroup.alpha = 1f;
+
         DragManager.Instance.EndDrag();
     }
     public void OnPointerEnter(PointerEventData eventData)
@@ -98,5 +101,18 @@ IEndDragHandler,
     public void OnPointerExit(PointerEventData eventData)
     {
         TooltipUI.Instance.Hide();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (currentReward == null)
+            return;
+
+        owner.OnEquipClicked(slotIndex);
+    }
+    public void Clear()
+    {
+        currentReward = null;
+        icon.enabled = false;
     }
 }

@@ -10,7 +10,8 @@ public class RewardSlot :
     IDragHandler,
     IEndDragHandler,
     IPointerEnterHandler,
-    IPointerExitHandler
+    IPointerExitHandler,
+    IPointerClickHandler
 {
     [SerializeField] private Image icon;
     private Color imageColor;
@@ -18,6 +19,10 @@ public class RewardSlot :
     private RewardSO reward;
 
     private CanvasGroup canvasGroup;
+    private bool isEquipped;
+    private InventoryManager owner;
+    public RewardSO Reward => reward;
+    public RectTransform IconRect => icon.rectTransform;
 
     private void Awake()
     {
@@ -27,34 +32,48 @@ public class RewardSlot :
 
     public void Setup(RewardSO reward, InventoryManager owner)
     {
+        this.owner = owner;
         this.reward = reward;
 
         icon.sprite = reward.icon;
         icon.enabled = true;
+
+        isEquipped = PlayerReward.Instance.IsEquipped(reward);
+
+        Color c = icon.color;
+        c.a = isEquipped ? 0.3f : 1f;
+        icon.color = c;
+
+        canvasGroup.interactable = !isEquipped;
+        canvasGroup.blocksRaycasts = !isEquipped;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (reward == null)
+        if (reward == null || isEquipped)
             return;
 
         canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 0.3f;
 
         DragManager.Instance.BeginDrag(reward, -1);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (isEquipped)
+            return;
+
         DragManager.Instance.Drag(eventData.position);
-        imageColor.a = 0.2f;
-        icon.color = imageColor;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (isEquipped)
+            return;
+
         canvasGroup.blocksRaycasts = true;
-        imageColor.a = 1f;
-        icon.color = imageColor;
+        canvasGroup.alpha = isEquipped ? 0.3f : 1f;
 
         DragManager.Instance.EndDrag();
     }
@@ -67,5 +86,13 @@ public class RewardSlot :
     public void OnPointerExit(PointerEventData eventData)
     {
         TooltipUI.Instance.Hide();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (reward == null)
+            return;
+
+        owner.OnInventoryClicked(this);
     }
 }

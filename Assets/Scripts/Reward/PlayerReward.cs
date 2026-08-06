@@ -200,4 +200,20 @@ public class PlayerReward : MonoBehaviour
 
         return false;
     }
+
+    public int GetFirstEmptySlot()
+    {
+        for (int i = 0; i < EquippedRewards.Length; i++)
+        {
+            if (EquippedRewards[i] == null)
+                return i;
+        }
+
+        return -1;
+    }
+
+    public bool IsFull()
+    {
+        return GetFirstEmptySlot() == -1;
+    }
 }
