@@ -225,22 +225,6 @@ public class BattleManager : MonoBehaviour
             PlayerReward.Instance.AddReward(deadBoss.currentTrait.reward);
         }
 
-        if (BossManager.Instance.CurrentStageIndex == 1 &&
-    deadBoss.rank == BossRank.Jack)
-        {
-            yield return StageManager.Instance.ChangeStage(BossRank.Queen);
-        }
-        else if (BossManager.Instance.CurrentStageIndex == 2 &&
-                 deadBoss.rank == BossRank.Queen)
-        {
-            yield return StageManager.Instance.ChangeStage(BossRank.King);
-        }
-        else if (BossManager.Instance.CurrentStageIndex == 3 &&
-                 deadBoss.rank == BossRank.King)
-        {
-            yield return StageManager.Instance.ChangeStage(BossRank.Joker);
-        }
-
         bool hasNextBoss = BossManager.Instance.HasMoreBosses;
 
         if (!hasNextBoss)
@@ -257,6 +241,27 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(() => !waitingForInventory);
 
         LevelManager.instance.UnloadSceneAdditive("InventoryScene");
+
+        if (BossManager.Instance.CurrentStageIndex == 0)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.Jack);
+        }
+        else if (BossManager.Instance.CurrentStageIndex == 1 &&
+    deadBoss.rank == BossRank.Jack)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.Queen);
+        }
+        else if (BossManager.Instance.CurrentStageIndex == 2 &&
+                 deadBoss.rank == BossRank.Queen)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.King);
+        }
+        else if (BossManager.Instance.CurrentStageIndex == 3 &&
+                 deadBoss.rank == BossRank.King)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.Joker);
+        }
+
 
 
         if (handWasEmptyAfterPlay)
