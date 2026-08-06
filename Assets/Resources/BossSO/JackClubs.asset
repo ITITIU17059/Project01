@@ -22,7 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8b4b0c50f406fb041b6c5956b8405c57, type: 2}
   - {fileID: 11400000, guid: 7ba2675673164ff45ab8d730dd2289f4, type: 2}
   - {fileID: 11400000, guid: 4e5f99ef7d9bc7a41af4fd3e0c68e8cc, type: 2}
-  currentTrait: {fileID: 11400000, guid: 4e5f99ef7d9bc7a41af4fd3e0c68e8cc, type: 2}
+  currentTrait: {fileID: 11400000, guid: 3b06283b4d406ac489ff9af0e7a337d7, type: 2}
   bossCard: {fileID: 11400000, guid: 1cfa6d749ddbd254ba56f7d0fb5f7a88, type: 2}
   isJoker: 0
   resistanceSuit: 3
@@ -31,5 +31,8 @@ MonoBehaviour:
   hitVFX: {fileID: 393033613081136493, guid: d251affd0d7059c49ac9c07f6e891fc4, type: 3}
   attackSoundID: JackAttack
   attackFlyTime: 0.4
+  turnCounter: 0
   rank: 0
-  spawnSoundID: Jack
+  spawnSoundID: JackClub
+  requiredSuit: 0
+  currentDisguiseSprite: {fileID: 0}
