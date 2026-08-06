@@ -26,10 +26,13 @@ MonoBehaviour:
   bossCard: {fileID: 11400000, guid: baa1fb82cc4d75b4b89d2eca16c50938, type: 2}
   isJoker: 0
   resistanceSuit: 1
-  currentATK: 10
+  currentATK: 1
   attackVFX: {fileID: 5453914515797376023, guid: 86f6f0700445378479325d1398169de5, type: 3}
   hitVFX: {fileID: 393033613081136493, guid: d251affd0d7059c49ac9c07f6e891fc4, type: 3}
   attackSoundID: JackAttack
   attackFlyTime: 0.4
+  turnCounter: 0
   rank: 0
-  spawnSoundID: Jack
+  spawnSoundID: JackHearth
+  requiredSuit: 0
+  currentDisguiseSprite: {fileID: 0}
