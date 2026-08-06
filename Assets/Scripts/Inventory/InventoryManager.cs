@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private InventoryAnimationManager animationManager;
     private void Start()
     {
+        MusicManager.instance.PlayMusic("InventoryTheme");
         RefreshRewardList();
         RefreshEquipSlots();
     }
