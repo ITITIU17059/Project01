@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -7,9 +8,9 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
-    public Slider progressBar;
     public GameObject transitionsContainer;
-    private SceneTransition[] transitions;
+    [NonSerialized] public SceneTransition[] transitions;
+    public string sceneTransName;
 
     private void Awake()
     {
@@ -29,46 +30,55 @@ public class LevelManager : MonoBehaviour
         transitions = transitionsContainer.GetComponentsInChildren<SceneTransition>();
     }
 
-    public void LoadScene(string sceneName, string transitionName)
+    public void FadeOut()
     {
-        StartCoroutine(LoadSceneAsync(sceneName, transitionName));
+        Debug.Log("FadeOut called");
+        StartCoroutine(FadeOutRoutine());
     }
 
-    private IEnumerator LoadSceneAsync(string sceneName, string transitionName)
+    private IEnumerator FadeOutRoutine()
     {
-        SceneTransition transition = transitions.First(t => t.name == transitionName);
+        Debug.Log("FadeOutRoutine");
 
-        AsyncOperation scene = SceneManager.LoadSceneAsync(sceneName);
-        scene.allowSceneActivation = false;
+        SceneTransition transition =
+            transitions.First(t => t.name == "CrossFade");
+
+        yield return transition.AnimateTransitionOut();
+
+        Debug.Log("FadeOut Finished");
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        sceneTransName = sceneName;
+        StartCoroutine(LoadLoadingScene());
+    }
+
+    private IEnumerator LoadLoadingScene()
+    {
+        SceneTransition transition =
+            transitions.First(t => t.name == "CrossFade");
 
         yield return transition.AnimateTransitionIn();
 
-        progressBar.gameObject.SetActive(true);
+        yield return SceneManager.LoadSceneAsync("LoadingScene");
 
-        do
-        {
-            progressBar.value = scene.progress;
-            yield return null;
-        } while (scene.progress < 0.9f);
-
-        scene.allowSceneActivation = true;
-        progressBar.gameObject.SetActive(false);
         yield return transition.AnimateTransitionOut();
     }
 
     public void LoadMainMenu()
     {
-        LoadScene("MenuScene", "CrossFade");
+        LoadScene("MenuScene");
     }
 
     public void LoadBattle()
     {
-        LoadScene("BattleScene", "CrossFade");
+        LoadScene("BattleScene");
     }
 
     public void LoadIntro()
     {
-        LoadScene("IntroScene", "CrossFade");
+        LoadScene("IntroScene");
     }
 
 
