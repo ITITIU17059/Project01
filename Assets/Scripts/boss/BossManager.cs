@@ -166,12 +166,12 @@ public class BossManager : MonoBehaviour
 
     public bool LoadNextBoss()
     {
-        Debug.Log("Load Boss Index = " + CurrentBossIndex);
+       
         if (CurrentBossIndex >= bossSequence.Count)
             return false;
 
         CurrentBoss = bossSequence[CurrentBossIndex];
-
+       
         CurrentHP = CurrentBoss.hp;
         CurrentBoss.currentATK = CurrentBoss.atk;
         CurrentBoss.turnCounter = 0;

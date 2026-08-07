@@ -14,6 +14,7 @@ public class HandManager : MonoBehaviour
     public int maxHandSize;
     [SerializeField] private int spacingValue;
     [SerializeField] private GameObject cardPrefab;
+    public GameObject CardPrefab => cardPrefab;
     [SerializeField] private SplineContainer splineContainer;
     [SerializeField] private Transform cardSpawnPoint;
     [SerializeField] private Button confirmDiscardButton;
@@ -23,6 +24,7 @@ public class HandManager : MonoBehaviour
     private int discardCurrent = 0;
 
     [SerializeField] private Transform playPreviewArea;
+    public Transform PlayPreviewArea => playPreviewArea;
     private int totalCardValue;
 
     [NonSerialized] public List<GameObject> handCards = new();
@@ -595,6 +597,70 @@ public class HandManager : MonoBehaviour
 
         return card;
     }
+    public int HiddenCardCount()
+    {
+        int count = 0;
 
+        foreach (GameObject obj in handCards)
+        {
+            CardDisplay display = obj.GetComponent<CardDisplay>();
 
+            if (display != null && display.IsHidden)
+                count++;
+        }
+
+        return count;
+    }
+    public void HideNextCardIfNeeded()
+    {
+        BossSO boss = BossManager.Instance.CurrentBoss;
+
+        if (boss == null)
+            return;
+
+        if (boss.currentTrait == null)
+            return;
+
+        if (boss.currentTrait.traitID != TraitID.K_BLIND_FATE)
+            return;
+
+        if (HiddenCardCount() >= 2)
+            return;
+
+        for (int i = handCards.Count - 1; i >= 0; i--)
+        {
+            CardDisplay display = handCards[i].GetComponent<CardDisplay>();
+
+            if (!display.IsHidden)
+            {
+                display.SetHidden(true);
+                break;
+            }
+        }
+    }
+    public void RefreshHiddenCards()
+    {
+        while (HiddenCardCount() < 2)
+        {
+            HideNextCardIfNeeded();
+
+            if (HiddenCardCount() >= handCards.Count)
+                break;
+        }
+    }
+    public void RevealAllHiddenCards()
+    {
+        foreach (GameObject obj in handCards)
+        {
+            if (obj == null)
+                continue;
+
+            CardDisplay display = obj.GetComponent<CardDisplay>();
+
+            if (display == null)
+                continue;
+
+            display.SetHidden(false);
+        }
+    }
 }

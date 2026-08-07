@@ -95,7 +95,11 @@ public static class BossSkill
     TraitID.K_ROYAL_DECREE,
     TraitEventType.PlayerTurn,
     KingDisguise_PlayerTurn);
-
+        RegisterEvent(
+    TraitID.K_BLIND_FATE,
+    TraitEventType.PlayerTurn,
+    KingBlindFate_PlayerTurn);
+        
     }
 
 
@@ -116,6 +120,7 @@ public static class BossSkill
             evt.Invoke(value);
         }
     }
+    
     private static void RegisterEvent(
     TraitID id,
     TraitEventType type,
@@ -301,4 +306,12 @@ public static class BossSkill
             "Required Suit = " +
             boss.requiredSuit);
     }
-}
+    private static void KingBlindFate_PlayerTurn(int value)
+    {
+        if (HandManager.Instance == null)
+            return;
+
+        HandManager.Instance.RefreshHiddenCards();
+    }
+    
+}   

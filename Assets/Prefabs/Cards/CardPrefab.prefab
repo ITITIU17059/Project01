@@ -57,6 +57,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardDisplay
   cardScriptableObject: {fileID: 11400000, guid: 19ef720baff35fc4eb334a4b222e9e0b, type: 2}
   cardSpriteRenderer: {fileID: 84387954114038891}
+  cardBackSprite: {fileID: -8246103488371625927, guid: 19970555c9a11a84d9a6fdcbda4bc851, type: 3}
 --- !u!114 &4077469916708904582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +79,7 @@ MonoBehaviour:
     m_Bits: 64
   isSelectedInCenter: 0
   splineLocalPosition: {x: 0, y: 0, z: 0}
+  IsLocked: 0
 --- !u!114 &1704015094851527828
 MonoBehaviour:
   m_ObjectHideFlags: 0
