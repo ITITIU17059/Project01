@@ -12,6 +12,15 @@ public class DamageManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI first_number_card;
     [SerializeField] private TextMeshProUGUI second_number_card;
     [SerializeField] private TextMeshProUGUI sign_card;
+    [SerializeField] private TextMeshProUGUI first_number_heal;
+    [SerializeField] private TextMeshProUGUI second_number_heal;
+    [SerializeField] private TextMeshProUGUI sign_heal;
+    [SerializeField] private TextMeshProUGUI first_number_heal_boss;
+    [SerializeField] private TextMeshProUGUI second_number_heal_boss;
+    [SerializeField] private TextMeshProUGUI sign_heal_boss;
+    [SerializeField] private TextMeshProUGUI first_number_attack_boss;
+    [SerializeField] private TextMeshProUGUI second_number_attack_boss;
+    [SerializeField] private TextMeshProUGUI sign_attack_boss;
 
     public IEnumerator ShowTakenDamage(int damage)
     {
@@ -22,6 +31,22 @@ public class DamageManager : MonoBehaviour
     {
         yield return StartCoroutine(CalculateNumber(first_number_card, second_number_card, sign_card, amount));
     }
+
+    public IEnumerator ShowHealCard(int amount)
+    {
+        yield return StartCoroutine(CalculateNumber(first_number_heal, second_number_heal, sign_heal, amount));
+    }
+
+    public IEnumerator ShowBossHeal(int amount)
+    {
+        yield return StartCoroutine(CalculateNumber(first_number_heal_boss, second_number_heal_boss, sign_heal_boss, amount));
+    }
+
+    public IEnumerator ShowBossAttack(int amount)
+    {
+        yield return StartCoroutine(CalculateNumber(first_number_attack_boss, second_number_attack_boss, sign_attack_boss, amount));
+    }
+
 
     private void AnimateNumber(TextMeshProUGUI numberText)
     {

@@ -364,6 +364,9 @@ public class BattleManager : MonoBehaviour
             InteractConfirmButton(true);
             yield break;
         }
+
+        yield return new WaitForSeconds(1f);
+
         ChangeState(BattleState.CheckBattle);
     }
 
@@ -563,11 +566,14 @@ public class BattleManager : MonoBehaviour
     #region Card Effect
     public void HealDeck(int amount)
     {
+        int actualHeal = 0;
         if (GraveyardManager.Instance == null)
             return;
 
         List<CardSO> healedCards =
             GraveyardManager.Instance.PopRandomCards(amount);
+
+        actualHeal = healedCards.Count;
 
         if (healedCards.Count == 0)
             return;
@@ -581,7 +587,7 @@ public class BattleManager : MonoBehaviour
         );
 
         deckManager.RefreshDeckBar();
-
+        StartCoroutine(damageManager.ShowHealCard(actualHeal));
     }
 
     #endregion
