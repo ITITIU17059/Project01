@@ -14,6 +14,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private TarvernDeckManager deckManager;
     [SerializeField] private HandManager handManager;
     [SerializeField] private Button confirmButton;
+    [SerializeField] private DamageManager damageManager;
 
     [Header("Spawn Points")]
     [SerializeField] private Transform tavernSpawnPoint;
@@ -168,6 +169,9 @@ public class BattleManager : MonoBehaviour
             BossFXManager.Instance.PlayBossAttackFX());
 
         int damage = BossManager.Instance.CurrentATK;
+        damage = Mathf.Max(0, damage);
+
+        yield return StartCoroutine(damageManager.ShowTakenDamage(damage));
 
         if (damage <= 0)
         {
@@ -482,6 +486,7 @@ public class BattleManager : MonoBehaviour
                 TraitEventType.Draw,
                 actualDraw);
         }
+        StartCoroutine(damageManager.ShowAdditionCard(actualDraw));
     }
 
     public void ConfirmPlayCards()
