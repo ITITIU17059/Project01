@@ -13,5 +13,6 @@ public enum TraitID
     K_ABSOLUTE_AUTHORITY,
     K_BLIND_FATE,
     K_ROYAL_DECREE,
-    K_ENDLESS_WRATH
+    K_ENDLESS_WRATH,
+    JOKER
 }

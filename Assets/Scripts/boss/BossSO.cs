@@ -58,5 +58,5 @@ public class BossSO : ScriptableObject
 
     [HideInInspector]
     public Sprite currentDisguiseSprite;
-
+    public List<TraitID> jokerSkills = new();
 }

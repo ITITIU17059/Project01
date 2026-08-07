@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static CardSO;
 
 public class BattleManager : MonoBehaviour
 {
@@ -18,9 +19,10 @@ public class BattleManager : MonoBehaviour
 
     [Header("Spawn Points")]
     [SerializeField] private Transform tavernSpawnPoint;
+    public Transform TavernSpawnPoint => tavernSpawnPoint;
     public Transform graveyardSpawnPoint;
     [SerializeField] private Transform playerHitPoint;
-
+  
     public Transform PlayerHitPoint => playerHitPoint;
     public HandManager Hand => handManager;
     private bool handWasEmptyAfterPlay;
@@ -28,6 +30,7 @@ public class BattleManager : MonoBehaviour
     private bool extraAttackUsed = false;
     private bool waitingExtraAttack = false;
     private bool waitingExtraDiscard = false;
+    private CardSO rewardK4Card;
     public int LastDiscardOverflow { get; set; }
     public bool IsExtraAttack => waitingExtraAttack;
     public int LastDrawAmount { get; private set; }
@@ -104,6 +107,7 @@ public class BattleManager : MonoBehaviour
         if (BossManager.Instance.CurrentBoss == null)
         {
             BossManager.Instance.Initialize();
+            handManager.RevealAllHiddenCards();
         }
         else
         {
@@ -203,8 +207,10 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandleBossDeath()
     {
+        
         handManager.UnlockCard();
         handManager.SetInteractable(false);
+        handManager.RevealAllHiddenCards();
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
         BossManager.Instance.BossDisplay.ResetBossSprite();
 
@@ -274,6 +280,7 @@ public class BattleManager : MonoBehaviour
                    deckManager.allCards.Count > 0)
             {
                 deckManager.DrawCard(handManager);
+                handManager.HideNextCardIfNeeded();
             }
         }
         else
@@ -287,6 +294,7 @@ public class BattleManager : MonoBehaviour
                     break;
 
                 deckManager.DrawCard(handManager);
+                handManager.HideNextCardIfNeeded();
             }
         }
 
@@ -375,8 +383,9 @@ public class BattleManager : MonoBehaviour
         TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayCard, 0);
         TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayCard, 0);
         ApplyRewardK3(cards);
+        ApplyRewardK4(cards);
         int damage = CardResolver.ResolveDamage(cards);
-
+       
         // Hiệu ứng lá bài
         yield return StartCoroutine(
             CardResolver.ResolveEffects(cards));
@@ -384,7 +393,15 @@ public class BattleManager : MonoBehaviour
         // Animation chất bài
         yield return StartCoroutine(
             CardResolver.PlaySuitFX(handManager.selectedCards));
+        if (rewardK4Card != null)
+        {
+            yield return StartCoroutine(
+                CardResolver.PlayRewardK4FX(rewardK4Card));
 
+            GraveyardManager.Instance.AddToGraveyard(rewardK4Card);
+
+            rewardK4Card = null;
+        }
         // Sau cùng mới gây sát thương
         BossManager.Instance.TakeDamage(damage);
 
@@ -480,6 +497,7 @@ public class BattleManager : MonoBehaviour
                 break;
 
             deckManager.DrawCard(handManager);
+            handManager.HideNextCardIfNeeded();
             actualDraw++;
             yield return new WaitForSeconds(0.3f);
         }
@@ -669,11 +687,29 @@ public class BattleManager : MonoBehaviour
         if (cards.Count != 1)
             return;
 
+        CardSO.Suit originalSuit = cards[0].suit;
+
+        List<CardSO.Suit> possibleSuits = new List<CardSO.Suit>();
+
+        foreach (CardSO.Suit suit in System.Enum.GetValues(typeof(CardSO.Suit)))
+        {
+            if (suit == CardSO.Suit.None)
+                continue;
+
+            if (suit == originalSuit)
+                continue;
+
+            possibleSuits.Add(suit);
+        }
+
         BattleManager.Instance.OverrideSuit =
-            (CardSO.Suit)Random.Range(1, 5);
+            possibleSuits[Random.Range(0, possibleSuits.Count)];
+
         SuitChangedUI.Instance.Show(
-        BattleManager.Instance.OverrideSuit);
-        Debug.Log("Reward K3 -> " + BattleManager.Instance.OverrideSuit);
+            BattleManager.Instance.OverrideSuit);
+
+        Debug.Log(
+            $"Reward K3: {originalSuit} -> {BattleManager.Instance.OverrideSuit}");
     }
 
 
@@ -684,4 +720,25 @@ public class BattleManager : MonoBehaviour
 
         return card.suit;
     }
+    private void ApplyRewardK4(List<CardSO> cards)
+    {
+        rewardK4Card = null;
+
+        if (!PlayerReward.Instance.HasReward(TraitID.K_BLIND_FATE))
+            return;
+
+        if (cards.Count != 1)
+            return;
+
+        if (deckManager.allCards.Count == 0)
+            return;
+
+        rewardK4Card = deckManager.allCards[0];
+
+        deckManager.allCards.RemoveAt(0);
+        deckManager.RefreshDeckBar();
+
+        cards.Add(rewardK4Card);
+    }
+
 }

@@ -5,7 +5,11 @@ public class CardDisplay : MonoBehaviour
 {
     public CardSO cardScriptableObject;
     public SpriteRenderer cardSpriteRenderer;
+    private bool isHidden = false;
 
+    public bool IsHidden => isHidden;
+
+    [SerializeField] private Sprite cardBackSprite;
     void Start()
     {
         UpdateCardDisplay();
@@ -14,7 +18,15 @@ public class CardDisplay : MonoBehaviour
             cardSpriteRenderer.sortingLayerName = "UI";
         }
     }
+    public void SetHidden(bool value)
+    {
+        isHidden = value;
 
+        if (value)
+            cardSpriteRenderer.sprite = cardBackSprite;
+        else
+            cardSpriteRenderer.sprite = cardScriptableObject.cardSprite;
+    }
     void UpdateCardDisplay()
     {
         if (cardScriptableObject != null && cardSpriteRenderer != null)
