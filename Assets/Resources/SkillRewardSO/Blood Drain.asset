@@ -15,5 +15,4 @@ MonoBehaviour:
   traitID: 5
   icon: {fileID: 21300000, guid: eecb85004343b0e4d8b78fd7f9877b32, type: 3}
   rewardName: Blood Drain
-  description: "M\u1ED7i l\xE1 th\xEAm v\xE0o tay g\xE2y X s\xE1t th\u01B0\u01A1ng
-    l\xEAn Boss."
+  description: Each card added to your hand deals damage to the Boss

@@ -15,5 +15,4 @@ MonoBehaviour:
   traitID: 7
   icon: {fileID: 21300000, guid: c67fbf9375ad5c34399c2849430ca7f7, type: 3}
   rewardName: Dual Strike
-  description: "th\xEAm 1 l\u01B0\u1EE3t \u0111\xE1nh nh\u01B0ng ch\u1EC9 \u0111\xE1nh
-    th\xEAm 1 l\xE1"
+  description: Gain one additional attack, but play only one extra card

@@ -275,11 +275,7 @@ public static class BossSkill
 
         boss.turnCounter++;
 
-        boss.currentATK += boss.turnCounter;
-
-        BossManager.Instance.BossDisplay.UpdateATK(
-            boss.currentATK);
-
+        BossManager.Instance.HealAttack(boss.turnCounter);
     }
     private static void KingDisguise_PlayerTurn(int value)
     {

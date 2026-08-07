@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -11,9 +13,11 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private EquipSlot[] equipSlots;
 
     private readonly List<RewardSlot> rewardSlots = new();
-    private RewardSO selectedReward;
+    [SerializeField] private GameObject notificationObject;
+    [SerializeField] private InventoryAnimationManager animationManager;
     private void Start()
     {
+        MusicManager.instance.PlayMusic("InventoryTheme");
         RefreshRewardList();
         RefreshEquipSlots();
     }
@@ -73,5 +77,61 @@ public class InventoryManager : MonoBehaviour
         }
 
         DragManager.Instance.EndDrag();
+    }
+
+    public void OnInventoryClicked(RewardSlot slot)
+    {
+        if (PlayerReward.Instance.IsFull())
+        {
+            StartCoroutine(ShowNotification());
+            return;
+        }
+
+        int target =
+            PlayerReward.Instance.GetFirstEmptySlot();
+
+        StartCoroutine(
+            animationManager.PlayEquip(
+                slot,
+                equipSlots[target],
+                () =>
+                {
+                    PlayerReward.Instance.EquipReward(
+                        slot.Reward,
+                        target);
+
+                    RefreshRewardList();
+                    RefreshEquipSlots();
+                }));
+    }
+
+    public void OnEquipClicked(int slot)
+    {
+        RewardSO reward =
+            PlayerReward.Instance.EquippedRewards[slot];
+
+        RewardSlot rewardSlot =
+            rewardSlots.Find(x => x.Reward == reward);
+
+        StartCoroutine(
+            animationManager.PlayUnequip(
+                equipSlots[slot],
+                rewardSlot,
+                () =>
+                {
+                    PlayerReward.Instance.UnequipReward(slot);
+
+                    RefreshRewardList();
+                    RefreshEquipSlots();
+                }));
+    }
+
+    private IEnumerator ShowNotification()
+    {
+        notificationObject.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        notificationObject.SetActive(false);
     }
 }

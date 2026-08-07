@@ -15,4 +15,4 @@ MonoBehaviour:
   traitID: 1
   icon: {fileID: 21300000, guid: ee40d72ece864764f9d17d015aedb524, type: 3}
   rewardName: Vital Offering
-  description: "M\u1ED7i l\u1EA7n Discard h\u1ED3i 2 l\xE1."
+  description: Recover 2 cards each time you discard

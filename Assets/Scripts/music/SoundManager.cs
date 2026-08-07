@@ -39,6 +39,6 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound2D(string soundName)
     {
-        audioSource.PlayOneShot(soundLibrary.GetClipFromName(soundName));
+        audioSource.PlayOneShot(soundLibrary.GetClipFromName(soundName), soundLibrary.GetVolumeFromName(soundName));
     }
 }

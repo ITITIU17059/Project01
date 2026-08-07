@@ -31,5 +31,8 @@ MonoBehaviour:
   hitVFX: {fileID: 6350935104525037357, guid: 8f9279d50354685448d53011b87b3f02, type: 3}
   attackSoundID: KingAttack
   attackFlyTime: 0.4
+  turnCounter: 0
   rank: 2
-  spawnSoundID: King
+  spawnSoundID: KingSpade
+  requiredSuit: 0
+  currentDisguiseSprite: {fileID: 0}

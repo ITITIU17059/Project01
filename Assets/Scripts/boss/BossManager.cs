@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BossManager : MonoBehaviour
@@ -15,12 +16,15 @@ public class BossManager : MonoBehaviour
     [SerializeField] private BossDisplay bossDisplay;
     [SerializeField] private BossInfoPanelUI bossInfoPanel;
     [SerializeField] private TraitSelectionPanelUI traitSelectionPanel;
+    [SerializeField] private TextMeshProUGUI sign_heal_boss;
+    public TextMeshProUGUI sign_attack_boss;
     public BossDisplay BossDisplay => bossDisplay;
 
     [SerializeField]
     private List<BossSO> disguisePool;
     public List<BossSO> DisguisePool => disguisePool;
     public Transform BossTransform => bossDisplay.transform;
+    public DamageManager damageManager;
 
     private readonly List<BossSO> bossSequence = new();
     private bool initialized;
@@ -236,8 +240,10 @@ public class BossManager : MonoBehaviour
     public void TakeDamage(int damage)
     {
         int hpBefore = CurrentHP;
+        sign_heal_boss.text = "-";
 
         CurrentHP -= damage;
+        sign_heal_boss.text = "-";
 
         LastKillWasPerfect = false;
 
@@ -248,33 +254,49 @@ public class BossManager : MonoBehaviour
         }
 
         bossDisplay.UpdateHP(CurrentHP);
+        StartCoroutine(damageManager.ShowBossHeal(damage));
     }
     public void TakeTraitDamage(int damage)
     {
         CurrentHP -= damage;
+        sign_heal_boss.text = "-";
 
         if (CurrentHP < 0)
             CurrentHP = 0;
 
         bossDisplay.UpdateHP(CurrentHP);
+        StartCoroutine(damageManager.ShowBossHeal(damage));
     }
     public void Heal(int amount)
     {
         CurrentHP += amount;
+        sign_heal_boss.text = "+";
 
         if (CurrentHP > CurrentBoss.hp)
             CurrentHP = CurrentBoss.hp;
 
         bossDisplay.UpdateHP(CurrentHP);
+        StartCoroutine(damageManager.ShowBossHeal(amount));
     }
     public void ReduceAttack(int value)
     {
         CurrentBoss.currentATK -= value;
+        sign_attack_boss.text = "-";
 
         if (CurrentBoss.currentATK < 0)
             CurrentBoss.currentATK = 0;
 
         bossDisplay.UpdateATK(CurrentBoss.currentATK);
+        StartCoroutine(damageManager.ShowBossAttack(value));
+    }
+
+    public void HealAttack(int value)
+    {
+        CurrentBoss.currentATK += value;
+        sign_attack_boss.text = "+";
+
+        bossDisplay.UpdateATK(CurrentBoss.currentATK);
+        StartCoroutine(damageManager.ShowBossAttack(value));
     }
 
     public bool NeedChangeStage(BossSO deadBoss)

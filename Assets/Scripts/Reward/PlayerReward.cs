@@ -200,15 +200,20 @@ public class PlayerReward : MonoBehaviour
 
         return false;
     }
-    public List<TraitID> GetEquippedRewardIDs()
-    {
-        List<TraitID> result = new();
 
-        foreach (RewardSO reward in equippedRewards)
+    public int GetFirstEmptySlot()
+    {
+        for (int i = 0; i < EquippedRewards.Length; i++)
         {
-            result.Add(reward.traitID);
+            if (EquippedRewards[i] == null)
+                return i;
         }
 
-        return result;
+        return -1;
+    }
+
+    public bool IsFull()
+    {
+        return GetFirstEmptySlot() == -1;
     }
 }

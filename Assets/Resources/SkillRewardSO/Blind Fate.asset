@@ -15,4 +15,4 @@ MonoBehaviour:
   traitID: 9
   icon: {fileID: 21300000, guid: 37de44bcb59b8174497def1957cc490b, type: 3}
   rewardName: Foresight
-  description: "Nh\xECn tr\u01B0\u1EDBc 4 l\xE1 ti\u1EBFp theo c\u1EE7a b\u1ED9 b\xE0i."
+  description: Look at the next 4 cards of the deck

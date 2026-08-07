@@ -15,6 +15,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private TarvernDeckManager deckManager;
     [SerializeField] private HandManager handManager;
     [SerializeField] private Button confirmButton;
+    [SerializeField] private DamageManager damageManager;
 
     [Header("Spawn Points")]
     [SerializeField] private Transform tavernSpawnPoint;
@@ -172,6 +173,9 @@ public class BattleManager : MonoBehaviour
             BossFXManager.Instance.PlayBossAttackFX());
 
         int damage = BossManager.Instance.CurrentATK;
+        damage = Mathf.Max(0, damage);
+
+        yield return StartCoroutine(damageManager.ShowTakenDamage(damage));
 
         if (damage <= 0)
         {
@@ -231,22 +235,6 @@ public class BattleManager : MonoBehaviour
             PlayerReward.Instance.AddReward(deadBoss.currentTrait.reward);
         }
 
-        if (BossManager.Instance.CurrentStageIndex == 1 &&
-    deadBoss.rank == BossRank.Jack)
-        {
-            yield return StageManager.Instance.ChangeStage(BossRank.Queen);
-        }
-        else if (BossManager.Instance.CurrentStageIndex == 2 &&
-                 deadBoss.rank == BossRank.Queen)
-        {
-            yield return StageManager.Instance.ChangeStage(BossRank.King);
-        }
-        else if (BossManager.Instance.CurrentStageIndex == 3 &&
-                 deadBoss.rank == BossRank.King)
-        {
-            yield return StageManager.Instance.ChangeStage(BossRank.Joker);
-        }
-
         bool hasNextBoss = BossManager.Instance.HasMoreBosses;
 
         if (!hasNextBoss)
@@ -263,6 +251,27 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(() => !waitingForInventory);
 
         LevelManager.instance.UnloadSceneAdditive("InventoryScene");
+
+        if (BossManager.Instance.CurrentStageIndex == 0)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.Jack);
+        }
+        else if (BossManager.Instance.CurrentStageIndex == 1 &&
+    deadBoss.rank == BossRank.Jack)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.Queen);
+        }
+        else if (BossManager.Instance.CurrentStageIndex == 2 &&
+                 deadBoss.rank == BossRank.Queen)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.King);
+        }
+        else if (BossManager.Instance.CurrentStageIndex == 3 &&
+                 deadBoss.rank == BossRank.King)
+        {
+            yield return StageManager.Instance.ChangeStage(BossRank.Joker);
+        }
+
 
 
         if (handWasEmptyAfterPlay)
@@ -363,6 +372,9 @@ public class BattleManager : MonoBehaviour
             InteractConfirmButton(true);
             yield break;
         }
+
+        yield return new WaitForSeconds(1f);
+
         ChangeState(BattleState.CheckBattle);
     }
 
@@ -495,6 +507,7 @@ public class BattleManager : MonoBehaviour
                 TraitEventType.Draw,
                 actualDraw);
         }
+        StartCoroutine(damageManager.ShowAdditionCard(actualDraw));
     }
 
     public void ConfirmPlayCards()
@@ -571,11 +584,14 @@ public class BattleManager : MonoBehaviour
     #region Card Effect
     public void HealDeck(int amount)
     {
+        int actualHeal = 0;
         if (GraveyardManager.Instance == null)
             return;
 
         List<CardSO> healedCards =
             GraveyardManager.Instance.PopRandomCards(amount);
+
+        actualHeal = healedCards.Count;
 
         if (healedCards.Count == 0)
             return;
@@ -589,7 +605,7 @@ public class BattleManager : MonoBehaviour
         );
 
         deckManager.RefreshDeckBar();
-
+        StartCoroutine(damageManager.ShowHealCard(actualHeal));
     }
 
     #endregion
@@ -608,12 +624,15 @@ public class BattleManager : MonoBehaviour
     {
         InteractConfirmButton(false);
         handManager.enabled = false;
+        GameObject cardContainer = GameObject.FindGameObjectWithTag("CardContainer");
+        cardContainer.SetActive(false);
+
 
         yield return TurnUIController.Instance.ShowVictory();
 
         yield return new WaitForSeconds(2f);
 
-        LevelManager.instance.LoadScene("MenuScene", "CrossFade");
+        LevelManager.instance.LoadScene("MenuScene");
     }
 
     private void Defeat()
@@ -634,7 +653,7 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        LevelManager.instance.LoadScene("MenuScene", "CrossFade");
+        LevelManager.instance.LoadScene("MenuScene");
     }
     #endregion
 

@@ -15,4 +15,4 @@ MonoBehaviour:
   traitID: 11
   icon: {fileID: 21300000, guid: 125bb49b217257347be09ede099b888d, type: 3}
   rewardName: Crushing Discard
-  description: "Discard l\xE0m gi\u1EA3m ATK Boss b\u1EB1ng s\u1ED1 d\u01B0."
+  description: Discarding reduces the Boss's ATK by the remaining amount

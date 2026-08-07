@@ -15,4 +15,5 @@ MonoBehaviour:
   traitID: 3
   icon: {fileID: 21300000, guid: 0389074d1deba1c448d45812db40c0df, type: 3}
   rewardName: Perfect Strike
-  description: "Chu\u1ED3ng x3 v\u1EDBi l\xE1 < 6"
+  description: The Club card deals triple damage against cards with a value of less
+    than 6
