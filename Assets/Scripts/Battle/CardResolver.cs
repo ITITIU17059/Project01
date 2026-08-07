@@ -344,5 +344,23 @@ public static class CardResolver
 
         yield return new WaitForSeconds(0.55f);
     }
+    public static IEnumerator PlayRewardK4FX(CardSO card)
+    {
+        GameObject temp = new GameObject("RewardK4");
 
+        SpriteRenderer sr = temp.AddComponent<SpriteRenderer>();
+
+        sr.sprite = card.cardSprite;
+        sr.sortingLayerName = "UI";
+        sr.sortingOrder = 9999;
+
+        temp.transform.position =
+            BattleManager.Instance.TavernSpawnPoint.position;
+
+        yield return BossFXManager.Instance.PlayCardSuitFX(
+            BattleManager.Instance.GetSuit(card),
+            temp.transform);
+
+        Object.Destroy(temp);
+    }
 }

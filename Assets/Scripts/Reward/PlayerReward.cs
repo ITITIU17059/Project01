@@ -200,4 +200,15 @@ public class PlayerReward : MonoBehaviour
 
         return false;
     }
+    public List<TraitID> GetEquippedRewardIDs()
+    {
+        List<TraitID> result = new();
+
+        foreach (RewardSO reward in equippedRewards)
+        {
+            result.Add(reward.traitID);
+        }
+
+        return result;
+    }
 }
