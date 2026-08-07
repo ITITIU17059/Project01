@@ -481,6 +481,11 @@ public class BattleManager : MonoBehaviour
 
     public void DrawBonusCards(int amount)
     {
+        StartCoroutine(DrawCardRoutine(amount));
+    }
+
+    private IEnumerator DrawCardRoutine(int amount)
+    {
         int actualDraw = 0;
 
         for (int i = 0; i < amount; i++)
@@ -494,6 +499,7 @@ public class BattleManager : MonoBehaviour
             deckManager.DrawCard(handManager);
             handManager.HideNextCardIfNeeded();
             actualDraw++;
+            yield return new WaitForSeconds(0.3f);
         }
 
         LastDrawAmount = actualDraw;
@@ -506,8 +512,8 @@ public class BattleManager : MonoBehaviour
             TraitManager.Instance.InvokeRewardEvent(
                 TraitEventType.Draw,
                 actualDraw);
+            StartCoroutine(damageManager.ShowAdditionCard(actualDraw));
         }
-        StartCoroutine(damageManager.ShowAdditionCard(actualDraw));
     }
 
     public void ConfirmPlayCards()
