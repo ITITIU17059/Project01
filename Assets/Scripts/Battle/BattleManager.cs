@@ -134,14 +134,19 @@ public class BattleManager : MonoBehaviour
     {
         waitingExtraAttack = false;
         extraAttackUsed = false;
+
         handManager.handCards.RemoveAll(card => card == null);
 
-        if (BossManager.Instance.CurrentBoss.isJoker)
-            BossManager.Instance.RandomizeJokerSuit();
-
         handManager.SetInteractable(true);
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayerTurn, 0);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayerTurn, 0);
+
+        TraitManager.Instance.InvokeBossEvent(
+            TraitEventType.PlayerTurn,
+            0);
+
+        TraitManager.Instance.InvokeRewardEvent(
+            TraitEventType.PlayerTurn,
+            0);
+
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -708,8 +713,6 @@ public class BattleManager : MonoBehaviour
         SuitChangedUI.Instance.Show(
             BattleManager.Instance.OverrideSuit);
 
-        Debug.Log(
-            $"Reward K3: {originalSuit} -> {BattleManager.Instance.OverrideSuit}");
     }
 
 

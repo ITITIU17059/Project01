@@ -39,7 +39,7 @@ public class BossManager : MonoBehaviour
     public BossSO CurrentBoss { get; private set; }
 
     public int CurrentHP { get; private set; }
-
+    private int maxRuntimeHP;
     public int CurrentATK => CurrentBoss.currentATK;
     public bool LastKillWasPerfect { get; private set; }
 
@@ -151,9 +151,8 @@ public class BossManager : MonoBehaviour
                 kingBosses[0].possibleTraits
             );
         }
-        Debug.Log("Jack Trait : " + jackBosses[0].possibleTraits.Count);
-        Debug.Log("Queen Trait : " + queenBosses[0].possibleTraits.Count);
-        Debug.Log("King Trait : " + kingBosses[0].possibleTraits.Count);
+        
+   
     }
     private void Shuffle(List<BossSO> list)
     {
@@ -166,43 +165,46 @@ public class BossManager : MonoBehaviour
 
     public bool LoadNextBoss()
     {
-       
         if (CurrentBossIndex >= bossSequence.Count)
             return false;
 
         CurrentBoss = bossSequence[CurrentBossIndex];
-       
-        CurrentHP = CurrentBoss.hp;
+
+        // Reset runtime stats
+        maxRuntimeHP = CurrentBoss.hp;
+        CurrentHP = maxRuntimeHP;
+
         CurrentBoss.currentATK = CurrentBoss.atk;
         CurrentBoss.turnCounter = 0;
+
+        // Setup display
         bossDisplay.Setup(CurrentBoss);
         bossInfoPanel.Setup(CurrentBoss);
 
         bossDisplay.UpdateHP(CurrentHP);
-        bossDisplay.UpdateATK(CurrentATK);
+        bossDisplay.UpdateATK(CurrentBoss.currentATK);
 
-        if (CurrentBoss.rank == BossRank.Joker)
-        {
-            traitSelectionPanel.SetVisible(false);
-            BattleManager.Instance.StartBattleAfterTraitSelected();
-        }
-        else
-        {
-            traitSelectionPanel.SetVisible(true);
-            traitSelectionPanel.Show(CurrentBoss);
-        }
+        // Tất cả boss đều dùng TraitSelection
+        traitSelectionPanel.SetVisible(true);
+        traitSelectionPanel.Show(CurrentBoss);
 
         if (!string.IsNullOrEmpty(CurrentBoss.spawnSoundID))
-            SoundManager.instance?.PlaySound2D(CurrentBoss.spawnSoundID);
+        {
+            SoundManager.instance?.PlaySound2D(
+                CurrentBoss.spawnSoundID);
+        }
 
-        BossFXManager.Instance?.PlaySpawnFX(bossDisplay.transform);
+        BossFXManager.Instance?.PlaySpawnFX(
+            bossDisplay.transform);
 
         return true;
-    }
+    
+}
 
     public void OnBossDefeated(BossSO deadBoss)
     {
-        if (deadBoss.currentTrait != null)
+        if (deadBoss.currentTrait != null &&
+      deadBoss.rank != BossRank.Joker)
         {
             TraitPoolManager.Instance.RemoveTrait(
                 deadBoss.rank,
@@ -270,13 +272,11 @@ public class BossManager : MonoBehaviour
     public void Heal(int amount)
     {
         CurrentHP += amount;
-        sign_heal_boss.text = "+";
 
-        if (CurrentHP > CurrentBoss.hp)
-            CurrentHP = CurrentBoss.hp;
+        if (CurrentHP > maxRuntimeHP)
+            CurrentHP = maxRuntimeHP;
 
         bossDisplay.UpdateHP(CurrentHP);
-        StartCoroutine(damageManager.ShowBossHeal(amount));
     }
     public void ReduceAttack(int value)
     {
@@ -345,7 +345,6 @@ public class BossManager : MonoBehaviour
         CurrentBoss.resistanceSuit = newSuit;
         bossDisplay.UpdateResistance(newSuit);
 
-        Debug.Log($"Joker đổi sang {newSuit}");
     }
     public void RefreshBossInfo()
     {
@@ -381,5 +380,5 @@ public class BossManager : MonoBehaviour
                 bossSequence.Add(boss);
         }
     }
-
+   
 }

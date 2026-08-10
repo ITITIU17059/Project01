@@ -382,7 +382,5 @@ public static class RewardSkill
         BattleManager.Instance.OverrideSuit =
             (CardSO.Suit)Random.Range(1, 5);
 
-        Debug.Log("Reward Random Suit = "
-            + BattleManager.Instance.OverrideSuit);
     }
 }

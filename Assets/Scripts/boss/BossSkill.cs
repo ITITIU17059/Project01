@@ -99,9 +99,8 @@ public static class BossSkill
     TraitID.K_BLIND_FATE,
     TraitEventType.PlayerTurn,
     KingBlindFate_PlayerTurn);
-        
-    }
 
+    }
 
     public static void Invoke(
      TraitEventType type,
@@ -134,7 +133,11 @@ public static class BossSkill
 
         eventTable[id][type] = evt;
     }
-    public static int ModifyDrawAmount(BossTraitSO trait, int amount)
+
+
+    public static int ModifyDrawAmount(
+    BossTraitSO trait,
+    int amount)
     {
         if (trait == null)
             return amount;
@@ -149,7 +152,9 @@ public static class BossSkill
         return amount;
     }
 
-    public static int ModifyHealAmount(BossTraitSO trait, int amount)
+    public static int ModifyHealAmount(
+     BossTraitSO trait,
+     int amount)
     {
         if (trait == null)
             return amount;
@@ -165,9 +170,9 @@ public static class BossSkill
     }
 
     public static int ModifyShieldAmount(
-        BossTraitSO trait,
-        List<CardSO> cards,
-        int amount)
+     BossTraitSO trait,
+     List<CardSO> cards,
+     int amount)
     {
         if (trait == null)
             return amount;
@@ -181,12 +186,11 @@ public static class BossSkill
 
         return amount;
     }
-
     public static int ModifyAttackDamage(
-    BossTraitSO trait,
-    List<CardSO> cards,
-    int originalDamage,
-    int finalDamage)
+     BossTraitSO trait,
+     List<CardSO> cards,
+     int originalDamage,
+     int finalDamage)
     {
         if (trait == null)
             return finalDamage;
@@ -202,6 +206,7 @@ public static class BossSkill
         }
 
         return finalDamage;
+    
     }
     //==================================================
     // JACK
@@ -302,9 +307,6 @@ public static class BossSkill
         manager.BossDisplay.SetBossSprite(
             disguise.cardSprite);
 
-        Debug.Log(
-            "Required Suit = " +
-            boss.requiredSuit);
     }
     private static void KingBlindFate_PlayerTurn(int value)
     {
@@ -313,5 +315,6 @@ public static class BossSkill
 
         HandManager.Instance.RefreshHiddenCards();
     }
-    
+   
+
 }   
