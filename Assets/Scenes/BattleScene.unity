@@ -5160,6 +5160,7 @@ Transform:
   - {fileID: 669591883}
   - {fileID: 1966146079}
   - {fileID: 961794540}
+  - {fileID: 1105946560}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &961794539
@@ -9297,7 +9298,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d58907eb88d88d54484951546e3bdc04, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8da1c7d3d8e70bc4889d53e0edc3060f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
