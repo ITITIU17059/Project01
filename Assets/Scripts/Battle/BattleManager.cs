@@ -22,7 +22,7 @@ public class BattleManager : MonoBehaviour
     public Transform TavernSpawnPoint => tavernSpawnPoint;
     public Transform graveyardSpawnPoint;
     [SerializeField] private Transform playerHitPoint;
-  
+
     public Transform PlayerHitPoint => playerHitPoint;
     public HandManager Hand => handManager;
     private bool handWasEmptyAfterPlay;
@@ -207,7 +207,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandleBossDeath()
     {
-        
+
         handManager.UnlockCard();
         handManager.SetInteractable(false);
         handManager.RevealAllHiddenCards();
@@ -251,23 +251,25 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(() => !waitingForInventory);
 
         LevelManager.instance.UnloadSceneAdditive("InventoryScene");
+        Debug.Log(BossManager.Instance.CurrentStageIndex);
+        Debug.Log(deadBoss);
 
         if (BossManager.Instance.CurrentStageIndex == 0)
         {
             yield return StageManager.Instance.ChangeStage(BossRank.Jack);
         }
-        else if (BossManager.Instance.CurrentStageIndex == 1 &&
-    deadBoss.rank == BossRank.Jack)
+        else if ((BossManager.Instance.CurrentStageIndex == 1 &&
+    deadBoss.rank == BossRank.Jack) || (BossManager.Instance.CurrentStageIndex == 1 && !waitingForInventory))
         {
             yield return StageManager.Instance.ChangeStage(BossRank.Queen);
         }
-        else if (BossManager.Instance.CurrentStageIndex == 2 &&
-                 deadBoss.rank == BossRank.Queen)
+        else if ((BossManager.Instance.CurrentStageIndex == 2 &&
+                 deadBoss.rank == BossRank.Queen) || (BossManager.Instance.CurrentStageIndex == 2 && !waitingForInventory))
         {
             yield return StageManager.Instance.ChangeStage(BossRank.King);
         }
-        else if (BossManager.Instance.CurrentStageIndex == 3 &&
-                 deadBoss.rank == BossRank.King)
+        else if ((BossManager.Instance.CurrentStageIndex == 3 &&
+                 deadBoss.rank == BossRank.King) || (BossManager.Instance.CurrentStageIndex == 3 && !waitingForInventory))
         {
             yield return StageManager.Instance.ChangeStage(BossRank.Joker);
         }
@@ -385,7 +387,7 @@ public class BattleManager : MonoBehaviour
         ApplyRewardK3(cards);
         ApplyRewardK4(cards);
         int damage = CardResolver.ResolveDamage(cards);
-       
+
         // Hiệu ứng lá bài
         yield return StartCoroutine(
             CardResolver.ResolveEffects(cards));
