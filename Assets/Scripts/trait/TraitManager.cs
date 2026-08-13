@@ -91,9 +91,14 @@ public class TraitManager : MonoBehaviour
             finalDamage);
     }
 
-    public void InvokeBossEvent(TraitEventType type, int value = 0)
+    public void InvokeBossEvent(
+     TraitEventType type,
+     int value = 0)
     {
-        BossSkill.Invoke(type, CurrentTrait, value);
+        BossSkill.Invoke(
+            type,
+            CurrentTrait,
+            value);
     }
 
     public void InvokeRewardEvent(TraitEventType type, int value = 0)

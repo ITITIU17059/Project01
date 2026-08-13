@@ -76,6 +76,15 @@ public class BossDisplay : MonoBehaviour
     }
     public void SetBossSprite(Sprite sprite)
     {
+        if (artwork == null)
+            return;
+
+        if (sprite == null)
+        {
+            artwork.sprite = originalSprite;
+            return;
+        }
+
         artwork.sprite = sprite;
     }
 

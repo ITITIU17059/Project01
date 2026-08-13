@@ -4,6 +4,7 @@ using UnityEngine.Splines;
 using DG.Tweening;
 using System;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 
 public class HandManager : MonoBehaviour
@@ -548,17 +549,59 @@ public class HandManager : MonoBehaviour
         if (interaction != null)
             interaction.IsLocked = true;
     }
-    public void UnlockCard()
+    public void HideRandomCard()
     {
-        if (LockedCard == null)
+        List<GameObject> candidates = new List<GameObject>();
+
+        foreach (GameObject obj in handCards)
+        {
+            if (obj == null)
+                continue;
+
+            // Không úp lá đang bị khóa
+            if (obj == LockedCard)
+                continue;
+
+            CardDisplay display = obj.GetComponent<CardDisplay>();
+
+            if (display == null)
+                continue;
+
+            // Chỉ lấy lá đang ngửa
+            if (!display.IsHidden)
+                candidates.Add(obj);
+        }
+
+        if (candidates.Count == 0)
             return;
 
-        CardInteraction interaction =
-            LockedCard.GetComponent<CardInteraction>();
+        GameObject selected =
+            candidates[Random.Range(0, candidates.Count)];
 
-        if (interaction != null)
-            interaction.IsLocked = false;
+        CardDisplay selectedDisplay =
+            selected.GetComponent<CardDisplay>();
 
+        selectedDisplay.SetHidden(true);
+
+        Debug.Log(
+            $"[JOKER] Úp lá: {selectedDisplay.cardScriptableObject.name}");
+    }
+    public void UnlockCard()
+    {
+        // Unlock toàn bộ card trong hand
+        foreach (GameObject obj in handCards)
+        {
+            if (obj == null)
+                continue;
+
+            CardInteraction interaction =
+                obj.GetComponent<CardInteraction>();
+
+            if (interaction != null)
+                interaction.IsLocked = false;
+        }
+
+        // Reset reference
         LockedCard = null;
     }
     public CardSO ReturnRandomSelectedCard()
@@ -621,15 +664,27 @@ public class HandManager : MonoBehaviour
         if (boss.currentTrait == null)
             return;
 
-        if (boss.currentTrait.traitID != TraitID.K_BLIND_FATE)
+        bool joker =
+            boss.currentTrait.traitID == TraitID.JOKER;
+
+        bool blindFate =
+            boss.currentTrait.traitID == TraitID.K_BLIND_FATE;
+
+        if (!joker && !blindFate)
             return;
 
-        if (HiddenCardCount() >= 2)
+        int maxHidden = joker ? 1 : 2;
+
+        if (HiddenCardCount() >= maxHidden)
             return;
 
         for (int i = handCards.Count - 1; i >= 0; i--)
         {
-            CardDisplay display = handCards[i].GetComponent<CardDisplay>();
+            CardDisplay display =
+                handCards[i].GetComponent<CardDisplay>();
+
+            if (display == null)
+                continue;
 
             if (!display.IsHidden)
             {

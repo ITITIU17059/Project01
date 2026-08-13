@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ebe589fe1e61e45b76eb31a2b1f86e, type: 3}
-  m_Name: Joker
+  m_Name: JOKER
   m_EditorClassIdentifier: Assembly-CSharp::BossTraitSO
   traitID: 12
   icon: {fileID: 21300000, guid: a2563f2b8dbc4044b9a50537d3a29962, type: 3}
-  traitName: The Unity
-  description: "M\u1ED7i 1 skill b\u1EA1n equip th\xEC joker s\u1EBD nh\u1EADn skill
-    boss t\u01B0\u01A1ng t\u1EF1"
-  reward: {fileID: 11400000, guid: ce3d5d7962e118849986f86ff187f0bd, type: 2}
+  traitName: JOKER
+  description: "\xFAp 1 l\xE1 b\xE0i, lock 1 l\xE1 b\xE0i\nm\u1ED7i 2 l\u01B0\u1EE3t 
+    h\u1ED3i 10 ATK,ch\u1EC9 nh\u1EADn dmg \u0111\xFAng ch\u1EA5t\nm\u1ED7i draw
+    ho\u1EB7c heal h\u1ED3i 1 HP"
+  reward: {fileID: 11400000, guid: 07a22f9e7ab9c364ea358bb4bba78769, type: 2}

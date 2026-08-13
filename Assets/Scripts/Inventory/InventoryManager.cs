@@ -57,18 +57,13 @@ public class InventoryManager : MonoBehaviour
 
         for (int i = 0; i < equipSlots.Length; i++)
         {
-            Debug.Log($"Refresh Slot {i} = {(equipped[i] == null ? "NULL" : equipped[i].rewardName)}");
 
             equipSlots[i].Setup(equipped[i], this);
         }
     }
     public void OnRewardDropped(RewardSO reward, int slotIndex)
     {
-        Debug.Log($"Drop: {reward.rewardName} -> Slot {slotIndex}");
-
         bool success = PlayerReward.Instance.EquipReward(reward, slotIndex);
-
-        Debug.Log("Equip Success = " + success);
 
         if (success)
         {
