@@ -9294,12 +9294,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageManager
   background: {fileID: 1293263065}
   fadeGroup: {fileID: 639101137}
-  jackBackground: {fileID: 32900000, guid: 6a43ddab52b25334295bf2bfce3521da, type: 3}
+  jackBackground: {fileID: 32900000, guid: 833a5b910b0bf424895a2e38d8492eb3, type: 3}
   queenBackground: {fileID: 32900000, guid: bd5ac2d243c93bf43bf7ca18db4d94d1, type: 3}
   kingBackground: {fileID: 32900000, guid: a3c420c7f455dd04ca6de2484f35b733, type: 3}
   jokerBackground: {fileID: 32900000, guid: 6a43ddab52b25334295bf2bfce3521da, type: 3}
   victoryBackground: {fileID: 32900000, guid: 833a5b910b0bf424895a2e38d8492eb3, type: 3}
-  jackTextture: {fileID: 8400000, guid: c906cd98f0e2f08438a86ddb39a0fa8c, type: 2}
+  jackTextture: {fileID: 8400000, guid: 0d69b3c1fe04ac24fbf0a1897c874ef9, type: 2}
   queenTextture: {fileID: 8400000, guid: 14c631bd65625a8479db945089fcdd5f, type: 2}
   kingTextture: {fileID: 8400000, guid: f9513e92ca7b22047a962c075ac4392a, type: 2}
   jokerTextture: {fileID: 8400000, guid: c906cd98f0e2f08438a86ddb39a0fa8c, type: 2}
