@@ -4,7 +4,9 @@ using UnityEngine;
 
 public static class CardResolver
 {
-    public static int ResolveDamage(List<CardSO> cards)
+    public static int ResolveDamage(
+     List<CardSO> cards,
+     int foresightValue = 0)
     {
         if (cards == null || cards.Count == 0)
             return 0;
@@ -76,6 +78,7 @@ public static class CardResolver
         int baseDamage = 0;
         bool hasClub = false;
 
+        // Chỉ tính các lá PLAYER THỰC SỰ ĐÁNH
         foreach (CardSO card in cards)
         {
             if (card == null)
@@ -83,6 +86,7 @@ public static class CardResolver
 
             baseDamage += card.value;
 
+            // Foresight KHÔNG được xét suit ở đây
             if (BattleManager.Instance.GetSuit(card)
                 == CardSO.Suit.Clubs)
             {
@@ -90,10 +94,20 @@ public static class CardResolver
             }
         }
 
+        // Foresight chỉ cộng VALUE vào tổng damage
+        if (foresightValue > 0)
+        {
+            baseDamage += foresightValue;
+
+            Debug.Log(
+                $"[FORESIGHT] +{foresightValue} damage value -> " +
+                $"Base Total = {baseDamage}");
+        }
+
         int damage = baseDamage;
 
         // ============================================
-        // CLUB = x2 DAMAGE ONLY
+        // CLUB = x2 TOÀN BỘ TOTAL DAMAGE
         // ============================================
 
         if (!hasClub)

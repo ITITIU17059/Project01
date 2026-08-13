@@ -15,22 +15,22 @@ MonoBehaviour:
   bossName: The Joker
   cardSprite: {fileID: 4365758969843650344, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 0
-  hp: 50
-  atk: 25
+  hp: 40
+  atk: 20
   possibleTraits:
   - {fileID: 11400000, guid: fdf20d0fb1ea424408a5d78ff2904f4f, type: 2}
   currentTrait: {fileID: 11400000, guid: fdf20d0fb1ea424408a5d78ff2904f4f, type: 2}
   bossCard: {fileID: 11400000, guid: d643d36d95dc28b489d868de24a4a595, type: 2}
   isJoker: 1
-  resistanceSuit: 0
-  currentATK: 40
+  resistanceSuit: 2
+  currentATK: 14
   attackVFX: {fileID: 3987306231668895585, guid: 0bde82b2638401f41ae1867dfabc6462, type: 3}
   hitVFX: {fileID: 6370263198934622829, guid: 63b5b6a477fdca145a1e679dc4b89a25, type: 3}
   attackSoundID: JokerAttack
   attackFlyTime: 0.4
-  turnCounter: 1
+  turnCounter: 3
   rank: 3
   spawnSoundID: Joker
   requiredSuit: 0
-  currentDisguiseSprite: {fileID: 645457689055715373, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
-  jokerDamageSuit: 0
+  currentDisguiseSprite: {fileID: 3595503678859460682, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
+  jokerDamageSuit: 1

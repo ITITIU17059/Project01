@@ -430,60 +430,35 @@ public class BattleManager : MonoBehaviour
             TraitEventType.PlayCard,
             0);
 
-        // ============================================
-        // K3
-        // ============================================
-
         ApplyRewardK3(cards);
-
-        // ============================================
-        // FORESIGHT
-        // ============================================
 
         ApplyRewardK4(cards);
 
-        // ============================================
-        // DAMAGE
-        // Clubs x2 chỉ ảnh hưởng DAMAGE
-        // ============================================
+        int foresightValue = 0;
+
+        if (rewardK4Card != null)
+        {
+            foresightValue = rewardK4Card.value;
+        }
 
         int damage =
-            CardResolver.ResolveDamage(cards);
-
-        // ============================================
-        // EFFECT TOTAL
-        // Không dùng damage ở đây
-        // ============================================
+            CardResolver.ResolveDamage(
+                cards,
+                foresightValue);
 
         int effectTotal =
             CardResolver.ResolveEffectTotal(
                 cards,
                 rewardK4Card);
 
-        Debug.Log(
-            $"[COMBO] Damage = {damage} | " +
-            $"Effect Total = {effectTotal}");
-
-        // ============================================
-        // EFFECT
-        // ============================================
-
         yield return StartCoroutine(
             CardResolver.ResolveEffects(
                 cards,
                 effectTotal));
 
-        // ============================================
-        // PLAYER CARD FX
-        // ============================================
-
         yield return StartCoroutine(
             CardResolver.PlaySuitFX(
                 handManager.selectedCards));
-
-        // ============================================
-        // FORESIGHT FX
-        // ============================================
 
         if (rewardK4Card != null)
         {
@@ -506,10 +481,6 @@ public class BattleManager : MonoBehaviour
 
             rewardK4Card = null;
         }
-
-        // ============================================
-        // BOSS DAMAGE
-        // ============================================
 
         BossManager.Instance.TakeDamage(
             damage);
