@@ -58,5 +58,6 @@ public class BossSO : ScriptableObject
 
     [HideInInspector]
     public Sprite currentDisguiseSprite;
-    
+
+    public CardSO.Suit jokerDamageSuit;
 }

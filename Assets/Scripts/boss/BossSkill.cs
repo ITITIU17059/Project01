@@ -99,7 +99,25 @@ public static class BossSkill
     TraitID.K_BLIND_FATE,
     TraitEventType.PlayerTurn,
     KingBlindFate_PlayerTurn);
+        RegisterEvent(
+    TraitID.JOKER,
+    TraitEventType.BossTurn,
+    Joker_BossTurn);
 
+        RegisterEvent(
+            TraitID.JOKER,
+            TraitEventType.PlayerTurn,
+            Joker_PlayerTurn);
+
+        RegisterEvent(
+            TraitID.JOKER,
+            TraitEventType.DrawOneCard,
+            Joker_DrawOneCard);
+
+        RegisterEvent(
+            TraitID.JOKER,
+            TraitEventType.HealDeck,
+            Joker_HealDeck);
     }
 
     public static void Invoke(
@@ -280,15 +298,28 @@ public static class BossSkill
 
         boss.turnCounter++;
 
-        BossManager.Instance.HealAttack(boss.turnCounter);
+        // Mỗi 2 lượt tăng 5 ATK, tối đa 20 ATK
+        if (boss.turnCounter % 2 == 0 &&
+            boss.currentATK < 20)
+        {
+            int increase = Mathf.Min(5, 20 - boss.currentATK);
+
+            BossManager.Instance.HealAttack(increase);
+
+            Debug.Log(
+                $"[KING] +{increase} ATK -> Current ATK: {boss.currentATK}");
+        }
     }
     private static void KingDisguise_PlayerTurn(int value)
     {
         BossManager manager = BossManager.Instance;
 
+        if (manager == null)
+            return;
+
         BossSO boss = manager.CurrentBoss;
 
-        if (boss == null)
+        if (boss == null || boss.rank != BossRank.King)
             return;
 
         List<BossSO> pool = manager.DisguisePool;
@@ -299,10 +330,10 @@ public static class BossSkill
         BossSO disguise =
             pool[Random.Range(0, pool.Count)];
 
-        boss.requiredSuit = disguise.resistanceSuit;
+        if (disguise == null)
+            return;
 
-        boss.currentDisguiseSprite =
-            disguise.cardSprite;
+        boss.requiredSuit = disguise.resistanceSuit;
 
         manager.BossDisplay.SetBossSprite(
             disguise.cardSprite);
@@ -315,6 +346,79 @@ public static class BossSkill
 
         HandManager.Instance.RefreshHiddenCards();
     }
-   
+    private static void Joker_BossTurn(int value)
+    {
+        BossManager manager = BossManager.Instance;
 
+        if (manager == null)
+            return;
+
+        BossSO boss = manager.CurrentBoss;
+
+        if (boss == null || !boss.isJoker)
+            return;
+
+        boss.turnCounter++;
+
+        Debug.Log(
+            $"[JOKER] Boss Turn: {boss.turnCounter}");
+
+        manager.HealAttack(boss.turnCounter);
+
+        // Đổi disguise + suit mỗi lượt
+        manager.RandomizeJokerDisguise();
+
+        Debug.Log(
+            $"[JOKER] Turn {boss.turnCounter} -> +{boss.turnCounter} ATK + Disguise");
+    }
+    private static void Joker_DrawOneCard(int value)
+    {
+        BossManager manager = BossManager.Instance;
+
+        if (manager == null)
+            return;
+
+        BossSO boss = manager.CurrentBoss;
+
+        if (boss == null || !boss.isJoker)
+            return;
+
+        manager.Heal(1);
+
+        Debug.Log(
+            "[JOKER] Draw 1 card -> +1 HP");
+    }
+    private static void Joker_HealDeck(int value)
+    {
+        BossManager manager = BossManager.Instance;
+
+        if (manager == null)
+            return;
+
+        BossSO boss = manager.CurrentBoss;
+
+        if (boss == null || !boss.isJoker)
+            return;
+
+        manager.Heal(1);
+
+        Debug.Log(
+            "[JOKER] Heart heal -> +1 HP");
+    }
+    private static void Joker_PlayerTurn(int value)
+    {
+        HandManager hand = HandManager.Instance;
+
+        if (hand == null)
+            return;
+
+        // Khóa 1 lá
+        hand.LockHighestCard();
+
+        // Úp 1 lá
+        hand.HideRandomCard();
+
+        Debug.Log(
+            "[JOKER] Player Turn -> Lock 1 card + Hide 1 card");
+    }
 }   

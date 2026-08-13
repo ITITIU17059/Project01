@@ -4,30 +4,27 @@ using UnityEngine;
 
 public static class CardResolver
 {
-    //====================================================
-    // DAMAGE
-    //====================================================
-
     public static int ResolveDamage(List<CardSO> cards)
     {
         if (cards == null || cards.Count == 0)
             return 0;
 
-        int damage = 0;
-        bool hasClub = false;
-
         BossSO boss = BossManager.Instance.CurrentBoss;
+
+        // ============================================
+        // ROYAL DECREE
+        // ============================================
 
         if (boss != null &&
             boss.currentTrait != null &&
-            boss.currentTrait.traitID == TraitID.K_ROYAL_DECREE
-)
+            boss.currentTrait.traitID == TraitID.K_ROYAL_DECREE)
         {
             bool matched = false;
 
             foreach (CardSO card in cards)
             {
-                if (BattleManager.Instance.GetSuit(card) == boss.requiredSuit)
+                if (BattleManager.Instance.GetSuit(card)
+                    == boss.requiredSuit)
                 {
                     matched = true;
                     break;
@@ -36,88 +33,184 @@ public static class CardResolver
 
             if (!matched)
             {
-                Debug.Log("Wrong suit. Damage = 0");
+                Debug.Log(
+                    "[ROYAL DECREE] Wrong suit -> Damage = 0");
+
                 return 0;
             }
         }
+
+        // ============================================
+        // JOKER
+        // ============================================
+
+        if (boss != null &&
+            boss.currentTrait != null &&
+            boss.currentTrait.traitID == TraitID.JOKER)
+        {
+            bool matched = false;
+
+            foreach (CardSO card in cards)
+            {
+                if (BattleManager.Instance.GetSuit(card)
+                    == boss.jokerDamageSuit)
+                {
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (!matched)
+            {
+                Debug.Log(
+                    "[JOKER] Wrong suit -> Damage = 0");
+
+                return 0;
+            }
+        }
+
+        // ============================================
+        // BASE DAMAGE
+        // ============================================
+
+        int baseDamage = 0;
+        bool hasClub = false;
+
         foreach (CardSO card in cards)
         {
-            damage += card.value;
+            if (card == null)
+                continue;
 
-            if (BattleManager.Instance.GetSuit(card) == CardSO.Suit.Clubs)
+            baseDamage += card.value;
+
+            if (BattleManager.Instance.GetSuit(card)
+                == CardSO.Suit.Clubs)
+            {
                 hasClub = true;
+            }
         }
+
+        int damage = baseDamage;
+
+        // ============================================
+        // CLUB = x2 DAMAGE ONLY
+        // ============================================
 
         if (!hasClub)
             return damage;
 
-        int originalDamage = damage;
         bool clubResisted =
-    BossManager.Instance.CurrentBoss != null &&
-    BossManager.Instance.CurrentBoss.resistanceSuit == CardSO.Suit.Clubs;
+            BossManager.Instance.CurrentBoss != null &&
+            BossManager.Instance.CurrentBoss.resistanceSuit
+                == CardSO.Suit.Clubs;
 
         if (!clubResisted)
         {
-            damage *= 2;
+            damage = baseDamage * 2;
+
+            Debug.Log(
+                $"[CLUB] Damage: {baseDamage} -> {damage}");
         }
+
+        // ============================================
+        // CLUB MODIFIERS
+        // ============================================
 
         foreach (CardSO card in cards)
         {
-            if (BattleManager.Instance.GetSuit(card) != CardSO.Suit.Clubs)
+            if (card == null)
                 continue;
+
+            if (BattleManager.Instance.GetSuit(card)
+                != CardSO.Suit.Clubs)
+            {
+                continue;
+            }
 
             if (!clubResisted)
             {
-                damage = TraitManager.Instance.ModifyRewardAttackDamage(
-                    card,
-                    originalDamage,
-                    damage);
+                damage =
+                    TraitManager.Instance.ModifyRewardAttackDamage(
+                        card,
+                        baseDamage,
+                        damage);
 
-                damage = TraitManager.Instance.ModifyAttackDamage(
-                    cards,
-                    originalDamage,
-                    damage);
+                damage =
+                    TraitManager.Instance.ModifyAttackDamage(
+                        cards,
+                        baseDamage,
+                        damage);
             }
 
             break;
-        
         }
 
         return damage;
-
     }
 
     //====================================================
     // CARD EFFECT
     //====================================================
+    public static int ResolveEffectTotal(
+    List<CardSO> cards,
+    CardSO foresightCard = null)
+    {
+        if (cards == null || cards.Count == 0)
+            return 0;
 
-    public static IEnumerator ResolveEffects(List<CardSO> cards)
+        int total = 0;
+
+        foreach (CardSO card in cards)
+        {
+            if (card == null)
+                continue;
+
+            total += card.value;
+        }
+
+        // Foresight chỉ cộng VALUE.
+        // Không thêm card vào cards.
+        if (foresightCard != null)
+        {
+            total += foresightCard.value;
+
+            Debug.Log(
+                $"[FORESIGHT] " +
+                $"+{foresightCard.value} -> Effect Total = {total}");
+        }
+
+        return total;
+    }
+    public static IEnumerator ResolveEffects(
+     List<CardSO> cards,
+     int effectTotal)
     {
         bool hasHeart = false;
         bool hasDiamond = false;
         bool hasSpade = false;
 
-        int total = 0;
-        
+        if (cards == null || cards.Count == 0)
+            yield break;
+
+        int healValue = effectTotal;
+        int drawValue = effectTotal;
+        int shieldValue = effectTotal;
 
         bool firstSuitOnly =
-    BossManager.Instance != null &&
-    BossManager.Instance.CurrentBoss != null &&
-    BossManager.Instance.CurrentBoss.currentTrait != null &&
-    BossManager.Instance.CurrentBoss.currentTrait.traitID == TraitID.K_ABSOLUTE_AUTHORITY;
-        foreach (CardSO card in cards)
-        {
-            total += card.value;
-        }
-        int healValue = total;
-        int drawValue = total;
-        int shieldValue = total;
+            BossManager.Instance != null &&
+            BossManager.Instance.CurrentBoss != null &&
+            BossManager.Instance.CurrentBoss.currentTrait != null &&
+            BossManager.Instance.CurrentBoss.currentTrait.traitID ==
+                TraitID.K_ABSOLUTE_AUTHORITY;
+
         if (firstSuitOnly)
         {
-            if (cards.Count > 0)
+            CardSO firstCard = cards[0];
+
+            if (firstCard != null)
             {
                 CardSO.Suit suit =
-                    BattleManager.Instance.GetSuit(cards[0]);
+                    BattleManager.Instance.GetSuit(firstCard);
 
                 switch (suit)
                 {
@@ -139,6 +232,9 @@ public static class CardResolver
         {
             foreach (CardSO card in cards)
             {
+                if (card == null)
+                    continue;
+
                 switch (BattleManager.Instance.GetSuit(card))
                 {
                     case CardSO.Suit.Hearts:
@@ -156,34 +252,36 @@ public static class CardResolver
             }
         }
 
-        CardSO.Suit resistedSuit = BossManager.Instance != null && BossManager.Instance.CurrentBoss != null
-            ? BossManager.Instance.CurrentBoss.resistanceSuit
-            : CardSO.Suit.None;
+        CardSO.Suit resistedSuit =
+            BossManager.Instance != null &&
+            BossManager.Instance.CurrentBoss != null
+                ? BossManager.Instance.CurrentBoss.resistanceSuit
+                : CardSO.Suit.None;
 
-        bool IsResisted(CardSO.Suit suit) =>
-            suit != CardSO.Suit.None && suit == resistedSuit;
+        bool IsResisted(CardSO.Suit suit)
+        {
+            return suit != CardSO.Suit.None &&
+                   suit == resistedSuit;
+        }
 
         if (IsResisted(CardSO.Suit.Hearts) && hasHeart)
-        {
             hasHeart = false;
-        }
 
         if (IsResisted(CardSO.Suit.Diamonds) && hasDiamond)
-        {
             hasDiamond = false;
-        }
 
         if (IsResisted(CardSO.Suit.Spades) && hasSpade)
-        {
             hasSpade = false;
-        }
-
-        //---------------- HEART ----------------
 
         if (hasHeart)
         {
-            healValue = TraitManager.Instance.ModifyHealAmount(healValue);
-            healValue = TraitManager.Instance.ModifyRewardHealAmount(healValue);
+            healValue =
+                TraitManager.Instance.ModifyHealAmount(
+                    healValue);
+
+            healValue =
+                TraitManager.Instance.ModifyRewardHealAmount(
+                    healValue);
 
             BattleManager.Instance.HealDeck(healValue);
 
@@ -196,45 +294,53 @@ public static class CardResolver
                 healValue);
         }
 
-        //---------------- DIAMOND ----------------
-
         if (hasDiamond)
         {
-            drawValue = TraitManager.Instance.ModifyDrawAmount(drawValue);
-            drawValue = TraitManager.Instance.ModifyRewardDrawAmount(drawValue);
+            drawValue =
+                TraitManager.Instance.ModifyDrawAmount(
+                    drawValue);
 
-            BattleManager.Instance.DrawBonusCards(drawValue);
+            drawValue =
+                TraitManager.Instance.ModifyRewardDrawAmount(
+                    drawValue);
 
+            BattleManager.Instance.DrawBonusCards(
+                drawValue);
         }
-
-        //---------------- SPADE ----------------
 
         if (hasSpade)
         {
             int reduceAmount = shieldValue;
 
             reduceAmount =
-     TraitManager.Instance.ModifyShieldAmount(
-         cards,
-         reduceAmount);
+                TraitManager.Instance.ModifyShieldAmount(
+                    cards,
+                    reduceAmount);
 
             foreach (CardSO card in cards)
             {
-                if (BattleManager.Instance.GetSuit(card) == CardSO.Suit.Spades &&
-     card.value < 6)
+                if (card == null)
+                    continue;
+
+                if (BattleManager.Instance.GetSuit(card)
+                        == CardSO.Suit.Spades &&
+                    card.value < 6)
                 {
                     reduceAmount =
-                        TraitManager.Instance.ModifyRewardShieldAmount(reduceAmount);
+                        TraitManager.Instance
+                            .ModifyRewardShieldAmount(
+                                reduceAmount);
 
                     break;
                 }
             }
 
-            BossManager.Instance.ReduceAttack(reduceAmount);
+            BossManager.Instance.ReduceAttack(
+                reduceAmount);
 
             TraitManager.Instance.InvokeBossEvent(
-      TraitEventType.ReduceAttack,
-      reduceAmount);
+                TraitEventType.ReduceAttack,
+                reduceAmount);
 
             TraitManager.Instance.InvokeRewardEvent(
                 TraitEventType.ReduceAttack,

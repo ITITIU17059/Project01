@@ -28,24 +28,23 @@ public class TarvernDeckManager : MonoBehaviour
 
     public void DrawCard(HandManager handManager)
     {
-
         if (allCards.Count == 0)
-        {
-
             return;
-        }
 
-        if (handManager.handCards.Count == handManager.maxHandSize) return;
+        if (handManager.handCards.Count >= handManager.maxHandSize)
+            return;
 
-        // Luôn bốc lá bài nằm ở trên cùng (vị trí số 0)
         CardSO nextCard = allCards[0];
 
-        // Xóa ngay lập tức lá đó khỏi bộ bài rút
         allCards.RemoveAt(0);
-        // Cập nhật thanh deck
+
         drawDeckBar.UpdateBar(allCards.Count);
-        // Thêm vào tay người chơi
+
         handManager.AddCardToHand(nextCard);
+
+        TraitManager.Instance?.InvokeBossEvent(
+            TraitEventType.DrawOneCard,
+            1);
     }
 
     public void ShuffleDeck()

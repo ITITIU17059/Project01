@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -104,6 +105,7 @@ public class BattleManager : MonoBehaviour
     {
         extraAttackUsed = false;
         waitingExtraAttack = false;
+
         if (BossManager.Instance.CurrentBoss == null)
         {
             BossManager.Instance.Initialize();
@@ -120,16 +122,37 @@ public class BattleManager : MonoBehaviour
         {
             deckManager.LoadDeck(save.deckCards);
 
-            GraveyardManager.Instance.LoadData(save.graveyardCards);
+            GraveyardManager.Instance.LoadData(
+                save.graveyardCards);
 
-            handManager.LoadHand(save.handCards);
+            handManager.LoadHand(
+                save.handCards);
+
+            // Joker không có Trait Selection
+            if (BossManager.Instance.CurrentBoss != null &&
+                BossManager.Instance.CurrentBoss.isJoker)
+            {
+                ChangeState(BattleState.PlayerTurn);
+            }
         }
         else
         {
-            StartCoroutine(deckManager.AddCardFromFirst());
+            StartCoroutine(StartFirstBattleRoutine());
         }
     }
+    private IEnumerator StartFirstBattleRoutine()
+    {
+        yield return StartCoroutine(
+            deckManager.AddCardFromFirst()
+        );
 
+        // Sau khi đã có hand mới bắt đầu lượt
+        if (BossManager.Instance.CurrentBoss != null &&
+            BossManager.Instance.CurrentBoss.isJoker)
+        {
+            ChangeState(BattleState.PlayerTurn);
+        }
+    }
     private void StartPlayerTurn()
     {
         waitingExtraAttack = false;
@@ -137,7 +160,16 @@ public class BattleManager : MonoBehaviour
 
         handManager.handCards.RemoveAll(card => card == null);
 
-        handManager.SetInteractable(true);
+        BossSO boss = BossManager.Instance.CurrentBoss;
+
+        if (boss != null && boss.isJoker)
+        {
+            BossManager.Instance.RandomizeJokerSuit();
+
+            BossManager.Instance.RandomizeJokerDisguise();
+        }
+
+        handManager.SetInteractable(false);
 
         TraitManager.Instance.InvokeBossEvent(
             TraitEventType.PlayerTurn,
@@ -147,6 +179,8 @@ public class BattleManager : MonoBehaviour
             TraitEventType.PlayerTurn,
             0);
 
+        handManager.SetInteractable(true);
+
         if (handManager.handCards.Count == 0)
         {
             ChangeState(BattleState.Defeat);
@@ -155,6 +189,7 @@ public class BattleManager : MonoBehaviour
 
         TurnUIController.Instance.ShowYourTurn();
         InteractConfirmButton(true);
+    
     }
 
     private void StartBossTurn()
@@ -319,7 +354,7 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-        yield break;
+        ChangeState(BattleState.PlayerTurn);
 
     }
 
@@ -385,30 +420,97 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator ResolveCombo(List<CardSO> cards)
     {
-        TraitManager.Instance.InvokeBossEvent(TraitEventType.PlayCard, 0);
-        TraitManager.Instance.InvokeRewardEvent(TraitEventType.PlayCard, 0);
-        ApplyRewardK3(cards);
-        ApplyRewardK4(cards);
-        int damage = CardResolver.ResolveDamage(cards);
-       
-        // Hiệu ứng lá bài
-        yield return StartCoroutine(
-            CardResolver.ResolveEffects(cards));
+        TraitManager.Instance.InvokeBossEvent(
+            TraitEventType.PlayCard,
+            0);
 
-        // Animation chất bài
+        TraitManager.Instance.InvokeRewardEvent(
+            TraitEventType.PlayCard,
+            0);
+
+        // ============================================
+        // K3
+        // ============================================
+
+        ApplyRewardK3(cards);
+
+        // ============================================
+        // FORESIGHT
+        // ============================================
+
+        ApplyRewardK4(cards);
+
+        // ============================================
+        // DAMAGE
+        // Clubs x2 chỉ ảnh hưởng DAMAGE
+        // ============================================
+
+        int damage =
+            CardResolver.ResolveDamage(cards);
+
+        // ============================================
+        // EFFECT TOTAL
+        // Không dùng damage ở đây
+        // ============================================
+
+        int effectTotal =
+            CardResolver.ResolveEffectTotal(
+                cards,
+                rewardK4Card);
+
+        Debug.Log(
+            $"[COMBO] Damage = {damage} | " +
+            $"Effect Total = {effectTotal}");
+
+        // ============================================
+        // EFFECT
+        // ============================================
+
         yield return StartCoroutine(
-            CardResolver.PlaySuitFX(handManager.selectedCards));
+            CardResolver.ResolveEffects(
+                cards,
+                effectTotal));
+
+        // ============================================
+        // PLAYER CARD FX
+        // ============================================
+
+        yield return StartCoroutine(
+            CardResolver.PlaySuitFX(
+                handManager.selectedCards));
+
+        // ============================================
+        // FORESIGHT FX
+        // ============================================
+
         if (rewardK4Card != null)
         {
-            yield return StartCoroutine(
-                CardResolver.PlayRewardK4FX(rewardK4Card));
+            CardSO foresightCard = rewardK4Card;
 
-            GraveyardManager.Instance.AddToGraveyard(rewardK4Card);
+            yield return StartCoroutine(
+                CardResolver.PlayRewardK4FX(
+                    foresightCard));
+
+            // Chỉ remove nếu đúng là lá đầu deck
+            if (deckManager.allCards.Count > 0 &&
+                deckManager.allCards[0] == foresightCard)
+            {
+                deckManager.allCards.RemoveAt(0);
+                deckManager.RefreshDeckBar();
+            }
+
+            GraveyardManager.Instance.AddToGraveyard(
+                foresightCard);
 
             rewardK4Card = null;
         }
-        // Sau cùng mới gây sát thương
-        BossManager.Instance.TakeDamage(damage);
+
+        // ============================================
+        // BOSS DAMAGE
+        // ============================================
+
+        BossManager.Instance.TakeDamage(
+            damage);
 
         TraitManager.Instance.InvokeBossEvent(
             TraitEventType.BossDamaged,
@@ -425,7 +527,9 @@ public class BattleManager : MonoBehaviour
         TraitManager.Instance.InvokeRewardEvent(
             TraitEventType.AfterAttack,
             damage);
-        BattleManager.Instance.OverrideSuit = CardSO.Suit.None;
+
+        BattleManager.Instance.OverrideSuit =
+            CardSO.Suit.None;
     }
 
     private IEnumerator FinishDiscardRoutine(bool success)
@@ -686,33 +790,60 @@ public class BattleManager : MonoBehaviour
     }
     private void ApplyRewardK3(List<CardSO> cards)
     {
+        if (PlayerReward.Instance == null)
+            return;
+
         if (!PlayerReward.Instance.HasReward(TraitID.K_ROYAL_DECREE))
             return;
 
-        if (cards.Count != 1)
+        // K3 chỉ kích hoạt khi đánh đúng 1 lá
+        if (cards == null || cards.Count != 1)
             return;
 
-        CardSO.Suit originalSuit = cards[0].suit;
+        CardSO card = cards[0];
 
-        List<CardSO.Suit> possibleSuits = new List<CardSO.Suit>();
+        if (card == null)
+            return;
 
-        foreach (CardSO.Suit suit in System.Enum.GetValues(typeof(CardSO.Suit)))
+        BossSO boss = BossManager.Instance.CurrentBoss;
+
+        if (boss == null)
+            return;
+
+        CardSO.Suit originalSuit = card.suit;
+        CardSO.Suit bossResistance = boss.resistanceSuit;
+
+        List<CardSO.Suit> possibleSuits =
+            new List<CardSO.Suit>();
+
+        foreach (CardSO.Suit suit in
+            System.Enum.GetValues(typeof(CardSO.Suit)))
         {
             if (suit == CardSO.Suit.None)
                 continue;
 
+            // Không được random ra chính chất của lá
             if (suit == originalSuit)
+                continue;
+
+            // Không được random ra chất Boss kháng
+            if (suit == bossResistance)
                 continue;
 
             possibleSuits.Add(suit);
         }
 
-        BattleManager.Instance.OverrideSuit =
-            possibleSuits[Random.Range(0, possibleSuits.Count)];
+        if (possibleSuits.Count == 0)
+            return;
 
-        SuitChangedUI.Instance.Show(
-            BattleManager.Instance.OverrideSuit);
+        CardSO.Suit newSuit =
+            possibleSuits[
+                Random.Range(0, possibleSuits.Count)
+            ];
 
+        BattleManager.Instance.OverrideSuit = newSuit;
+
+        SuitChangedUI.Instance.Show(newSuit);
     }
 
 
@@ -727,21 +858,28 @@ public class BattleManager : MonoBehaviour
     {
         rewardK4Card = null;
 
-        if (!PlayerReward.Instance.HasReward(TraitID.K_BLIND_FATE))
+        if (PlayerReward.Instance == null ||
+            !PlayerReward.Instance.HasReward(TraitID.K_BLIND_FATE))
             return;
 
-        if (cards.Count != 1)
+        if (cards == null || cards.Count <= 1)
             return;
 
-        if (deckManager.allCards.Count == 0)
+        if (deckManager == null ||
+            deckManager.allCards == null ||
+            deckManager.allCards.Count == 0)
             return;
 
         rewardK4Card = deckManager.allCards[0];
 
-        deckManager.allCards.RemoveAt(0);
-        deckManager.RefreshDeckBar();
+        if (rewardK4Card == null)
+        {
+            rewardK4Card = null;
+            return;
+        }
 
-        cards.Add(rewardK4Card);
+        Debug.Log(
+            $"[FORESIGHT] Top card = {rewardK4Card.name}, " +
+            $"Value = {rewardK4Card.value}");
     }
-
 }

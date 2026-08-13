@@ -170,48 +170,118 @@ public class BossManager : MonoBehaviour
 
         CurrentBoss = bossSequence[CurrentBossIndex];
 
-        // Reset runtime stats
+        if (CurrentBoss == null)
+            return false;
+
+        // Reset trait của boss mới
+        if (!CurrentBoss.isJoker)
+        {
+            CurrentBoss.currentTrait = null;
+        }
+
         maxRuntimeHP = CurrentBoss.hp;
         CurrentHP = maxRuntimeHP;
 
         CurrentBoss.currentATK = CurrentBoss.atk;
         CurrentBoss.turnCounter = 0;
 
-        // Setup display
+        if (CurrentBoss.isJoker)
+        {
+            CurrentBoss.currentTrait = FindJokerTrait();
+
+            SetupJokerRuntime();
+        }
+
         bossDisplay.Setup(CurrentBoss);
         bossInfoPanel.Setup(CurrentBoss);
 
         bossDisplay.UpdateHP(CurrentHP);
         bossDisplay.UpdateATK(CurrentBoss.currentATK);
+        bossDisplay.UpdateResistance(CurrentBoss.resistanceSuit);
 
-        // Tất cả boss đều dùng TraitSelection
-        traitSelectionPanel.SetVisible(true);
-        traitSelectionPanel.Show(CurrentBoss);
-
-        if (!string.IsNullOrEmpty(CurrentBoss.spawnSoundID))
+        if (CurrentBoss.isJoker)
         {
-            SoundManager.instance?.PlaySound2D(
-                CurrentBoss.spawnSoundID);
+            traitSelectionPanel.SetVisible(false);
+
+            RandomizeJokerSuit();
+        }
+        else
+        {
+            traitSelectionPanel.SetVisible(true);
+            traitSelectionPanel.Show(CurrentBoss);
         }
 
-        BossFXManager.Instance?.PlaySpawnFX(
-            bossDisplay.transform);
-
         return true;
-    
-}
+    }
+    private void SetupJokerRuntime()
+    {
+        if (CurrentBoss == null)
+            return;
+
+        if (!CurrentBoss.isJoker)
+            return;
+
+        if (PlayerReward.Instance == null)
+            return;
+
+        int equippedCount = 0;
+
+        foreach (RewardSO reward in PlayerReward.Instance.EquippedRewards)
+        {
+            if (reward == null)
+                continue;
+
+            equippedCount++;
+        }
+
+        if (equippedCount > 0)
+        {
+            maxRuntimeHP += equippedCount * 5;
+            CurrentHP = maxRuntimeHP;
+
+            CurrentBoss.currentATK += equippedCount * 3;
+        }
+    }
+    private BossTraitSO FindJokerTrait()
+    {
+        if (CurrentBoss == null)
+            return null;
+
+        if (CurrentBoss.possibleTraits == null)
+            return null;
+
+        foreach (BossTraitSO trait in CurrentBoss.possibleTraits)
+        {
+            if (trait == null)
+                continue;
+
+            if (trait.traitID == TraitID.JOKER)
+                return trait;
+        }
+
+        return null;
+    }
 
     public void OnBossDefeated(BossSO deadBoss)
     {
+        if (deadBoss == null)
+            return;
+
+        // Joker không nằm trong trait pool thông thường
         if (deadBoss.currentTrait != null &&
-      deadBoss.rank != BossRank.Joker)
+            deadBoss.rank != BossRank.Joker &&
+            TraitPoolManager.Instance != null)
         {
             TraitPoolManager.Instance.RemoveTrait(
                 deadBoss.rank,
                 deadBoss.currentTrait);
         }
 
-        TraitSelectionPanelUI.Instance.ClearCurrentTraits();
+        // Trait Selection có thể không tồn tại / không active
+        if (TraitSelectionPanelUI.Instance != null)
+        {
+            TraitSelectionPanelUI.Instance.ClearCurrentTraits();
+        }
 
         CurrentBossIndex++;
 
@@ -219,24 +289,36 @@ public class BossManager : MonoBehaviour
         {
             case BossRank.Jack:
                 defeatedJack++;
+
                 if (defeatedJack == jackBosses.Count)
                     CurrentStageIndex = 1;
+
                 break;
 
             case BossRank.Queen:
                 defeatedQueen++;
+
                 if (defeatedQueen == queenBosses.Count)
                     CurrentStageIndex = 2;
+
                 break;
 
             case BossRank.King:
                 defeatedKing++;
+
                 if (defeatedKing == kingBosses.Count)
                     CurrentStageIndex = 3;
+
+                break;
+
+            case BossRank.Joker:
+        
                 break;
         }
 
-        SaveManager.Instance.SaveProgress(CurrentStageIndex, CurrentBossIndex);
+        SaveManager.Instance.SaveProgress(
+            CurrentStageIndex,
+            CurrentBossIndex);
     }
 
     public void TakeDamage(int damage)
@@ -346,6 +428,7 @@ public class BossManager : MonoBehaviour
         bossDisplay.UpdateResistance(newSuit);
 
     }
+  
     public void RefreshBossInfo()
     {
         if (bossInfoPanel != null)
@@ -380,5 +463,36 @@ public class BossManager : MonoBehaviour
                 bossSequence.Add(boss);
         }
     }
-   
+    public void RandomizeJokerDisguise()
+    {
+        if (CurrentBoss == null)
+            return;
+
+        if (!CurrentBoss.isJoker)
+            return;
+
+        if (disguisePool == null || disguisePool.Count == 0)
+            return;
+
+        BossSO disguise =
+            disguisePool[Random.Range(0, disguisePool.Count)];
+
+        if (disguise == null)
+            return;
+
+        // Sprite quyết định suit gây DAMAGE
+        CurrentBoss.currentDisguiseSprite =
+            disguise.cardSprite;
+
+        CurrentBoss.jokerDamageSuit =
+            disguise.resistanceSuit;
+
+        bossDisplay.SetBossSprite(
+            disguise.cardSprite);
+
+        Debug.Log(
+            $"[JOKER] Disguise: {disguise.bossName} | " +
+            $"Damage Suit: {CurrentBoss.jokerDamageSuit}");
+    }
+
 }

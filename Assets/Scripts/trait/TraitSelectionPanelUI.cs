@@ -121,7 +121,11 @@ public class TraitSelectionPanelUI : MonoBehaviour
     public void SetVisible(bool visible)
     {
         gameObject.SetActive(visible);
-        hand.SetInteractable(true);
+
+        if (!visible)
+            return;
+
+        hand.SetInteractable(false);
     }
 
     public void ClearCurrentTraits()
