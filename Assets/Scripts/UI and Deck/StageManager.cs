@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,11 +16,6 @@ public class StageManager : MonoBehaviour
     [SerializeField] private CanvasGroup fadeGroup;
 
     [Header("Stage Background")]
-    // [SerializeField] private Sprite jackBackground;
-    // [SerializeField] private Sprite queenBackground;
-    // [SerializeField] private Sprite kingBackground;
-    // [SerializeField] private Sprite jokerBackground;
-    // [SerializeField] private Sprite victoryBackground;
     [SerializeField] private VideoClip jackBackground;
     [SerializeField] private VideoClip queenBackground;
     [SerializeField] private VideoClip kingBackground;
@@ -31,10 +27,16 @@ public class StageManager : MonoBehaviour
     [SerializeField] private RenderTexture jokerTextture;
     [SerializeField] private RenderTexture victoryTextture;
     [SerializeField] private VideoPlayer videoPlayer;
+    private List<string> JackThemeList;
+    private List<string> QueenThemeList;
+    private List<string> KingThemeList;
 
     private void Awake()
     {
         Instance = this;
+        JackThemeList = new List<string>() { "JackTheme1", "JackTheme2", "JackTheme3", "JackTheme4" };
+        QueenThemeList = new List<string>() { "QueenTheme1", "QueenTheme2", "QueenTheme3", "QueenTheme4" };
+        KingThemeList = new List<string>() { "KingTheme1", "KingTheme2", "KingTheme3", "KingTheme4" };
     }
 
     private void Start()
@@ -44,6 +46,7 @@ public class StageManager : MonoBehaviour
 
     public IEnumerator ChangeStage(BossRank nextStage)
     {
+        int randomTheme;
         yield return fadeGroup
             .DOFade(1, 0.5f)
             .WaitForCompletion();
@@ -55,7 +58,9 @@ public class StageManager : MonoBehaviour
                 background.texture = jackTextture;
                 videoPlayer.clip = jackBackground;
                 videoPlayer.targetTexture = jackTextture;
-                MusicManager.instance.PlayMusic("JackTheme");
+                randomTheme = Random.Range(0, JackThemeList.Count);
+                MusicManager.instance.PlayMusic(JackThemeList[randomTheme]);
+                JackThemeList.Remove(JackThemeList[randomTheme]);
                 break;
 
             case BossRank.Queen:
@@ -63,7 +68,9 @@ public class StageManager : MonoBehaviour
                 background.texture = queenTextture;
                 videoPlayer.clip = queenBackground;
                 videoPlayer.targetTexture = queenTextture;
-                MusicManager.instance.PlayMusic("QueenTheme");
+                randomTheme = Random.Range(0, QueenThemeList.Count);
+                MusicManager.instance.PlayMusic(QueenThemeList[randomTheme]);
+                QueenThemeList.Remove(QueenThemeList[randomTheme]);
                 break;
 
             case BossRank.King:
@@ -71,7 +78,9 @@ public class StageManager : MonoBehaviour
                 background.texture = kingTextture;
                 videoPlayer.clip = kingBackground;
                 videoPlayer.targetTexture = kingTextture;
-                MusicManager.instance.PlayMusic("KingTheme");
+                randomTheme = Random.Range(0, KingThemeList.Count);
+                MusicManager.instance.PlayMusic(KingThemeList[randomTheme]);
+                KingThemeList.Remove(KingThemeList[randomTheme]);
                 break;
 
             case BossRank.Joker:
@@ -109,27 +118,34 @@ public class StageManager : MonoBehaviour
 
     public void ApplyStage(int stageIndex)
     {
+        int randomTheme;
         switch (stageIndex)
         {
             case 0:
                 background.texture = jackTextture;
                 videoPlayer.clip = jackBackground;
                 videoPlayer.targetTexture = jackTextture;
-                MusicManager.instance.PlayMusic("JackTheme");
+                randomTheme = Random.Range(0, JackThemeList.Count);
+                MusicManager.instance.PlayMusic(JackThemeList[randomTheme]);
+                JackThemeList.Remove(JackThemeList[randomTheme]);
                 break;
 
             case 1:
                 background.texture = queenTextture;
                 videoPlayer.clip = queenBackground;
                 videoPlayer.targetTexture = queenTextture;
-                MusicManager.instance.PlayMusic("QueenTheme");
+                randomTheme = Random.Range(0, QueenThemeList.Count);
+                MusicManager.instance.PlayMusic(QueenThemeList[randomTheme]);
+                QueenThemeList.Remove(QueenThemeList[randomTheme]);
                 break;
 
             case 2:
                 background.texture = kingTextture;
                 videoPlayer.clip = kingBackground;
                 videoPlayer.targetTexture = kingTextture;
-                MusicManager.instance.PlayMusic("KingTheme");
+                randomTheme = Random.Range(0, KingThemeList.Count);
+                MusicManager.instance.PlayMusic(KingThemeList[randomTheme]);
+                KingThemeList.Remove(KingThemeList[randomTheme]);
                 break;
 
             case 3:
