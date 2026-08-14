@@ -608,7 +608,7 @@ public class BattleManager : MonoBehaviour
             !waitingExtraAttack &&
             handManager.selectedCards.Count > 1)
         {
-            Debug.Log("Boss chỉ cho phép đánh 1 lá.");
+            StartCoroutine(NotificationInfo.Instance.SetUp("Can only play one card this turn"));
             return;
         }
 
@@ -623,7 +623,7 @@ public class BattleManager : MonoBehaviour
 
             if (handManager.selectedCards.Count != 1)
             {
-                Debug.Log("Lượt đánh thêm chỉ được đánh 1 lá.");
+                StartCoroutine(NotificationInfo.Instance.SetUp("Can only play one card this turn"));
                 return;
             }
         }

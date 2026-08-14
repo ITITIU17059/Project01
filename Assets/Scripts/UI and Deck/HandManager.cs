@@ -80,7 +80,7 @@ public class HandManager : MonoBehaviour
             var cardObjectValue = cardObject.GetComponent<CardDisplay>().cardScriptableObject.value;
             if (!CanSelectCard(cardObjectValue))
             {
-                Debug.Log("Card phải cùng value (Ace được phép đi kèm)");
+                StartCoroutine(NotificationInfo.Instance.SetUp("Invalid Play"));
 
                 cardObject.transform.DOKill();
                 cardObject.transform.DOScale(Vector3.one, 0.2f)

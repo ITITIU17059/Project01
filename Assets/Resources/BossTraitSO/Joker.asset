@@ -15,7 +15,9 @@ MonoBehaviour:
   traitID: 12
   icon: {fileID: 21300000, guid: a2563f2b8dbc4044b9a50537d3a29962, type: 3}
   traitName: JOKER
-  description: "\xFAp 1 l\xE1 b\xE0i, lock 1 l\xE1 b\xE0i\nm\u1ED7i 2 l\u01B0\u1EE3t 
-    h\u1ED3i 10 ATK,ch\u1EC9 nh\u1EADn dmg \u0111\xFAng ch\u1EA5t\nm\u1ED7i draw
-    ho\u1EB7c heal h\u1ED3i 1 HP"
+  description: 'Set 1 card, lock 1 card in hand. Recover 10 ATK every 2 turns; take
+    damage only corresponding to the Joker''s current suit.
+
+    Recover 1 HP upon
+    every draw or heal.'
   reward: {fileID: 11400000, guid: 07a22f9e7ab9c364ea358bb4bba78769, type: 2}
