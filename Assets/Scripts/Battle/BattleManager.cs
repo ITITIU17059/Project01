@@ -189,7 +189,7 @@ public class BattleManager : MonoBehaviour
 
         TurnUIController.Instance.ShowYourTurn();
         InteractConfirmButton(true);
-    
+
     }
 
     private void StartBossTurn()
@@ -291,8 +291,6 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(() => !waitingForInventory);
 
         LevelManager.instance.UnloadSceneAdditive("InventoryScene");
-        Debug.Log(BossManager.Instance.CurrentStageIndex);
-        Debug.Log(deadBoss);
 
         if (BossManager.Instance.CurrentStageIndex == 0)
         {
@@ -355,8 +353,6 @@ public class BattleManager : MonoBehaviour
             ChangeState(BattleState.Defeat);
             yield break;
         }
-
-        ChangeState(BattleState.PlayerTurn);
 
     }
 

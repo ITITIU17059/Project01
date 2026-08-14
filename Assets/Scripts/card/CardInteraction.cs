@@ -36,7 +36,7 @@ public class CardInteraction : MonoBehaviour
         if (isDragging || isHovered)
             return;
 
-        transform.DOKill();  
+        transform.DOKill();
 
         transform.DOLocalMove(localPos, duration)
                  .SetEase(Ease.OutCubic);
@@ -50,7 +50,7 @@ public class CardInteraction : MonoBehaviour
 
         if (IsLocked)
             return;
-        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+        if (!handManager.CanInteract)
             return;
         if (SoundManager.instance != null)
         {
@@ -77,7 +77,7 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleMouseExit()
     {
-        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+        if (!handManager.CanInteract)
             return;
         if (!isHovered || isDragging) return;
         isHovered = false;
@@ -101,7 +101,7 @@ public class CardInteraction : MonoBehaviour
     {
         if (IsLocked)
             return;
-        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+        if (!handManager.CanInteract)
             return;
         isDragging = true;
         cardPhysics.ResetPhysics();
@@ -111,7 +111,7 @@ public class CardInteraction : MonoBehaviour
     {
         if (IsLocked)
             return;
-        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+        if (!handManager.CanInteract)
             return;
         transform.position = targetWorldPos;
 
@@ -126,7 +126,7 @@ public class CardInteraction : MonoBehaviour
     {
         if (IsLocked)
             return;
-        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+        if (!handManager.CanInteract)
             return;
         if (!isDragging) return;
         isDragging = false;
@@ -176,7 +176,7 @@ public class CardInteraction : MonoBehaviour
     {
         if (IsLocked)
             return;
-        if (!handManager.CanInteract && !handManager.IsDiscardMode)
+        if (!handManager.CanInteract)
             return;
         if (!handManager) return;
         transform.DOKill();
