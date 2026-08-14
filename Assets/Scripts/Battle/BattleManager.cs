@@ -189,7 +189,7 @@ public class BattleManager : MonoBehaviour
 
         TurnUIController.Instance.ShowYourTurn();
         InteractConfirmButton(true);
-    
+
     }
 
     private void StartBossTurn()
@@ -291,8 +291,6 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(() => !waitingForInventory);
 
         LevelManager.instance.UnloadSceneAdditive("InventoryScene");
-        Debug.Log(BossManager.Instance.CurrentStageIndex);
-        Debug.Log(deadBoss);
 
         if (BossManager.Instance.CurrentStageIndex == 0)
         {
@@ -355,8 +353,6 @@ public class BattleManager : MonoBehaviour
             ChangeState(BattleState.Defeat);
             yield break;
         }
-
-        ChangeState(BattleState.PlayerTurn);
 
     }
 
@@ -612,7 +608,7 @@ public class BattleManager : MonoBehaviour
             !waitingExtraAttack &&
             handManager.selectedCards.Count > 1)
         {
-            Debug.Log("Boss chỉ cho phép đánh 1 lá.");
+            StartCoroutine(NotificationInfo.Instance.SetUp("Can only play one card this turn"));
             return;
         }
 
@@ -627,7 +623,7 @@ public class BattleManager : MonoBehaviour
 
             if (handManager.selectedCards.Count != 1)
             {
-                Debug.Log("Lượt đánh thêm chỉ được đánh 1 lá.");
+                StartCoroutine(NotificationInfo.Instance.SetUp("Can only play one card this turn"));
                 return;
             }
         }

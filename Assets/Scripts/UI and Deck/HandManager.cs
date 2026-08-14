@@ -80,7 +80,7 @@ public class HandManager : MonoBehaviour
             var cardObjectValue = cardObject.GetComponent<CardDisplay>().cardScriptableObject.value;
             if (!CanSelectCard(cardObjectValue))
             {
-                Debug.Log("Card phải cùng value (Ace được phép đi kèm)");
+                StartCoroutine(NotificationInfo.Instance.SetUp("Invalid Play"));
 
                 cardObject.transform.DOKill();
                 cardObject.transform.DOScale(Vector3.one, 0.2f)
@@ -542,12 +542,14 @@ public class HandManager : MonoBehaviour
             return;
 
         LockedCard = highest;
+        CardDisplay LockedCardDisplay = highest.GetComponent<CardDisplay>();
 
         CardInteraction interaction =
             highest.GetComponent<CardInteraction>();
 
         if (interaction != null)
             interaction.IsLocked = true;
+        LockedCardDisplay.SetFade(true);
     }
     public void HideRandomCard()
     {
@@ -596,6 +598,9 @@ public class HandManager : MonoBehaviour
 
             CardInteraction interaction =
                 obj.GetComponent<CardInteraction>();
+
+            CardDisplay display = obj.GetComponent<CardDisplay>();
+            display.SetFade(false);
 
             if (interaction != null)
                 interaction.IsLocked = false;

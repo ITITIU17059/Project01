@@ -151,8 +151,8 @@ public class BossManager : MonoBehaviour
                 kingBosses[0].possibleTraits
             );
         }
-        
-   
+
+
     }
     private void Shuffle(List<BossSO> list)
     {
@@ -198,6 +198,7 @@ public class BossManager : MonoBehaviour
         bossDisplay.UpdateHP(CurrentHP);
         bossDisplay.UpdateATK(CurrentBoss.currentATK);
         bossDisplay.UpdateResistance(CurrentBoss.resistanceSuit);
+        SoundManager.instance.PlaySound2D(CurrentBoss.spawnSoundID);
 
         if (CurrentBoss.isJoker)
         {
@@ -210,6 +211,9 @@ public class BossManager : MonoBehaviour
             traitSelectionPanel.SetVisible(true);
             traitSelectionPanel.Show(CurrentBoss);
         }
+
+        BossFXManager.Instance?.PlaySpawnFX(
+           bossDisplay.transform);
 
         return true;
     }
@@ -312,7 +316,7 @@ public class BossManager : MonoBehaviour
                 break;
 
             case BossRank.Joker:
-        
+
                 break;
         }
 
@@ -354,11 +358,13 @@ public class BossManager : MonoBehaviour
     public void Heal(int amount)
     {
         CurrentHP += amount;
+        sign_heal_boss.text = "+";
 
         if (CurrentHP > maxRuntimeHP)
             CurrentHP = maxRuntimeHP;
 
         bossDisplay.UpdateHP(CurrentHP);
+        StartCoroutine(damageManager.ShowBossHeal(amount));
     }
     public void ReduceAttack(int value)
     {
@@ -428,7 +434,7 @@ public class BossManager : MonoBehaviour
         bossDisplay.UpdateResistance(newSuit);
 
     }
-  
+
     public void RefreshBossInfo()
     {
         if (bossInfoPanel != null)

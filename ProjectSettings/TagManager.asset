@@ -50,6 +50,9 @@ TagManager:
   - name: UI
     uniqueID: 2612692067
     locked: 0
+  - name: Notification
+    uniqueID: 2893763631
+    locked: 0
   - name: Menu
     uniqueID: 2639104861
     locked: 0
