@@ -6,8 +6,10 @@ public class CardDisplay : MonoBehaviour
     public CardSO cardScriptableObject;
     public SpriteRenderer cardSpriteRenderer;
     private bool isHidden = false;
+    private bool isFade = false;
 
     public bool IsHidden => isHidden;
+    public bool IsFade => isFade;
 
     [SerializeField] private Sprite cardBackSprite;
     void Start()
@@ -27,6 +29,17 @@ public class CardDisplay : MonoBehaviour
         else
             cardSpriteRenderer.sprite = cardScriptableObject.cardSprite;
     }
+
+    public void SetFade(bool value)
+    {
+        isFade = value;
+
+        if (value)
+            cardSpriteRenderer.color = Color.gray;
+        else
+            cardSpriteRenderer.color = Color.white;
+    }
+
     void UpdateCardDisplay()
     {
         if (cardScriptableObject != null && cardSpriteRenderer != null)
