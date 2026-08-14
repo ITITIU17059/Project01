@@ -213,6 +213,8 @@ public class TurnUIController : MonoBehaviour
 
         yield return currentSequence.WaitForCompletion();
 
+        if (soundId == "EnemyTurn") yield break;
+
         HandManager.Instance.SetInteractable(true);
     }
 
