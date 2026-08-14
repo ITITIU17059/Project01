@@ -542,12 +542,14 @@ public class HandManager : MonoBehaviour
             return;
 
         LockedCard = highest;
+        CardDisplay LockedCardDisplay = highest.GetComponent<CardDisplay>();
 
         CardInteraction interaction =
             highest.GetComponent<CardInteraction>();
 
         if (interaction != null)
             interaction.IsLocked = true;
+        LockedCardDisplay.SetFade(true);
     }
     public void HideRandomCard()
     {
@@ -596,6 +598,9 @@ public class HandManager : MonoBehaviour
 
             CardInteraction interaction =
                 obj.GetComponent<CardInteraction>();
+
+            CardDisplay display = obj.GetComponent<CardDisplay>();
+            display.SetFade(false);
 
             if (interaction != null)
                 interaction.IsLocked = false;
