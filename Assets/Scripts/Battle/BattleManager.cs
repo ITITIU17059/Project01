@@ -247,20 +247,21 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandleBossDeath()
     {
-
         handManager.UnlockCard();
         handManager.SetInteractable(false);
         handManager.RevealAllHiddenCards();
+
         BossSO deadBoss = BossManager.Instance.CurrentBoss;
+
         BossManager.Instance.BossDisplay.ResetBossSprite();
 
         yield return BossFXManager.Instance.PlayDeathFX(
-        BossManager.Instance.BossTransform);
+            BossManager.Instance.BossTransform);
 
         Transform target =
-        BossManager.Instance.LastKillWasPerfect
-            ? tavernSpawnPoint
-            : graveyardSpawnPoint;
+            BossManager.Instance.LastKillWasPerfect
+                ? tavernSpawnPoint
+                : graveyardSpawnPoint;
 
         yield return BossFXManager.Instance
             .PlayCollectRewardFX(
@@ -272,52 +273,64 @@ public class BattleManager : MonoBehaviour
 
         if (deadBoss.currentTrait != null)
         {
-            PlayerReward.Instance.AddReward(deadBoss.currentTrait.reward);
+            PlayerReward.Instance.AddReward(
+                deadBoss.currentTrait.reward);
         }
 
-        bool hasNextBoss = BossManager.Instance.HasMoreBosses;
+        bool hasNextBoss =
+            BossManager.Instance.HasMoreBosses;
 
         if (!hasNextBoss)
         {
-            yield return StartCoroutine(StageManager.Instance.VictoryStage());
+            yield return StartCoroutine(
+                StageManager.Instance.VictoryStage());
+
             SaveManager.Instance.DeleteSave();
+
             ChangeState(BattleState.Victory);
             yield break;
         }
 
         waitingForInventory = true;
-        LevelManager.instance.LoadSceneAdditive("InventoryScene");
 
-        yield return new WaitUntil(() => !waitingForInventory);
+        LevelManager.instance.LoadSceneAdditive(
+            "InventoryScene");
 
-        LevelManager.instance.UnloadSceneAdditive("InventoryScene");
+        yield return new WaitUntil(
+            () => !waitingForInventory);
+
+        LevelManager.instance.UnloadSceneAdditive(
+            "InventoryScene");
 
         if (BossManager.Instance.CurrentStageIndex == 0)
         {
-            yield return StageManager.Instance.ChangeStage(BossRank.Jack);
+            yield return StageManager.Instance.ChangeStage(
+                BossRank.Jack);
         }
-        else if ((BossManager.Instance.CurrentStageIndex == 1 &&
-    deadBoss.rank == BossRank.Jack) || (BossManager.Instance.CurrentStageIndex == 1 && !waitingForInventory))
+        else if (BossManager.Instance.CurrentStageIndex == 1)
         {
-            yield return StageManager.Instance.ChangeStage(BossRank.Queen);
+            yield return StageManager.Instance.ChangeStage(
+                BossRank.Queen);
         }
-        else if ((BossManager.Instance.CurrentStageIndex == 2 &&
-                 deadBoss.rank == BossRank.Queen) || (BossManager.Instance.CurrentStageIndex == 2 && !waitingForInventory))
+        else if (BossManager.Instance.CurrentStageIndex == 2)
         {
-            yield return StageManager.Instance.ChangeStage(BossRank.King);
+            yield return StageManager.Instance.ChangeStage(
+                BossRank.King);
         }
-        else if ((BossManager.Instance.CurrentStageIndex == 3 &&
-                 deadBoss.rank == BossRank.King) || (BossManager.Instance.CurrentStageIndex == 3 && !waitingForInventory))
+        else if (BossManager.Instance.CurrentStageIndex == 3)
         {
-            yield return StageManager.Instance.ChangeStage(BossRank.Joker);
+            yield return StageManager.Instance.ChangeStage(
+                BossRank.Joker);
         }
-
-
+        LevelManager.instance.UnloadSceneAdditive(
+    "InventoryScene");
 
         if (handWasEmptyAfterPlay)
         {
-            while (handManager.handCards.Count < handManager.maxHandSize &&
-                   deckManager.allCards.Count > 0)
+            while (
+                handManager.handCards.Count <
+                handManager.maxHandSize &&
+                deckManager.allCards.Count > 0)
             {
                 deckManager.DrawCard(handManager);
                 handManager.HideNextCardIfNeeded();
@@ -330,7 +343,9 @@ public class BattleManager : MonoBehaviour
                 if (deckManager.allCards.Count == 0)
                     break;
 
-                if (handManager.handCards.Count >= handManager.maxHandSize)
+                if (
+                    handManager.handCards.Count >=
+                    handManager.maxHandSize)
                     break;
 
                 deckManager.DrawCard(handManager);
@@ -340,12 +355,16 @@ public class BattleManager : MonoBehaviour
 
         if (BossManager.Instance.LastKillWasPerfect)
         {
-            deckManager.allCards.Insert(0, deadBoss.bossCard);
+            deckManager.allCards.Insert(
+                0,
+                deadBoss.bossCard);
+
             deckManager.RefreshDeckBar();
         }
         else
         {
-            GraveyardManager.Instance.AddToGraveyard(deadBoss.bossCard);
+            GraveyardManager.Instance.AddToGraveyard(
+                deadBoss.bossCard);
         }
 
         if (handManager.handCards.Count == 0)
@@ -354,6 +373,13 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
+        if (
+            BossManager.Instance.CurrentBoss != null &&
+            BossManager.Instance.CurrentBoss.isJoker)
+        {
+            ChangeState(BattleState.PlayerTurn);
+            yield break;
+        }
     }
 
     #endregion
