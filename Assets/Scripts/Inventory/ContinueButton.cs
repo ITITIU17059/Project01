@@ -4,10 +4,11 @@ public class ContinueButton : MonoBehaviour
 {
     public void Continue()
     {
-        Debug.Log("CONTINUE CLICK");
+        Debug.Log("[INVENTORY] Continue");
 
-        BossManager.Instance.LoadNextBoss();
-
-        BattleManager.Instance.ContinueFromInventory();
+        if (BattleManager.Instance != null)
+        {
+            BattleManager.Instance.ContinueFromInventory();
+        }
     }
 }

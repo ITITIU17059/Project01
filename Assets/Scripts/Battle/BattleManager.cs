@@ -158,14 +158,14 @@ public class BattleManager : MonoBehaviour
         waitingExtraAttack = false;
         extraAttackUsed = false;
 
-        handManager.handCards.RemoveAll(card => card == null);
+        handManager.handCards.RemoveAll(
+            card => card == null);
 
-        BossSO boss = BossManager.Instance.CurrentBoss;
+        BossSO boss =
+            BossManager.Instance.CurrentBoss;
 
         if (boss != null && boss.isJoker)
         {
-            BossManager.Instance.RandomizeJokerSuit();
-
             BossManager.Instance.RandomizeJokerDisguise();
         }
 
@@ -188,8 +188,8 @@ public class BattleManager : MonoBehaviour
         }
 
         TurnUIController.Instance.ShowYourTurn();
-        InteractConfirmButton(true);
 
+        InteractConfirmButton(true);
     }
 
     private void StartBossTurn()
@@ -263,11 +263,10 @@ public class BattleManager : MonoBehaviour
                 ? tavernSpawnPoint
                 : graveyardSpawnPoint;
 
-        yield return BossFXManager.Instance
-            .PlayCollectRewardFX(
-                BossManager.Instance.BossDisplay,
-                deadBoss.bossCard,
-                target);
+        yield return BossFXManager.Instance.PlayCollectRewardFX(
+            BossManager.Instance.BossDisplay,
+            deadBoss.bossCard,
+            target);
 
         BossManager.Instance.OnBossDefeated(deadBoss);
 
@@ -302,28 +301,38 @@ public class BattleManager : MonoBehaviour
         LevelManager.instance.UnloadSceneAdditive(
             "InventoryScene");
 
-        if (BossManager.Instance.CurrentStageIndex == 0)
+        BossRank nextRank;
+
+        switch (deadBoss.rank)
         {
-            yield return StageManager.Instance.ChangeStage(
-                BossRank.Jack);
+            case BossRank.Jack:
+                nextRank = BossRank.Queen;
+                break;
+
+            case BossRank.Queen:
+                nextRank = BossRank.King;
+                break;
+
+            case BossRank.King:
+                nextRank = BossRank.Joker;
+                break;
+
+            default:
+                ChangeState(BattleState.Victory);
+                yield break;
         }
-        else if (BossManager.Instance.CurrentStageIndex == 1)
+
+        if (!BossManager.Instance.LoadNextBoss())
         {
-            yield return StageManager.Instance.ChangeStage(
-                BossRank.Queen);
+            Debug.LogError(
+                "[BATTLE] Failed to load next boss.");
+
+            ChangeState(BattleState.Victory);
+            yield break;
         }
-        else if (BossManager.Instance.CurrentStageIndex == 2)
-        {
-            yield return StageManager.Instance.ChangeStage(
-                BossRank.King);
-        }
-        else if (BossManager.Instance.CurrentStageIndex == 3)
-        {
-            yield return StageManager.Instance.ChangeStage(
-                BossRank.Joker);
-        }
-        LevelManager.instance.UnloadSceneAdditive(
-    "InventoryScene");
+
+        yield return StartCoroutine(
+            StageManager.Instance.ChangeStage(nextRank));
 
         if (handWasEmptyAfterPlay)
         {
@@ -373,13 +382,8 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-        if (
-            BossManager.Instance.CurrentBoss != null &&
-            BossManager.Instance.CurrentBoss.isJoker)
-        {
-            ChangeState(BattleState.PlayerTurn);
-            yield break;
-        }
+        ChangeState(BattleState.PlayerTurn);
+
     }
 
     #endregion
@@ -724,25 +728,45 @@ public class BattleManager : MonoBehaviour
     private void Victory()
     {
         SaveManager.Instance.DeleteSave();
+
         StartCoroutine(VictoryRoutine());
-        MusicManager.instance.PlayMusic(
-    "VictoryTheme",
-    1f);
+
+        if (MusicManager.instance != null)
+        {
+            MusicManager.instance.PlayMusic(
+                "VictoryTheme",
+                1f);
+        }
     }
 
     private IEnumerator VictoryRoutine()
     {
         InteractConfirmButton(false);
-        handManager.enabled = false;
-        GameObject cardContainer = GameObject.FindGameObjectWithTag("CardContainer");
-        cardContainer.SetActive(false);
 
+        if (handManager != null)
+        {
+            handManager.enabled = false;
+        }
 
-        yield return TurnUIController.Instance.ShowVictory();
+        GameObject cardContainer =
+            GameObject.FindGameObjectWithTag("CardContainer");
+
+        if (cardContainer != null)
+        {
+            cardContainer.SetActive(false);
+        }
+
+        if (TurnUIController.Instance != null)
+        {
+            yield return TurnUIController.Instance.ShowVictory();
+        }
 
         yield return new WaitForSeconds(2f);
 
-        LevelManager.instance.LoadScene("MenuScene");
+        if (LevelManager.instance != null)
+        {
+            LevelManager.instance.LoadScene("MenuScene");
+        }
     }
 
     private void Defeat()
