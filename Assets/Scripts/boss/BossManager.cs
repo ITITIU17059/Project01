@@ -44,7 +44,7 @@ public class BossManager : MonoBehaviour
     public bool LastKillWasPerfect { get; private set; }
 
     public bool HasMoreBosses => CurrentBossIndex < bossSequence.Count;
-
+   
     private void Awake()
     {
         if (Instance == null)
