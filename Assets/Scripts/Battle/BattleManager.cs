@@ -354,6 +354,12 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
+        BossSO currentBoss = BossManager.Instance.CurrentBoss;
+
+        if (currentBoss != null && currentBoss.isJoker)
+        {
+            ChangeState(BattleState.PlayerTurn);
+        }
     }
 
     #endregion
