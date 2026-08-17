@@ -412,7 +412,6 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-<<<<<<< Updated upstream
 
         ChangeState(BattleState.PlayerTurn);
 
@@ -424,7 +423,7 @@ public class BattleManager : MonoBehaviour
             ChangeState(BattleState.PlayerTurn);
         }
 
-=======
+
         if (
             BossManager.Instance.CurrentBoss != null &&
             BossManager.Instance.CurrentBoss.isJoker)
@@ -434,7 +433,7 @@ public class BattleManager : MonoBehaviour
 
             yield break;
         }
->>>>>>> Stashed changes
+
     }
 
 
