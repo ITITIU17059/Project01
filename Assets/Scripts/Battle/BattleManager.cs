@@ -382,6 +382,7 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
+<<<<<<< HEAD
         ChangeState(BattleState.PlayerTurn);
 
 =======
