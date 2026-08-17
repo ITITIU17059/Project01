@@ -37,6 +37,10 @@ public class BattleManager : MonoBehaviour
     public int LastDrawAmount { get; private set; }
 
     public CardSO.Suit OverrideSuit = CardSO.Suit.None;
+
+    private bool hasPendingJokerEnding = false;
+    private bool pendingBadEnding = false;
+
     public void ContinueFromInventory()
     {
         waitingForInventory = false;
@@ -158,14 +162,14 @@ public class BattleManager : MonoBehaviour
         waitingExtraAttack = false;
         extraAttackUsed = false;
 
-        handManager.handCards.RemoveAll(card => card == null);
+        handManager.handCards.RemoveAll(
+            card => card == null);
 
-        BossSO boss = BossManager.Instance.CurrentBoss;
+        BossSO boss =
+            BossManager.Instance.CurrentBoss;
 
         if (boss != null && boss.isJoker)
         {
-            BossManager.Instance.RandomizeJokerSuit();
-
             BossManager.Instance.RandomizeJokerDisguise();
         }
 
@@ -188,8 +192,8 @@ public class BattleManager : MonoBehaviour
         }
 
         TurnUIController.Instance.ShowYourTurn();
-        InteractConfirmButton(true);
 
+        InteractConfirmButton(true);
     }
 
     private void StartBossTurn()
@@ -247,79 +251,123 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandleBossDeath()
     {
-
         handManager.UnlockCard();
         handManager.SetInteractable(false);
         handManager.RevealAllHiddenCards();
-        BossSO deadBoss = BossManager.Instance.CurrentBoss;
+
+        BossSO deadBoss =
+            BossManager.Instance.CurrentBoss;
+
+        int oldStageIndex =
+            BossManager.Instance.CurrentStageIndex;
+
         BossManager.Instance.BossDisplay.ResetBossSprite();
 
         yield return BossFXManager.Instance.PlayDeathFX(
-        BossManager.Instance.BossTransform);
+            BossManager.Instance.BossTransform);
 
         Transform target =
-        BossManager.Instance.LastKillWasPerfect
-            ? tavernSpawnPoint
-            : graveyardSpawnPoint;
+            BossManager.Instance.LastKillWasPerfect
+                ? tavernSpawnPoint
+                : graveyardSpawnPoint;
 
-        yield return BossFXManager.Instance
-            .PlayCollectRewardFX(
-                BossManager.Instance.BossDisplay,
-                deadBoss.bossCard,
-                target);
+        yield return BossFXManager.Instance.PlayCollectRewardFX(
+            BossManager.Instance.BossDisplay,
+            deadBoss.bossCard,
+            target);
 
-        BossManager.Instance.OnBossDefeated(deadBoss);
+        BossManager.Instance.OnBossDefeated(
+            deadBoss);
 
         if (deadBoss.currentTrait != null)
         {
-            PlayerReward.Instance.AddReward(deadBoss.currentTrait.reward);
+            PlayerReward.Instance.AddReward(
+                deadBoss.currentTrait.reward);
         }
 
-        bool hasNextBoss = BossManager.Instance.HasMoreBosses;
+        bool hasNextBoss =
+            BossManager.Instance.HasMoreBosses;
 
         if (!hasNextBoss)
         {
-            yield return StartCoroutine(StageManager.Instance.VictoryStage());
-            SaveManager.Instance.DeleteSave();
+            if (deadBoss.rank == BossRank.Joker)
+            {
+                hasPendingJokerEnding = true;
+
+                pendingBadEnding =
+                    PlayerReward.Instance != null &&
+                    PlayerReward.Instance.TraitHasAdd;
+
+                ChangeState(BattleState.Victory);
+                yield break;
+            }
+
+            yield return StartCoroutine(
+                StageManager.Instance.VictoryStage());
+
+            ChangeState(BattleState.Victory);
+            yield break;
+        }
+        waitingForInventory = true;
+
+        LevelManager.instance.LoadSceneAdditive(
+            "InventoryScene");
+
+        yield return new WaitUntil(
+            () => !waitingForInventory);
+
+        LevelManager.instance.UnloadSceneAdditive(
+            "InventoryScene");
+
+        int newStageIndex =
+     BossManager.Instance.CurrentStageIndex;
+
+        if (!BossManager.Instance.LoadNextBoss())
+        {
+            Debug.LogError(
+                "[BATTLE] Failed to load next boss.");
+
             ChangeState(BattleState.Victory);
             yield break;
         }
 
-        waitingForInventory = true;
-        LevelManager.instance.LoadSceneAdditive("InventoryScene");
-
-        yield return new WaitUntil(() => !waitingForInventory);
-
-        LevelManager.instance.UnloadSceneAdditive("InventoryScene");
-
-        if (BossManager.Instance.CurrentStageIndex == 0)
+        if (newStageIndex != oldStageIndex)
         {
-            yield return StageManager.Instance.ChangeStage(BossRank.Jack);
-        }
-        else if ((BossManager.Instance.CurrentStageIndex == 1 &&
-    deadBoss.rank == BossRank.Jack) || (BossManager.Instance.CurrentStageIndex == 1 && !waitingForInventory))
-        {
-            yield return StageManager.Instance.ChangeStage(BossRank.Queen);
-        }
-        else if ((BossManager.Instance.CurrentStageIndex == 2 &&
-                 deadBoss.rank == BossRank.Queen) || (BossManager.Instance.CurrentStageIndex == 2 && !waitingForInventory))
-        {
-            yield return StageManager.Instance.ChangeStage(BossRank.King);
-        }
-        else if ((BossManager.Instance.CurrentStageIndex == 3 &&
-                 deadBoss.rank == BossRank.King) || (BossManager.Instance.CurrentStageIndex == 3 && !waitingForInventory))
-        {
-            yield return StageManager.Instance.ChangeStage(BossRank.Joker);
-        }
+            BossRank nextRank;
 
+            switch (newStageIndex)
+            {
+                case 1:
+                    nextRank = BossRank.Queen;
+                    break;
 
+                case 2:
+                    nextRank = BossRank.King;
+                    break;
+
+                case 3:
+                    nextRank = BossRank.Joker;
+                    break;
+
+                default:
+                    nextRank = BossRank.Jack;
+                    break;
+            }
+
+            yield return StartCoroutine(
+                StageManager.Instance.ChangeStage(nextRank));
+        }
 
         if (handWasEmptyAfterPlay)
         {
-            while (handManager.handCards.Count < handManager.maxHandSize &&
-                   deckManager.allCards.Count > 0)
+            while (
+                handManager.handCards.Count <
+                handManager.maxHandSize &&
+                deckManager.allCards.Count > 0)
             {
-                deckManager.DrawCard(handManager);
+                deckManager.DrawCard(
+                    handManager);
+
                 handManager.HideNextCardIfNeeded();
             }
         }
@@ -330,29 +378,43 @@ public class BattleManager : MonoBehaviour
                 if (deckManager.allCards.Count == 0)
                     break;
 
-                if (handManager.handCards.Count >= handManager.maxHandSize)
+                if (
+                    handManager.handCards.Count >=
+                    handManager.maxHandSize)
                     break;
 
-                deckManager.DrawCard(handManager);
+                deckManager.DrawCard(
+                    handManager);
+
                 handManager.HideNextCardIfNeeded();
             }
         }
 
         if (BossManager.Instance.LastKillWasPerfect)
         {
-            deckManager.allCards.Insert(0, deadBoss.bossCard);
+            deckManager.allCards.Insert(
+                0,
+                deadBoss.bossCard);
+
             deckManager.RefreshDeckBar();
         }
         else
         {
-            GraveyardManager.Instance.AddToGraveyard(deadBoss.bossCard);
+            GraveyardManager.Instance.AddToGraveyard(
+                deadBoss.bossCard);
         }
 
         if (handManager.handCards.Count == 0)
         {
-            ChangeState(BattleState.Defeat);
+            ChangeState(
+                BattleState.Defeat);
+
             yield break;
         }
+
+
+        ChangeState(BattleState.PlayerTurn);
+
 
         BossSO currentBoss = BossManager.Instance.CurrentBoss;
 
@@ -360,7 +422,20 @@ public class BattleManager : MonoBehaviour
         {
             ChangeState(BattleState.PlayerTurn);
         }
+
+
+        if (
+            BossManager.Instance.CurrentBoss != null &&
+            BossManager.Instance.CurrentBoss.isJoker)
+        {
+            ChangeState(
+                BattleState.PlayerTurn);
+
+            yield break;
+        }
+
     }
+
 
     #endregion
 
@@ -369,6 +444,7 @@ public class BattleManager : MonoBehaviour
     {
         if (waitingExtraAttack)
             waitingExtraAttack = false;
+
         handManager.SetInteractable(false);
 
         handWasEmptyAfterPlay =
@@ -384,13 +460,44 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        if (PlayerReward.Instance != null &&
+            PlayerReward.Instance.HasReward(
+                TraitID.Q_SEAL_OF_SILENCE))
+        {
+            int aceCount = 0;
+
+            foreach (CardSO card in cards)
+            {
+                if (card != null && card.value == 1)
+                {
+                    aceCount++;
+                }
+            }
+
+            if (aceCount > 0)
+            {
+                PlayerReward.Instance.AddAceHandBonus(
+                    aceCount);
+
+                PlayerReward.Instance.RefreshHandSize();
+            }
+        }
+
         yield return StartCoroutine(
             ResolveCombo(cards));
 
-        if (PlayerReward.Instance.HasReward(TraitID.K_ABSOLUTE_AUTHORITY))
+        if (
+       cards.Count > 1 &&
+       PlayerReward.Instance != null &&
+       PlayerReward.Instance.HasReward(
+           TraitID.K_ABSOLUTE_AUTHORITY) &&
+       BossManager.Instance.CurrentBoss != null &&
+       !BossManager.Instance.IsDead())
         {
-            handManager.ReturnRandomSelectedCard();
+            yield return StartCoroutine(
+                ResolveCombo(cards));
         }
+
         yield return StartCoroutine(
             CardResolver.DiscardCards(
                 handManager.selectedCards,
@@ -398,22 +505,27 @@ public class BattleManager : MonoBehaviour
                 graveyardSpawnPoint));
 
         handManager.ClearSelection();
+
         bool playerHasExtraAttackReward =
-    PlayerReward.Instance.HasReward(TraitID.Q_LONE_DUEL);
+            PlayerReward.Instance.HasReward(
+                TraitID.Q_LONE_DUEL);
 
         bool bossIsLoneDuel =
             BossManager.Instance.CurrentBoss != null &&
             BossManager.Instance.CurrentBoss.currentTrait != null &&
-            BossManager.Instance.CurrentBoss.currentTrait.traitID == TraitID.Q_LONE_DUEL;
+            BossManager.Instance.CurrentBoss.currentTrait.traitID
+                == TraitID.Q_LONE_DUEL;
+
         if (!extraAttackUsed &&
-    playerHasExtraAttackReward &&
-    !bossIsLoneDuel)
+            playerHasExtraAttackReward &&
+            !bossIsLoneDuel)
         {
             extraAttackUsed = true;
             waitingExtraAttack = true;
 
             handManager.SetInteractable(true);
             InteractConfirmButton(true);
+
             yield break;
         }
 
@@ -470,7 +582,6 @@ public class BattleManager : MonoBehaviour
                 CardResolver.PlayRewardK4FX(
                     foresightCard));
 
-            // Chỉ remove nếu đúng là lá đầu deck
             if (deckManager.allCards.Count > 0 &&
                 deckManager.allCards[0] == foresightCard)
             {
@@ -703,11 +814,14 @@ public class BattleManager : MonoBehaviour
 
     private void Victory()
     {
-        SaveManager.Instance.DeleteSave();
         StartCoroutine(VictoryRoutine());
-        MusicManager.instance.PlayMusic(
-    "VictoryTheme",
-    1f);
+
+        if (MusicManager.instance != null)
+        {
+            MusicManager.instance.PlayMusic(
+                "VictoryTheme",
+                1f);
+        }
     }
 
     private IEnumerator VictoryRoutine()
@@ -722,12 +836,55 @@ public class BattleManager : MonoBehaviour
         foreach (GameObject bar in bars) bar.SetActive(false);
         GameObject[] buttons = GameObject.FindGameObjectsWithTag("Button");
         foreach (GameObject button in buttons) button.SetActive(false);
+        InteractConfirmButton(false);
 
-        yield return TurnUIController.Instance.ShowVictory();
+        if (handManager != null)
+        {
+            handManager.enabled = false;
+        }
+
+        GameObject cardContainer =
+            GameObject.FindGameObjectWithTag(
+                "CardContainer");
+
+        if (cardContainer != null)
+        {
+            cardContainer.SetActive(false);
+        }
+
+        if (TurnUIController.Instance != null)
+        {
+            yield return TurnUIController.Instance.ShowVictory();
+        }
 
         yield return new WaitForSeconds(2f);
 
-        LevelManager.instance.LoadScene("MenuScene");
+        if (hasPendingJokerEnding)
+        {
+            hasPendingJokerEnding = false;
+
+            SaveManager.Instance.DeleteSave();
+
+            if (pendingBadEnding)
+            {
+                pendingBadEnding = false;
+
+                LevelManager.instance.LoadScene(
+                    "BadEndingScene");
+            }
+            else
+            {
+                LevelManager.instance.LoadScene(
+                    "GoodEndingScene");
+            }
+
+            yield break;
+        }
+
+        SaveManager.Instance.DeleteSave();
+
+        LevelManager.instance.LoadScene(
+            "MenuScene");
     }
 
     private void Defeat()
@@ -857,9 +1014,37 @@ public class BattleManager : MonoBehaviour
             rewardK4Card = null;
             return;
         }
+    }
+    private void ApplyExpandedArsenalAceBonus(
+    List<CardSO> cards)
+    {
+        if (PlayerReward.Instance == null)
+            return;
 
-        Debug.Log(
-            $"[FORESIGHT] Top card = {rewardK4Card.name}, " +
-            $"Value = {rewardK4Card.value}");
+        if (!PlayerReward.Instance.HasReward(
+                TraitID.Q_SEAL_OF_SILENCE))
+            return;
+
+        if (cards == null || cards.Count == 0)
+            return;
+
+        int aceCount = 0;
+
+        foreach (CardSO card in cards)
+        {
+            if (card == null)
+                continue;
+
+            if (card.value == 1)
+                aceCount++;
+        }
+
+        if (aceCount <= 0)
+            return;
+
+        PlayerReward.Instance.AddAceHandBonus(
+            aceCount);
+
+        PlayerReward.Instance.RefreshHandSize();
     }
 }

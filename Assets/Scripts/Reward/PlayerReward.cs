@@ -15,6 +15,11 @@ public class PlayerReward : MonoBehaviour
     public IReadOnlyList<RewardSO> OwnedRewards => ownedRewards;
     public RewardSO[] EquippedRewards => equippedRewards;
     public static event Action OnEquipmentChanged;
+    
+    private bool traitHasAdd = false;
+    public bool TraitHasAdd => traitHasAdd;
+
+    public int aceHandBonus = 0;
     private void Awake()
     {
         if (equippedRewards == null || equippedRewards.Length != MaxEquipSlots)
@@ -32,7 +37,15 @@ public class PlayerReward : MonoBehaviour
         }
     }
 
-
+    public void MarkTraitHasAdd()
+    {
+        traitHasAdd = true;
+    }
+    public void LoadTraitHasAdd(bool value)
+    {
+        if (value)
+            traitHasAdd = true;
+    }
     public bool AddReward(RewardSO reward)
     {
         if (reward == null)
@@ -48,7 +61,10 @@ public class PlayerReward : MonoBehaviour
 
         return true;
     }
-
+    public void ResetTraitHasAdd()
+    {
+        traitHasAdd = false;
+    }
     public bool IsEquipped(RewardSO reward)
     {
         foreach (RewardSO r in equippedRewards)
@@ -89,6 +105,7 @@ public class PlayerReward : MonoBehaviour
 
         equippedRewards[slotIndex] = reward;
         RefreshHandSize();
+        traitHasAdd = true;
         OnEquipmentChanged?.Invoke();
 
         return true;
@@ -174,7 +191,12 @@ public class PlayerReward : MonoBehaviour
     }
     public void RefreshHandSize()
     {
+        if (HandManager.Instance == null)
+            return;
+
         HandManager.Instance.maxHandSize = 8;
+
+        bool hasExpandedArsenal = false;
 
         foreach (RewardSO reward in equippedRewards)
         {
@@ -183,9 +205,33 @@ public class PlayerReward : MonoBehaviour
 
             if (reward.traitID == TraitID.Q_SEAL_OF_SILENCE)
             {
+                hasExpandedArsenal = true;
                 HandManager.Instance.maxHandSize++;
             }
         }
+
+        if (hasExpandedArsenal)
+        {
+            HandManager.Instance.maxHandSize += aceHandBonus;
+        }
+        else
+        {
+            aceHandBonus = 0;
+        }
+    }
+    public void AddAceHandBonus(int amount)
+    {
+        if (amount <= 0)
+            return;
+
+        aceHandBonus += amount;
+    }
+
+    public void ResetAceHandBonus()
+    {
+        aceHandBonus = 0;
+
+        RefreshHandSize();
     }
     public bool HasReward(TraitID traitID)
     {

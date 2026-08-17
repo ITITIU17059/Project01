@@ -23,5 +23,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoadingScene.unity
     guid: 58f2a97abf8c17a4d85aff4801e8ce94
+  - enabled: 1
+    path: Assets/Scenes/GoodEndingScene.unity
+    guid: 671de3625707e71459226226a7fced26
+  - enabled: 1
+    path: Assets/Scenes/BadEndingScene.unity
+    guid: 282ee65336e72584db9f872772331d87
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
