@@ -7,6 +7,8 @@ public class SaveData
     public int stageIndex;
     public int bossIndex;
 
+    public bool traitHasAdd;
+
     public List<string> bossSequence = new();
 
     public List<string> handCards = new();

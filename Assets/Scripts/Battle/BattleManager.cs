@@ -37,6 +37,10 @@ public class BattleManager : MonoBehaviour
     public int LastDrawAmount { get; private set; }
 
     public CardSO.Suit OverrideSuit = CardSO.Suit.None;
+
+    private bool hasPendingJokerEnding = false;
+    private bool pendingBadEnding = false;
+    
     public void ContinueFromInventory()
     {
         waitingForInventory = false;
@@ -251,7 +255,11 @@ public class BattleManager : MonoBehaviour
         handManager.SetInteractable(false);
         handManager.RevealAllHiddenCards();
 
-        BossSO deadBoss = BossManager.Instance.CurrentBoss;
+        BossSO deadBoss =
+            BossManager.Instance.CurrentBoss;
+
+        int oldStageIndex =
+            BossManager.Instance.CurrentStageIndex;
 
         BossManager.Instance.BossDisplay.ResetBossSprite();
 
@@ -268,7 +276,8 @@ public class BattleManager : MonoBehaviour
             deadBoss.bossCard,
             target);
 
-        BossManager.Instance.OnBossDefeated(deadBoss);
+        BossManager.Instance.OnBossDefeated(
+            deadBoss);
 
         if (deadBoss.currentTrait != null)
         {
@@ -281,15 +290,24 @@ public class BattleManager : MonoBehaviour
 
         if (!hasNextBoss)
         {
+            if (deadBoss.rank == BossRank.Joker)
+            {
+                hasPendingJokerEnding = true;
+
+                pendingBadEnding =
+                    PlayerReward.Instance != null &&
+                    PlayerReward.Instance.TraitHasAdd;
+
+                ChangeState(BattleState.Victory);
+                yield break;
+            }
+
             yield return StartCoroutine(
                 StageManager.Instance.VictoryStage());
-
-            SaveManager.Instance.DeleteSave();
 
             ChangeState(BattleState.Victory);
             yield break;
         }
-
         waitingForInventory = true;
 
         LevelManager.instance.LoadSceneAdditive(
@@ -301,26 +319,8 @@ public class BattleManager : MonoBehaviour
         LevelManager.instance.UnloadSceneAdditive(
             "InventoryScene");
 
-        BossRank nextRank;
-
-        switch (deadBoss.rank)
-        {
-            case BossRank.Jack:
-                nextRank = BossRank.Queen;
-                break;
-
-            case BossRank.Queen:
-                nextRank = BossRank.King;
-                break;
-
-            case BossRank.King:
-                nextRank = BossRank.Joker;
-                break;
-
-            default:
-                ChangeState(BattleState.Victory);
-                yield break;
-        }
+        int newStageIndex =
+     BossManager.Instance.CurrentStageIndex;
 
         if (!BossManager.Instance.LoadNextBoss())
         {
@@ -331,8 +331,32 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-        yield return StartCoroutine(
-            StageManager.Instance.ChangeStage(nextRank));
+        if (newStageIndex != oldStageIndex)
+        {
+            BossRank nextRank;
+
+            switch (newStageIndex)
+            {
+                case 1:
+                    nextRank = BossRank.Queen;
+                    break;
+
+                case 2:
+                    nextRank = BossRank.King;
+                    break;
+
+                case 3:
+                    nextRank = BossRank.Joker;
+                    break;
+
+                default:
+                    nextRank = BossRank.Jack;
+                    break;
+            }
+
+            yield return StartCoroutine(
+                StageManager.Instance.ChangeStage(nextRank));
+        }
 
         if (handWasEmptyAfterPlay)
         {
@@ -341,7 +365,9 @@ public class BattleManager : MonoBehaviour
                 handManager.maxHandSize &&
                 deckManager.allCards.Count > 0)
             {
-                deckManager.DrawCard(handManager);
+                deckManager.DrawCard(
+                    handManager);
+
                 handManager.HideNextCardIfNeeded();
             }
         }
@@ -357,7 +383,9 @@ public class BattleManager : MonoBehaviour
                     handManager.maxHandSize)
                     break;
 
-                deckManager.DrawCard(handManager);
+                deckManager.DrawCard(
+                    handManager);
+
                 handManager.HideNextCardIfNeeded();
             }
         }
@@ -378,10 +406,13 @@ public class BattleManager : MonoBehaviour
 
         if (handManager.handCards.Count == 0)
         {
-            ChangeState(BattleState.Defeat);
+            ChangeState(
+                BattleState.Defeat);
+
             yield break;
         }
 
+<<<<<<< Updated upstream
 
         ChangeState(BattleState.PlayerTurn);
 
@@ -393,7 +424,19 @@ public class BattleManager : MonoBehaviour
             ChangeState(BattleState.PlayerTurn);
         }
 
+=======
+        if (
+            BossManager.Instance.CurrentBoss != null &&
+            BossManager.Instance.CurrentBoss.isJoker)
+        {
+            ChangeState(
+                BattleState.PlayerTurn);
+
+            yield break;
+        }
+>>>>>>> Stashed changes
     }
+
 
     #endregion
 
@@ -402,6 +445,7 @@ public class BattleManager : MonoBehaviour
     {
         if (waitingExtraAttack)
             waitingExtraAttack = false;
+
         handManager.SetInteractable(false);
 
         handWasEmptyAfterPlay =
@@ -417,13 +461,44 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        if (PlayerReward.Instance != null &&
+            PlayerReward.Instance.HasReward(
+                TraitID.Q_SEAL_OF_SILENCE))
+        {
+            int aceCount = 0;
+
+            foreach (CardSO card in cards)
+            {
+                if (card != null && card.value == 1)
+                {
+                    aceCount++;
+                }
+            }
+
+            if (aceCount > 0)
+            {
+                PlayerReward.Instance.AddAceHandBonus(
+                    aceCount);
+
+                PlayerReward.Instance.RefreshHandSize();
+            }
+        }
+
         yield return StartCoroutine(
             ResolveCombo(cards));
 
-        if (PlayerReward.Instance.HasReward(TraitID.K_ABSOLUTE_AUTHORITY))
+        if (
+       cards.Count > 1 &&
+       PlayerReward.Instance != null &&
+       PlayerReward.Instance.HasReward(
+           TraitID.K_ABSOLUTE_AUTHORITY) &&
+       BossManager.Instance.CurrentBoss != null &&
+       !BossManager.Instance.IsDead())
         {
-            handManager.ReturnRandomSelectedCard();
+            yield return StartCoroutine(
+                ResolveCombo(cards));
         }
+
         yield return StartCoroutine(
             CardResolver.DiscardCards(
                 handManager.selectedCards,
@@ -431,22 +506,27 @@ public class BattleManager : MonoBehaviour
                 graveyardSpawnPoint));
 
         handManager.ClearSelection();
+
         bool playerHasExtraAttackReward =
-    PlayerReward.Instance.HasReward(TraitID.Q_LONE_DUEL);
+            PlayerReward.Instance.HasReward(
+                TraitID.Q_LONE_DUEL);
 
         bool bossIsLoneDuel =
             BossManager.Instance.CurrentBoss != null &&
             BossManager.Instance.CurrentBoss.currentTrait != null &&
-            BossManager.Instance.CurrentBoss.currentTrait.traitID == TraitID.Q_LONE_DUEL;
+            BossManager.Instance.CurrentBoss.currentTrait.traitID
+                == TraitID.Q_LONE_DUEL;
+
         if (!extraAttackUsed &&
-    playerHasExtraAttackReward &&
-    !bossIsLoneDuel)
+            playerHasExtraAttackReward &&
+            !bossIsLoneDuel)
         {
             extraAttackUsed = true;
             waitingExtraAttack = true;
 
             handManager.SetInteractable(true);
             InteractConfirmButton(true);
+
             yield break;
         }
 
@@ -503,7 +583,6 @@ public class BattleManager : MonoBehaviour
                 CardResolver.PlayRewardK4FX(
                     foresightCard));
 
-            // Chỉ remove nếu đúng là lá đầu deck
             if (deckManager.allCards.Count > 0 &&
                 deckManager.allCards[0] == foresightCard)
             {
@@ -736,8 +815,6 @@ public class BattleManager : MonoBehaviour
 
     private void Victory()
     {
-        SaveManager.Instance.DeleteSave();
-
         StartCoroutine(VictoryRoutine());
 
         if (MusicManager.instance != null)
@@ -758,7 +835,8 @@ public class BattleManager : MonoBehaviour
         }
 
         GameObject cardContainer =
-            GameObject.FindGameObjectWithTag("CardContainer");
+            GameObject.FindGameObjectWithTag(
+                "CardContainer");
 
         if (cardContainer != null)
         {
@@ -772,10 +850,32 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        if (LevelManager.instance != null)
+        if (hasPendingJokerEnding)
         {
-            LevelManager.instance.LoadScene("MenuScene");
+            hasPendingJokerEnding = false;
+
+            SaveManager.Instance.DeleteSave();
+
+            if (pendingBadEnding)
+            {
+                pendingBadEnding = false;
+
+                LevelManager.instance.LoadScene(
+                    "BadEndingScene");
+            }
+            else
+            {
+                LevelManager.instance.LoadScene(
+                    "GoodEndingScene");
+            }
+
+            yield break;
         }
+
+        SaveManager.Instance.DeleteSave();
+
+        LevelManager.instance.LoadScene(
+            "MenuScene");
     }
 
     private void Defeat()
@@ -905,9 +1005,37 @@ public class BattleManager : MonoBehaviour
             rewardK4Card = null;
             return;
         }
+    }
+    private void ApplyExpandedArsenalAceBonus(
+    List<CardSO> cards)
+    {
+        if (PlayerReward.Instance == null)
+            return;
 
-        Debug.Log(
-            $"[FORESIGHT] Top card = {rewardK4Card.name}, " +
-            $"Value = {rewardK4Card.value}");
+        if (!PlayerReward.Instance.HasReward(
+                TraitID.Q_SEAL_OF_SILENCE))
+            return;
+
+        if (cards == null || cards.Count == 0)
+            return;
+
+        int aceCount = 0;
+
+        foreach (CardSO card in cards)
+        {
+            if (card == null)
+                continue;
+
+            if (card.value == 1)
+                aceCount++;
+        }
+
+        if (aceCount <= 0)
+            return;
+
+        PlayerReward.Instance.AddAceHandBonus(
+            aceCount);
+
+        PlayerReward.Instance.RefreshHandSize();
     }
 }
