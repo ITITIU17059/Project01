@@ -36,6 +36,8 @@ public class SaveManager : MonoBehaviour
             ownedRewards = PlayerReward.Instance.GetOwnedRewardNames(),
             equippedRewards = PlayerReward.Instance.GetEquippedRewardNames(),
 
+            traitHasAdd = PlayerReward.Instance.TraitHasAdd,
+
             currentTraitSelection = TraitSelectionPanelUI.Instance.GetCurrentTraitNames(),
             jackTraitPool = TraitPoolManager.Instance.GetPoolSaveData(BossRank.Jack),
             queenTraitPool = TraitPoolManager.Instance.GetPoolSaveData(BossRank.Queen),

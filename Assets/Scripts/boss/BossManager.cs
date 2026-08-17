@@ -44,7 +44,7 @@ public class BossManager : MonoBehaviour
     public bool LastKillWasPerfect { get; private set; }
 
     public bool HasMoreBosses => CurrentBossIndex < bossSequence.Count;
-
+   
     private void Awake()
     {
         if (Instance == null)
@@ -72,7 +72,8 @@ public class BossManager : MonoBehaviour
             PlayerReward.Instance.LoadRewards(
             save.ownedRewards,
             save.equippedRewards);
-
+            PlayerReward.Instance.LoadTraitHasAdd(
+    save.traitHasAdd);
             TraitPoolManager.Instance.LoadPool(
                 BossRank.Jack,
                 save.jackTraitPool);
@@ -99,9 +100,10 @@ public class BossManager : MonoBehaviour
         {
             CurrentBossIndex = 0;
             CurrentStageIndex = 0;
+            PlayerReward.Instance.ResetTraitHasAdd();
             CreateQueue();
         }
-
+       
         StageManager.Instance.ApplyStage(CurrentStageIndex);
 
         LoadNextBoss();
