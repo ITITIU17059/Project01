@@ -15,4 +15,4 @@ MonoBehaviour:
   traitID: 8
   icon: {fileID: 21300000, guid: 6960c6bd5088317429f7e0e033bee813, type: 3}
   rewardName: Echo Play
-  description: Return 1 card when the player plays it
+  description: If played with more than 1 card, re-triggers 1 additional time
