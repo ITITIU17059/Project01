@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 127245377}
   m_Layer: 5
   m_Name: DiscardbarUI
-  m_TagString: Untagged
+  m_TagString: Bar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -923,7 +923,7 @@ GameObject:
   - component: {fileID: 170372735}
   m_Layer: 5
   m_Name: 'DiscardConfirmButton '
-  m_TagString: Untagged
+  m_TagString: Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1615,7 +1615,7 @@ GameObject:
   - component: {fileID: 403569432}
   m_Layer: 0
   m_Name: TavernDeck
-  m_TagString: Untagged
+  m_TagString: Deck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4307,7 +4307,7 @@ GameObject:
   - component: {fileID: 776155654}
   m_Layer: 5
   m_Name: DeckbarUI
-  m_TagString: Untagged
+  m_TagString: Bar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4905,7 +4905,7 @@ GameObject:
   - component: {fileID: 848775553}
   m_Layer: 5
   m_Name: BossCard
-  m_TagString: Untagged
+  m_TagString: BossDisplay
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7929,7 +7929,7 @@ GameObject:
   - component: {fileID: 1550560575}
   m_Layer: 5
   m_Name: ConfirmButton
-  m_TagString: Untagged
+  m_TagString: Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8756,7 +8756,7 @@ GameObject:
   - component: {fileID: 1750712221}
   m_Layer: 0
   m_Name: CardContainer
-  m_TagString: Untagged
+  m_TagString: CardContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9667,12 +9667,12 @@ MonoBehaviour:
   queenBackground: {fileID: 32900000, guid: bd5ac2d243c93bf43bf7ca18db4d94d1, type: 3}
   kingBackground: {fileID: 32900000, guid: a3c420c7f455dd04ca6de2484f35b733, type: 3}
   jokerBackground: {fileID: 32900000, guid: 6a43ddab52b25334295bf2bfce3521da, type: 3}
-  victoryBackground: {fileID: 32900000, guid: 833a5b910b0bf424895a2e38d8492eb3, type: 3}
+  victoryBackground: {fileID: 32900000, guid: 25c032b2788386e43bbc1f7c9df8885a, type: 3}
   jackTextture: {fileID: 8400000, guid: 0d69b3c1fe04ac24fbf0a1897c874ef9, type: 2}
   queenTextture: {fileID: 8400000, guid: 14c631bd65625a8479db945089fcdd5f, type: 2}
   kingTextture: {fileID: 8400000, guid: f9513e92ca7b22047a962c075ac4392a, type: 2}
   jokerTextture: {fileID: 8400000, guid: c906cd98f0e2f08438a86ddb39a0fa8c, type: 2}
-  victoryTextture: {fileID: 8400000, guid: 0d69b3c1fe04ac24fbf0a1897c874ef9, type: 2}
+  victoryTextture: {fileID: 8400000, guid: fddae91c3985b6347a8678c8f5728acc, type: 2}
   videoPlayer: {fileID: 714688375}
 --- !u!1 &2029248846
 GameObject:
@@ -10523,7 +10523,7 @@ GameObject:
   - component: {fileID: 2129701499}
   m_Layer: 5
   m_Name: GraveyarDeck
-  m_TagString: Untagged
+  m_TagString: Deck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

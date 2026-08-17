@@ -712,11 +712,16 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator VictoryRoutine()
     {
-        InteractConfirmButton(false);
-        handManager.enabled = false;
         GameObject cardContainer = GameObject.FindGameObjectWithTag("CardContainer");
         cardContainer.SetActive(false);
-
+        GameObject bossDisplay = GameObject.FindGameObjectWithTag("BossDisplay");
+        bossDisplay.SetActive(false);
+        GameObject[] decks = GameObject.FindGameObjectsWithTag("Deck");
+        foreach (GameObject deck in decks) deck.SetActive(false);
+        GameObject[] bars = GameObject.FindGameObjectsWithTag("Bar");
+        foreach (GameObject bar in bars) bar.SetActive(false);
+        GameObject[] buttons = GameObject.FindGameObjectsWithTag("Button");
+        foreach (GameObject button in buttons) button.SetActive(false);
 
         yield return TurnUIController.Instance.ShowVictory();
 
