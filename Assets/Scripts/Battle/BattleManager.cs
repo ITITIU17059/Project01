@@ -384,6 +384,14 @@ public class BattleManager : MonoBehaviour
 
         ChangeState(BattleState.PlayerTurn);
 
+=======
+        BossSO currentBoss = BossManager.Instance.CurrentBoss;
+
+        if (currentBoss != null && currentBoss.isJoker)
+        {
+            ChangeState(BattleState.PlayerTurn);
+        }
+>>>>>>> main
     }
 
     #endregion

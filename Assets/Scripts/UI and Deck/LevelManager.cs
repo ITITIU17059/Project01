@@ -66,6 +66,16 @@ public class LevelManager : MonoBehaviour
         yield return transition.AnimateTransitionOut();
     }
 
+    private IEnumerator LoadInventory()
+    {
+        SceneTransition transition =
+            transitions.First(t => t.name == "CrossFade");
+
+        yield return transition.AnimateTransitionIn();
+
+        yield return transition.AnimateTransitionIn();
+    }
+
     public void LoadMainMenu()
     {
         LoadScene("MenuScene");
@@ -92,9 +102,19 @@ public class LevelManager : MonoBehaviour
         if (SceneManager.GetSceneByName(sceneName).isLoaded)
             yield break;
 
-        yield return SceneManager.LoadSceneAsync(
-            sceneName,
-            LoadSceneMode.Additive);
+        SceneTransition transition =
+            transitions.First(t => t.name == "CrossFade");
+
+        AsyncOperation scene = SceneManager.LoadSceneAsync(
+            sceneName, LoadSceneMode.Additive);
+
+        scene.allowSceneActivation = false;
+
+        yield return transition.AnimateTransitionIn();
+
+        scene.allowSceneActivation = true;
+
+        yield return transition.AnimateTransitionOut();
     }
 
     public void UnloadSceneAdditive(string sceneName)
@@ -107,6 +127,15 @@ public class LevelManager : MonoBehaviour
         if (!SceneManager.GetSceneByName(sceneName).isLoaded)
             yield break;
 
-        yield return SceneManager.UnloadSceneAsync(sceneName);
+        SceneTransition transition =
+            transitions.First(t => t.name == "CrossFade");
+
+        yield return transition.AnimateTransitionIn();
+
+        AsyncOperation scene = SceneManager.UnloadSceneAsync(sceneName);
+
+        yield return scene;
+
+        yield return transition.AnimateTransitionOut();
     }
 }
