@@ -843,10 +843,6 @@ public class BattleManager : MonoBehaviour
             handManager.enabled = false;
         }
 
-        GameObject cardContainer =
-            GameObject.FindGameObjectWithTag(
-                "CardContainer");
-
         if (cardContainer != null)
         {
             cardContainer.SetActive(false);
