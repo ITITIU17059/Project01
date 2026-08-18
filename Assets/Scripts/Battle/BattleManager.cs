@@ -266,6 +266,12 @@ public class BattleManager : MonoBehaviour
         yield return BossFXManager.Instance.PlayDeathFX(
             BossManager.Instance.BossTransform);
 
+        if (BossEliminatedUI.Instance != null)
+        {
+            Debug.Log("BossEleminatePlay");
+            yield return BossEliminatedUI.Instance.Play();
+        }
+
         Transform target =
             BossManager.Instance.LastKillWasPerfect
                 ? tavernSpawnPoint
@@ -357,6 +363,11 @@ public class BattleManager : MonoBehaviour
             yield return StartCoroutine(
                 StageManager.Instance.ChangeStage(nextRank));
         }
+        else
+        {
+            yield return StartCoroutine(
+                StageManager.Instance.ChangeStage(deadBoss.rank));
+        }
 
         if (handWasEmptyAfterPlay)
         {
@@ -412,26 +423,11 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-
-        ChangeState(BattleState.PlayerTurn);
-
-
         BossSO currentBoss = BossManager.Instance.CurrentBoss;
 
         if (currentBoss != null && currentBoss.isJoker)
         {
             ChangeState(BattleState.PlayerTurn);
-        }
-
-
-        if (
-            BossManager.Instance.CurrentBoss != null &&
-            BossManager.Instance.CurrentBoss.isJoker)
-        {
-            ChangeState(
-                BattleState.PlayerTurn);
-
-            yield break;
         }
 
     }

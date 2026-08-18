@@ -1460,13 +1460,17 @@ PrefabInstance:
       propertyPath: tracks.Array.data[19].trackName
       value: KingTheme4
       objectReference: {fileID: 0}
+    - target: {fileID: 7309919695954491340, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: m_TagString
+      value: Music
+      objectReference: {fileID: 0}
     - target: {fileID: 7881778789683042331, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: m_Name
       value: AudioManager
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.size
-      value: 35
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[0].volume
@@ -1609,6 +1613,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: soundEffects.Array.data[35].volume
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[8].groupId
       value: JackSpade
       objectReference: {fileID: 0}
@@ -1669,6 +1677,10 @@ PrefabInstance:
       value: KingHearth
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: soundEffects.Array.data[35].groupId
+      value: BossEliminated
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[23].clips.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1714,6 +1726,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[34].clips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: soundEffects.Array.data[35].clips.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
@@ -1772,6 +1788,10 @@ PrefabInstance:
       propertyPath: 'soundEffects.Array.data[34].clips.Array.data[0]'
       value: 
       objectReference: {fileID: 8300000, guid: 7a2cfb89dc1f93349a17158be6fcf801, type: 3}
+    - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: 'soundEffects.Array.data[35].clips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ae3a865cdbe0cd24f9f585519ac57c46, type: 3}
     - target: {fileID: 8679864226830082696, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
