@@ -175,6 +175,11 @@ public class BossManager : MonoBehaviour
         if (CurrentBoss == null)
             return false;
 
+        if (PlayerReward.Instance != null)
+        {
+            PlayerReward.Instance.ResetAceHandBonus();
+        }
+
         // Reset trait của boss mới
         if (!CurrentBoss.isJoker)
         {
