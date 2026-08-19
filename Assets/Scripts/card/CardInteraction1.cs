@@ -50,8 +50,6 @@ public class CardInteraction : MonoBehaviour
 
         if (IsLocked)
             return;
-        if (TraitSelectionPanelUI.IsOpen)
-            return;
         if (!handManager.CanInteract)
             return;
         if (SoundManager.instance != null)
@@ -79,15 +77,6 @@ public class CardInteraction : MonoBehaviour
 
     public void HandleMouseExit()
     {
-        if (TraitSelectionPanelUI.IsOpen)
-        {
-            // Panel chọn trait đang mở: ép reset hover ngay cả khi trước đó
-            // chưa kịp lọt qua điều kiện CanInteract, tránh lá bài bị kẹt
-            // ở trạng thái phóng to / nhấc lên.
-            if (isHovered && !isDragging)
-                HandleDeselect();
-            return;
-        }
         if (!handManager.CanInteract)
             return;
         if (!isHovered || isDragging) return;
@@ -112,8 +101,6 @@ public class CardInteraction : MonoBehaviour
     {
         if (IsLocked)
             return;
-        if (TraitSelectionPanelUI.IsOpen)
-            return;
         if (!handManager.CanInteract)
             return;
         isDragging = true;
@@ -123,8 +110,6 @@ public class CardInteraction : MonoBehaviour
     public void HandleDragging(Vector3 targetWorldPos)
     {
         if (IsLocked)
-            return;
-        if (TraitSelectionPanelUI.IsOpen)
             return;
         if (!handManager.CanInteract)
             return;
@@ -140,8 +125,6 @@ public class CardInteraction : MonoBehaviour
     public void HandleDragEnd(bool isClick, Vector3 mouseWorldPos)
     {
         if (IsLocked)
-            return;
-        if (TraitSelectionPanelUI.IsOpen)
             return;
         if (!handManager.CanInteract)
             return;
@@ -192,8 +175,6 @@ public class CardInteraction : MonoBehaviour
     private void ToggleCardSelection()
     {
         if (IsLocked)
-            return;
-        if (TraitSelectionPanelUI.IsOpen)
             return;
         if (!handManager.CanInteract)
             return;
