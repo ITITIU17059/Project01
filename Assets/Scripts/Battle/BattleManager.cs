@@ -40,7 +40,7 @@ public class BattleManager : MonoBehaviour
 
     private bool hasPendingJokerEnding = false;
     private bool pendingBadEnding = false;
-    
+
     public void ContinueFromInventory()
     {
         waitingForInventory = false;
@@ -266,6 +266,12 @@ public class BattleManager : MonoBehaviour
         yield return BossFXManager.Instance.PlayDeathFX(
             BossManager.Instance.BossTransform);
 
+        if (BossEliminatedUI.Instance != null)
+        {
+            Debug.Log("BossEleminatePlay");
+            yield return BossEliminatedUI.Instance.Play();
+        }
+
         Transform target =
             BossManager.Instance.LastKillWasPerfect
                 ? tavernSpawnPoint
@@ -357,6 +363,11 @@ public class BattleManager : MonoBehaviour
             yield return StartCoroutine(
                 StageManager.Instance.ChangeStage(nextRank));
         }
+        else
+        {
+            yield return StartCoroutine(
+                StageManager.Instance.ChangeStage(deadBoss.rank));
+        }
 
         if (handWasEmptyAfterPlay)
         {
@@ -412,26 +423,11 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-
-        ChangeState(BattleState.PlayerTurn);
-
-
         BossSO currentBoss = BossManager.Instance.CurrentBoss;
 
         if (currentBoss != null && currentBoss.isJoker)
         {
             ChangeState(BattleState.PlayerTurn);
-        }
-
-
-        if (
-            BossManager.Instance.CurrentBoss != null &&
-            BossManager.Instance.CurrentBoss.isJoker)
-        {
-            ChangeState(
-                BattleState.PlayerTurn);
-
-            yield break;
         }
 
     }
@@ -826,16 +822,22 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator VictoryRoutine()
     {
+        GameObject cardContainer = GameObject.FindGameObjectWithTag("CardContainer");
+        cardContainer.SetActive(false);
+        GameObject bossDisplay = GameObject.FindGameObjectWithTag("BossDisplay");
+        bossDisplay.SetActive(false);
+        GameObject[] decks = GameObject.FindGameObjectsWithTag("Deck");
+        foreach (GameObject deck in decks) deck.SetActive(false);
+        GameObject[] bars = GameObject.FindGameObjectsWithTag("Bar");
+        foreach (GameObject bar in bars) bar.SetActive(false);
+        GameObject[] buttons = GameObject.FindGameObjectsWithTag("Button");
+        foreach (GameObject button in buttons) button.SetActive(false);
         InteractConfirmButton(false);
 
         if (handManager != null)
         {
             handManager.enabled = false;
         }
-
-        GameObject cardContainer =
-            GameObject.FindGameObjectWithTag(
-                "CardContainer");
 
         if (cardContainer != null)
         {

@@ -106,6 +106,8 @@ public class StageManager : MonoBehaviour
             .WaitForCompletion();
 
         background.texture = victoryTextture;
+        videoPlayer.clip = victoryBackground;
+        videoPlayer.targetTexture = victoryTextture;
 
         MusicManager.instance.PlayMusic("VictoryTheme");
 

@@ -7,6 +7,11 @@ TagManager:
   - PlayZone
   - TraitItems
   - CardContainer
+  - Deck
+  - Button
+  - Bar
+  - BossDisplay
+  - Music
   layers:
   - Default
   - TransparentFX

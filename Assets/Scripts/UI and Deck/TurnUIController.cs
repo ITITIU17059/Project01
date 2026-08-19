@@ -99,7 +99,7 @@ public class TurnUIController : MonoBehaviour
 
         yield return seq.WaitForCompletion();
 
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(3f);
 
         Sequence end = DOTween.Sequence();
 
@@ -154,7 +154,7 @@ public class TurnUIController : MonoBehaviour
 
         yield return seq.WaitForCompletion();
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
 
         Sequence end = DOTween.Sequence();
 
