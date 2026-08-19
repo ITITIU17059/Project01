@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 84387954114038891}
   - component: {fileID: -8312107047823936541}
   - component: {fileID: -296154094594190960}
+  - component: {fileID: 3412404521900426675}
   m_Layer: 0
   m_Name: CardPrefab
   m_TagString: Untagged
@@ -67,7 +68,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3419911141167198513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d85f0ac73158d85498d5c04712646a79, type: 3}
+  m_Script: {fileID: 11500000, guid: 2bd18b7328ff21e4e97c58c0213fecfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardInteraction
   hover:
@@ -76,7 +77,7 @@ MonoBehaviour:
     duration: 0.15
   playZoneLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   isSelectedInCenter: 0
   splineLocalPosition: {x: 0, y: 0, z: 0}
   IsLocked: 0
@@ -213,7 +214,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5859375, y: 2.4101562}
+    oldSize: {x: 1.45, y: 2.2035713}
     newSize: {x: 1.5859375, y: 2.4101562}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -248,3 +249,25 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3412404521900426675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3419911141167198513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bd18b7328ff21e4e97c58c0213fecfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardInteraction
+  hover:
+    scale: 1.15
+    moveAmount: 0.6
+    duration: 0.15
+  playZoneLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isSelectedInCenter: 0
+  splineLocalPosition: {x: 0, y: 0, z: 0}
+  IsLocked: 0

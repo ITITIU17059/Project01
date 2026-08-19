@@ -459,7 +459,8 @@ public class HandManager : MonoBehaviour
     {
         foreach (GameObject card in handCards)
         {
-            CardInteraction interaction = card.GetComponent<CardInteraction>();
+            CardInteraction interaction =
+                card.GetComponent<CardInteraction>();
 
             if (interaction != null)
             {

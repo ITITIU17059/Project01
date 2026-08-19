@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +11,8 @@ public class LevelManager : MonoBehaviour
     public GameObject transitionsContainer;
     [NonSerialized] public SceneTransition[] transitions;
     public string sceneTransName;
+
+    private bool isLoadingScene = false;
 
     private void Awake()
     {
@@ -50,12 +52,21 @@ public class LevelManager : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
+
+        if (isLoadingScene)
+        {
+            Debug.LogWarning($"[LevelManager] Đang loading scene, bỏ qua lệnh LoadScene('{sceneName}') gọi trùng.");
+            return;
+        }
+
         sceneTransName = sceneName;
         StartCoroutine(LoadLoadingScene());
     }
 
     private IEnumerator LoadLoadingScene()
     {
+        isLoadingScene = true;
+
         SceneTransition transition =
             transitions.First(t => t.name == "CrossFade");
 
@@ -64,6 +75,8 @@ public class LevelManager : MonoBehaviour
         yield return SceneManager.LoadSceneAsync("LoadingScene");
 
         yield return transition.AnimateTransitionOut();
+
+        isLoadingScene = false;
     }
 
     private IEnumerator LoadInventory()
