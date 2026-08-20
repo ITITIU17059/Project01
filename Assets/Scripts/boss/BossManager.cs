@@ -44,7 +44,7 @@ public class BossManager : MonoBehaviour
     public bool LastKillWasPerfect { get; private set; }
 
     public bool HasMoreBosses => CurrentBossIndex < bossSequence.Count;
-   
+
     private void Awake()
     {
         if (Instance == null)
@@ -103,7 +103,7 @@ public class BossManager : MonoBehaviour
             PlayerReward.Instance.ResetTraitHasAdd();
             CreateQueue();
         }
-       
+
         StageManager.Instance.ApplyStage(CurrentStageIndex);
 
         LoadNextBoss();
@@ -205,7 +205,6 @@ public class BossManager : MonoBehaviour
         bossDisplay.UpdateHP(CurrentHP);
         bossDisplay.UpdateATK(CurrentBoss.currentATK);
         bossDisplay.UpdateResistance(CurrentBoss.resistanceSuit);
-        SoundManager.instance.PlaySound2D(CurrentBoss.spawnSoundID);
 
         if (CurrentBoss.isJoker)
         {

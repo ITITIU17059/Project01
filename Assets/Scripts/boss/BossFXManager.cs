@@ -73,7 +73,7 @@ public class BossFXManager : MonoBehaviour
         GameObject fx = Instantiate(
             prefab,
             cardTransform.position,
-            Quaternion.identity);
+            prefab.transform.rotation);
 
         Transform boss = BossManager.Instance.BossTransform;
 
