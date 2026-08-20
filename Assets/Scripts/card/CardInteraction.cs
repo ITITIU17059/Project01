@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using DG.Tweening;
 
 [RequireComponent(typeof(CardDisplay), typeof(CardPhysics))]

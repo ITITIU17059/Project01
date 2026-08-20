@@ -80,7 +80,6 @@ public class BossEliminatedUI : MonoBehaviour
         yield return PlayExit();
 
         canvasGroup.gameObject.SetActive(false);
-        audioSource.volume = 1;
     }
 
     private void ResetUI()
