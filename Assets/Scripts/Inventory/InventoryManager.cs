@@ -15,8 +15,13 @@ public class InventoryManager : MonoBehaviour
     private readonly List<RewardSlot> rewardSlots = new();
     [SerializeField] private GameObject notificationObject;
     [SerializeField] private InventoryAnimationManager animationManager;
+    private GameObject musicManger;
+    private AudioSource audioSource;
     private void Start()
     {
+        musicManger = GameObject.FindGameObjectWithTag("Music");
+        audioSource = musicManger.GetComponent<AudioSource>();
+        audioSource.volume = 1;
         MusicManager.instance.PlayMusic("InventoryTheme");
         RefreshRewardList();
         RefreshEquipSlots();

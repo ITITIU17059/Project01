@@ -111,6 +111,7 @@ public class TraitSelectionPanelUI : MonoBehaviour
         hand.SetInteractable(true);
 
         BattleManager.Instance.StartBattleAfterTraitSelected();
+        SoundManager.instance.PlaySound2D(currentBoss.spawnSoundID);
     }
 
     public void SetVisible(bool visible)

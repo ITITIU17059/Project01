@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO.Compression;
 using DG.Tweening;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
@@ -165,12 +166,12 @@ public class BattleManager : MonoBehaviour
         handManager.handCards.RemoveAll(
             card => card == null);
 
-        BossSO boss =
-            BossManager.Instance.CurrentBoss;
+        BossSO boss = BossManager.Instance.CurrentBoss;
 
         if (boss != null && boss.isJoker)
         {
             BossManager.Instance.RandomizeJokerDisguise();
+            SoundManager.instance.PlaySound2D(boss.spawnSoundID);
         }
 
         handManager.SetInteractable(false);
