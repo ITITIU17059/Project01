@@ -369,36 +369,49 @@ public class BattleManager : MonoBehaviour
                 StageManager.Instance.ChangeStage(deadBoss.rank));
         }
 
-        if (handWasEmptyAfterPlay)
-        {
-            while (
-                handManager.handCards.Count <
-                handManager.maxHandSize &&
-                deckManager.allCards.Count > 0)
-            {
-                deckManager.DrawCard(
-                    handManager);
+        bool drawBonusUnlocked =
+           PlayerReward.Instance != null &&
+           !PlayerReward.Instance.TraitHasAdd;
 
-                handManager.HideNextCardIfNeeded();
+        if (drawBonusUnlocked)
+        {
+            if (handWasEmptyAfterPlay)
+            {
+                while (handManager.handCards.Count <
+                    handManager.maxHandSize &&
+                    deckManager.allCards.Count > 0)
+                {
+                    deckManager.DrawCard(
+                        handManager);
+
+                    handManager.HideNextCardIfNeeded();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    if (deckManager.allCards.Count == 0)
+                        break;
+
+                    if (
+                        handManager.handCards.Count >=
+                        handManager.maxHandSize)
+                        break;
+
+                    deckManager.DrawCard(
+                        handManager);
+
+                    handManager.HideNextCardIfNeeded();
+                }
             }
         }
-        else
+        else if (handManager.handCards.Count == 0 &&
+                 deckManager.allCards.Count > 0)
         {
-            for (int i = 0; i < 2; i++)
-            {
-                if (deckManager.allCards.Count == 0)
-                    break;
-
-                if (
-                    handManager.handCards.Count >=
-                    handManager.maxHandSize)
-                    break;
-
-                deckManager.DrawCard(
-                    handManager);
-
-                handManager.HideNextCardIfNeeded();
-            }
+ 
+            deckManager.DrawCard(handManager);
+            handManager.HideNextCardIfNeeded();
         }
 
         if (BossManager.Instance.LastKillWasPerfect)
@@ -1007,36 +1020,5 @@ public class BattleManager : MonoBehaviour
             return;
         }
     }
-    private void ApplyExpandedArsenalAceBonus(
-    List<CardSO> cards)
-    {
-        if (PlayerReward.Instance == null)
-            return;
-
-        if (!PlayerReward.Instance.HasReward(
-                TraitID.Q_SEAL_OF_SILENCE))
-            return;
-
-        if (cards == null || cards.Count == 0)
-            return;
-
-        int aceCount = 0;
-
-        foreach (CardSO card in cards)
-        {
-            if (card == null)
-                continue;
-
-            if (card.value == 1)
-                aceCount++;
-        }
-
-        if (aceCount <= 0)
-            return;
-
-        PlayerReward.Instance.AddAceHandBonus(
-            aceCount);
-
-        PlayerReward.Instance.RefreshHandSize();
-    }
+   
 }

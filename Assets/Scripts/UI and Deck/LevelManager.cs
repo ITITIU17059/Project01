@@ -34,20 +34,17 @@ public class LevelManager : MonoBehaviour
 
     public void FadeOut()
     {
-        Debug.Log("FadeOut called");
         StartCoroutine(FadeOutRoutine());
     }
 
     private IEnumerator FadeOutRoutine()
     {
-        Debug.Log("FadeOutRoutine");
 
         SceneTransition transition =
             transitions.First(t => t.name == "CrossFade");
 
         yield return transition.AnimateTransitionOut();
 
-        Debug.Log("FadeOut Finished");
     }
 
     public void LoadScene(string sceneName)
@@ -55,7 +52,6 @@ public class LevelManager : MonoBehaviour
 
         if (isLoadingScene)
         {
-            Debug.LogWarning($"[LevelManager] Đang loading scene, bỏ qua lệnh LoadScene('{sceneName}') gọi trùng.");
             return;
         }
 
@@ -79,15 +75,6 @@ public class LevelManager : MonoBehaviour
         isLoadingScene = false;
     }
 
-    private IEnumerator LoadInventory()
-    {
-        SceneTransition transition =
-            transitions.First(t => t.name == "CrossFade");
-
-        yield return transition.AnimateTransitionIn();
-
-        yield return transition.AnimateTransitionIn();
-    }
 
     public void LoadMainMenu()
     {
