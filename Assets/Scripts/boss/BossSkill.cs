@@ -367,9 +367,10 @@ public static class BossSkill
 
         // Đổi disguise + suit mỗi lượt
         manager.RandomizeJokerDisguise();
+        manager.RandomizeJokerSuit();
 
         Debug.Log(
-            $"[JOKER] Turn {boss.turnCounter} -> +{boss.turnCounter} ATK + Disguise");
+            $"[JOKER] Turn {boss.turnCounter} -> +{boss.turnCounter} ATK + Disguise + Suit");
     }
     private static void Joker_DrawOneCard(int value)
     {
