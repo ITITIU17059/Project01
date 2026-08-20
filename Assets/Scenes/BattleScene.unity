@@ -7845,7 +7845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardFXManager
   visualCardPrefab: {fileID: 3419911141167198513, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
-  canvasTransform: {fileID: 0}
+  canvasTransform: {fileID: 1036221538}
 --- !u!1 &1043961771
 GameObject:
   m_ObjectHideFlags: 0

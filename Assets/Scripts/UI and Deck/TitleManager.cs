@@ -16,7 +16,6 @@ public class TitleManager : MonoBehaviour
         isClicked = false;
     }
 
-    // Chặn spam click: chỉ cho bấm "Press Start" đúng 1 lần
     private bool hasPressed = false;
 
     private void Start()
@@ -51,14 +50,11 @@ public class TitleManager : MonoBehaviour
 
     public void PressZoneButton()
     {
-        // Đã bấm rồi thì bỏ qua mọi lần bấm tiếp theo
         if (hasPressed)
             return;
 
         hasPressed = true;
 
-        // Tắt luôn vùng bấm để chuột/tay không thể trigger lại nữa,
-        // dù người chơi có click nhanh cỡ nào đi nữa.
         if (pressZone != null)
             pressZone.SetActive(false);
 
