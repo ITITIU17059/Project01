@@ -32,7 +32,6 @@ public class TraitSelectionPanelUI : MonoBehaviour
 
     public void Show(BossSO boss)
     {
-
         currentBoss = boss;
 
         hand.SetInteractable(false);
@@ -44,7 +43,6 @@ public class TraitSelectionPanelUI : MonoBehaviour
 
         ClearCards();
 
-
         SaveData save = SaveManager.Instance.LoadProgress();
 
         List<BossTraitSO> traits = new();
@@ -52,7 +50,6 @@ public class TraitSelectionPanelUI : MonoBehaviour
         if (save != null &&
             save.currentTraitSelection.Count > 0)
         {
-            // Continue
             foreach (string traitName in save.currentTraitSelection)
             {
                 BossTraitSO trait =
@@ -64,7 +61,6 @@ public class TraitSelectionPanelUI : MonoBehaviour
         }
         else
         {
-            // New Game
             traits =
                 TraitPoolManager.Instance.GetRandomTraits(
                     boss.rank,
@@ -112,10 +108,9 @@ public class TraitSelectionPanelUI : MonoBehaviour
 
         gameObject.SetActive(false);
 
-        BattleManager.Instance.StartBattleAfterTraitSelected();
-        FindAnyObjectByType<HandManager>()
-    .SetInteractable(true);
+        hand.SetInteractable(true);
 
+        BattleManager.Instance.StartBattleAfterTraitSelected();
     }
 
     public void SetVisible(bool visible)

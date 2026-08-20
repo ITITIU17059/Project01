@@ -15,4 +15,5 @@ MonoBehaviour:
   traitID: 6
   icon: {fileID: 21300000, guid: bb67b03c2969d104caba950c446f8c8d, type: 3}
   rewardName: Expanded Arsenal
-  description: +1 hand size limit
+  description: +1 Hand Size. Each Ace played grants +1 Hand Size; resets after defeating
+    the Boss
