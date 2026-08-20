@@ -9,6 +9,12 @@ public class TitleManager : MonoBehaviour
 
     [SerializeField] private Image pressStartImg;
     [SerializeField] private GameObject pressZone;
+    private bool isClicked;
+
+    private void Awake()
+    {
+        isClicked = false;
+    }
 
     // Chặn spam click: chỉ cho bấm "Press Start" đúng 1 lần
     private bool hasPressed = false;
@@ -57,5 +63,6 @@ public class TitleManager : MonoBehaviour
             pressZone.SetActive(false);
 
         LevelManager.instance.LoadMainMenu();
+        isClicked = true;
     }
 }

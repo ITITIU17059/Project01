@@ -13,9 +13,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private ButtonManager continueButtonManager;
     [SerializeField] private EventTrigger eventTrigger;
     [SerializeField] private bool isMenu = true;
+    private bool isClicked;
 
     private void Start()
     {
+        isClicked = false;
         LoadVolume();
 
         if (isMenu)
@@ -27,10 +29,13 @@ public class MainMenu : MonoBehaviour
 
     public void Play()
     {
+        if (isClicked) return;
+
         SaveVolume();
         SaveManager.Instance.DeleteSave();
 
         LevelManager.instance.LoadBattle();
+        isClicked = true;
     }
 
     public void ContinueGame()
