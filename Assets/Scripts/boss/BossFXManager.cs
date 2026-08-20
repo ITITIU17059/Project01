@@ -173,7 +173,7 @@ public class BossFXManager : MonoBehaviour
         GameObject fx = Instantiate(
             boss.attackVFX,
             BossManager.Instance.BossTransform.position,
-            Quaternion.identity);
+            boss.attackVFX.transform.rotation);
 
         SoundManager.instance?.PlaySound2D(
             boss.attackSoundID);

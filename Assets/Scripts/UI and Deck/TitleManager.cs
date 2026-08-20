@@ -9,6 +9,12 @@ public class TitleManager : MonoBehaviour
 
     [SerializeField] private Image pressStartImg;
     [SerializeField] private GameObject pressZone;
+    private bool isClicked;
+
+    private void Awake()
+    {
+        isClicked = false;
+    }
 
     private void Start()
     {
@@ -42,6 +48,8 @@ public class TitleManager : MonoBehaviour
 
     public void PressZoneButton()
     {
+        if (isClicked) return;
         LevelManager.instance.LoadMainMenu();
+        isClicked = true;
     }
 }
