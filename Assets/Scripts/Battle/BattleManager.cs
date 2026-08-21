@@ -552,6 +552,7 @@ public class BattleManager : MonoBehaviour
 
             handManager.SetInteractable(true);
             InteractConfirmButton(true);
+            TurnUIController.Instance.ShowYourTurn();
 
             yield break;
         }
@@ -1139,4 +1140,5 @@ public class BattleManager : MonoBehaviour
 
         ChangeState(BattleState.CheckBattle);
     }
+
 }
