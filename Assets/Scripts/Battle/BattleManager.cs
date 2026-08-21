@@ -410,7 +410,7 @@ public class BattleManager : MonoBehaviour
         else if (handManager.handCards.Count == 0 &&
                  deckManager.allCards.Count > 0)
         {
- 
+
             deckManager.DrawCard(handManager);
             handManager.HideNextCardIfNeeded();
         }
@@ -535,6 +535,7 @@ public class BattleManager : MonoBehaviour
 
             handManager.SetInteractable(true);
             InteractConfirmButton(true);
+            TurnUIController.Instance.ShowYourTurn();
 
             yield break;
         }
@@ -1021,5 +1022,5 @@ public class BattleManager : MonoBehaviour
             return;
         }
     }
-   
+
 }
