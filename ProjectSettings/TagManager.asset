@@ -12,6 +12,8 @@ TagManager:
   - Bar
   - BossDisplay
   - Music
+  - TutorialContainer
+  - TutorialCanvas
   layers:
   - Default
   - TransparentFX
