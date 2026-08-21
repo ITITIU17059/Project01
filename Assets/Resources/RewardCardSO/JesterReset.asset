@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40fee21677203da438e6b3b7aab3b738, type: 3}
-  m_Name: AceHearts
+  m_Name: JesterReset
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
-  cardSprite: {fileID: 6485879348570939822, guid: 122b3b6924ba6064c9b9814be6b1db90, type: 3}
-  value: 1
-  suit: 1
+  cardSprite: {fileID: -6462194140118145075, guid: 0a9f990126a3f3d498088ba8b5599203, type: 3}
+  value: 0
+  suit: 0
   type: 5

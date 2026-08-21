@@ -8,7 +8,6 @@ public static class FindMissingScripts
     {
         int totalMissing = 0;
 
-        // 1. Quét tất cả Prefab trong Assets (không đụng tới Packages)
         string[] prefabGuids = AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" });
         foreach (string guid in prefabGuids)
         {
@@ -19,8 +18,6 @@ public static class FindMissingScripts
             totalMissing += CountMissingOnGameObjectAndChildren(prefab, path, true);
         }
 
-        // 2. Quét tất cả Scene trong Assets (KHÔNG quét Packages, vì có scene template
-        //    read-only không mở được bằng EditorSceneManager -> gây crash)
         string[] sceneGuids = AssetDatabase.FindAssets("t:Scene", new[] { "Assets" });
 
         // Nhớ lại các scene đang mở để mở lại sau khi quét xong, tránh mất tiến trình đang làm
@@ -45,10 +42,6 @@ public static class FindMissingScripts
                     totalMissing += CountMissingOnGameObjectAndChildren(root, path, false);
                 }
 
-                // Unity không cho đóng nếu đây là scene DUY NHẤT đang load
-                // (ví dụ scene đó đã sẵn đang mở từ trước khi bấm nút quét).
-                // Trường hợp này bỏ qua bước đóng, để nguyên - sẽ được khôi phục
-                // lại setup ban đầu ở cuối hàm.
                 if (UnityEditor.SceneManagement.EditorSceneManager.sceneCount > 1)
                 {
                     UnityEditor.SceneManagement.EditorSceneManager.CloseScene(scene, true);

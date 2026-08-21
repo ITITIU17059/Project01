@@ -41,6 +41,7 @@ public class BattleManager : MonoBehaviour
 
     private bool hasPendingJokerEnding = false;
     private bool pendingBadEnding = false;
+    private bool jesterInstantKill = false;
 
     public void ContinueFromInventory()
     {
@@ -359,6 +360,22 @@ public class BattleManager : MonoBehaviour
                 default:
                     nextRank = BossRank.Jack;
                     break;
+            }
+
+            // Vừa hạ xong toàn bộ 4 Jack (chuyển sang stage Queen).
+            // Nếu người chơi CHƯA TỪNG gắn trait/skill nào -> mở khóa Jester.
+            if (nextRank == BossRank.Queen &&
+                JesterManager.Instance != null &&
+                PlayerReward.Instance != null &&
+                !PlayerReward.Instance.TraitHasAdd)
+            {
+                JesterManager.Instance.UnlockJesters();
+            }
+
+            // Vừa vượt qua trọn 1 rank -> hồi thêm lượt Jester (nếu đã mở khóa)
+            if (JesterManager.Instance != null)
+            {
+                JesterManager.Instance.RecoverAfterRank(nextRank);
             }
 
             yield return StartCoroutine(
@@ -1021,6 +1038,107 @@ public class BattleManager : MonoBehaviour
             rewardK4Card = null;
             return;
         }
+    }
+    public void UseJesterReset()
+    {
+        if (CurrentState != BattleState.PlayerTurn)
+            return;
+
+        if (JesterManager.Instance == null)
+            return;
+
+        if (!JesterManager.Instance.ConsumeReset())
+            return;
+
+        StartCoroutine(JesterResetRoutine());
+    }
+    private IEnumerator JesterResetRoutine()
+    {
+        handManager.SetInteractable(false);
+
+        InteractConfirmButton(false);
+
+        BossSO boss =
+            BossManager.Instance.CurrentBoss;
+
+        if (boss != null)
+        {
+            boss.currentTrait = null;
+
+            boss.resistanceSuit =
+                CardSO.Suit.None;
+
+            BossManager.Instance.RefreshBossInfo();
+
+            if (BossManager.Instance.BossDisplay != null)
+            {
+                BossManager.Instance.BossDisplay
+                    .UpdateResistance(CardSO.Suit.None);
+            }
+        }
+
+        foreach (GameObject obj in
+            new List<GameObject>(handManager.handCards))
+        {
+            if (obj == null)
+                continue;
+
+            CardDisplay display =
+                obj.GetComponent<CardDisplay>();
+
+            if (display != null &&
+                display.cardScriptableObject != null)
+            {
+                if (GraveyardManager.Instance != null)
+                {
+                    GraveyardManager.Instance.AddToGraveyard(
+                        display.cardScriptableObject);
+                }
+            }
+
+            Destroy(obj);
+        }
+
+        handManager.handCards.Clear();
+        handManager.selectedCards.Clear();
+
+        while (
+            handManager.handCards.Count < 8 &&
+            TarvernDeckManager.Instance != null &&
+            TarvernDeckManager.Instance.allCards.Count > 0)
+        {
+            TarvernDeckManager.Instance.DrawCard(
+                handManager);
+
+            yield return new WaitForSeconds(0.15f);
+        }
+
+        handManager.RepositionAllCards(null);
+
+        handManager.SetInteractable(true);
+
+        InteractConfirmButton(true);
+
+        Debug.Log("[JESTER] Reset completed.");
+    }
+
+    public void UseJesterInstantKill()
+    {
+        if (CurrentState != BattleState.PlayerTurn)
+            return;
+
+        if (JesterManager.Instance == null)
+            return;
+
+        if (!JesterManager.Instance.ConsumeInstantKill())
+            return;
+
+        jesterInstantKill = true;
+
+        BossManager.Instance.TakeDamage(
+            BossManager.Instance.CurrentHP);
+
+        ChangeState(BattleState.CheckBattle);
     }
 
 }

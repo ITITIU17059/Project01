@@ -20,7 +20,8 @@ public class CardSO : ScriptableObject
         Jack,
         Queen,
         King,
-        Joker
+        Jester
+
     }
 
     public Sprite cardSprite;
