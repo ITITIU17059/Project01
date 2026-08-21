@@ -1578,43 +1578,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[26].volume
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[27].volume
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[28].volume
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[29].volume
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[30].volume
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[31].volume
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[32].volume
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[33].volume
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[34].volume
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[35].volume
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[8].groupId
