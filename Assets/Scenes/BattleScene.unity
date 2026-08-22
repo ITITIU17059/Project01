@@ -131,6 +131,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 84387954114038891, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 84387954114038891, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1562975165
+      objectReference: {fileID: 0}
     - target: {fileID: 3005099668849131276, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -217,7 +225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4077469916708904582, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
       propertyPath: playZoneLayer.m_Bits
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7416,7 +7424,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000009783e2cc6384ba9b5d8b4d9d2f547bac
+  m_ApplyToSortingLayers: 000000009783e2cc6384ba9b5d8b4d9d2f547bac43e4d6a2
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -10461,9 +10469,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b832b90ebeb07c64096bdf6b5ea9b3e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JesterManager
-  unlocked: 1
-  resetCharges: 1
-  instantKillCharges: 1
+  unlocked: 0
+  resetCharges: 0
+  instantKillCharges: 0
 --- !u!114 &837951012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16846,6 +16854,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 84387954114038891, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 84387954114038891, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1562975165
+      objectReference: {fileID: 0}
     - target: {fileID: 2641574380540894778, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
       propertyPath: cardScriptableObject
       value: 
@@ -16936,7 +16952,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4077469916708904582, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
       propertyPath: playZoneLayer.m_Bits
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -5,15 +5,7 @@ public class JesterManager : MonoBehaviour
 {
     public static JesterManager Instance { get; private set; }
 
-    //==================================================
-    // EVENT
-    //==================================================
-
     public event Action OnChanged;
-
-    //==================================================
-    // STATE
-    //==================================================
 
     [Header("Jester State")]
     [SerializeField] private bool unlocked = false;
@@ -22,9 +14,6 @@ public class JesterManager : MonoBehaviour
     [SerializeField] private int resetCharges = 0;
     [SerializeField] private int instantKillCharges = 0;
 
-    //==================================================
-    // PROPERTIES
-    //==================================================
 
     public bool IsUnlocked => unlocked;
 
@@ -38,9 +27,6 @@ public class JesterManager : MonoBehaviour
     public bool CanUseInstantKill =>
         unlocked && instantKillCharges > 0;
 
-    //==================================================
-    // UNITY
-    //==================================================
 
     private void Awake()
     {
@@ -55,9 +41,6 @@ public class JesterManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    //==================================================
-    // UNLOCK
-    //==================================================
 
     public void UnlockJesters()
     {
@@ -66,8 +49,6 @@ public class JesterManager : MonoBehaviour
 
         unlocked = true;
 
-        // Khi mở khóa lần đầu:
-        // mỗi Jester có 1 lượt sử dụng.
         resetCharges = 1;
         instantKillCharges = 1;
 
@@ -80,16 +61,11 @@ public class JesterManager : MonoBehaviour
         );
     }
 
-    //==================================================
-    // RECOVER AFTER RANK
-    //==================================================
-
     public void RecoverAfterRank(BossRank rank)
     {
         if (!unlocked)
             return;
 
-        // Chỉ hồi sau khi hoàn thành Queen hoặc King.
         if (rank != BossRank.Queen &&
             rank != BossRank.King)
             return;
@@ -106,9 +82,6 @@ public class JesterManager : MonoBehaviour
         );
     }
 
-    //==================================================
-    // CONSUME RESET
-    //==================================================
 
     public bool ConsumeReset()
     {
@@ -127,9 +100,6 @@ public class JesterManager : MonoBehaviour
         return true;
     }
 
-    //==================================================
-    // CONSUME INSTANT KILL
-    //==================================================
 
     public bool ConsumeInstantKill()
     {
@@ -148,9 +118,6 @@ public class JesterManager : MonoBehaviour
         return true;
     }
 
-    //==================================================
-    // SAVE DATA
-    //==================================================
 
     public bool GetUnlocked()
     {
@@ -167,9 +134,6 @@ public class JesterManager : MonoBehaviour
         return instantKillCharges;
     }
 
-    //==================================================
-    // LOAD DATA
-    //==================================================
 
     public void LoadData(
         bool savedUnlocked,
@@ -194,9 +158,6 @@ public class JesterManager : MonoBehaviour
         );
     }
 
-    //==================================================
-    // RESET DATA
-    //==================================================
 
     public void ResetData()
     {
@@ -210,9 +171,6 @@ public class JesterManager : MonoBehaviour
         Debug.Log("[JESTER] Data reset.");
     }
 
-    //==================================================
-    // NOTIFY UI
-    //==================================================
 
     private void NotifyChanged()
     {
