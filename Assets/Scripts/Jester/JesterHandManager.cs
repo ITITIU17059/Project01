@@ -6,32 +6,16 @@ public class JesterHandManager : MonoBehaviour
 {
     public static JesterHandManager Instance { get; private set; }
 
-    //==================================================
-    // JESTER CARDS
-    //==================================================
-
     [Header("Jester Cards")]
     [SerializeField] private GameObject resetJester;
     [SerializeField] private GameObject instantKillJester;
-
-    //==================================================
-    // JESTER HAND POSITIONS
-    //==================================================
 
     [Header("Jester Hand")]
     [SerializeField] private Transform resetHandPoint;
     [SerializeField] private Transform instantKillHandPoint;
 
-    //==================================================
-    // PLAY AREA
-    //==================================================
-
     [Header("Jester Play Area")]
     [SerializeField] private Transform jesterPlayArea;
-
-    //==================================================
-    // STATE
-    //==================================================
 
     private GameObject selectedJester;
 
@@ -39,10 +23,6 @@ public class JesterHandManager : MonoBehaviour
     private bool instantKillLocked;
 
     private bool executing;
-
-    //==================================================
-    // UNITY
-    //==================================================
 
     private void Awake()
     {
@@ -78,19 +58,11 @@ public class JesterHandManager : MonoBehaviour
         Refresh();
     }
 
-    //==================================================
-    // PUBLIC STATE
-    //==================================================
-
     public bool HasSelectedJester =>
         selectedJester != null;
 
     public GameObject SelectedJester =>
         selectedJester;
-
-    //==================================================
-    // SELECT RESET
-    //==================================================
 
     public void SelectResetJester()
     {
@@ -112,10 +84,6 @@ public class JesterHandManager : MonoBehaviour
         SelectJester(resetJester);
     }
 
-    //==================================================
-    // SELECT INSTANT KILL
-    //==================================================
-
     public void SelectInstantKillJester()
     {
         if (executing)
@@ -136,10 +104,6 @@ public class JesterHandManager : MonoBehaviour
         SelectJester(instantKillJester);
     }
 
-    //==================================================
-    // SELECT
-    //==================================================
-
     private void SelectJester(GameObject jester)
     {
         if (jester == null)
@@ -149,7 +113,6 @@ public class JesterHandManager : MonoBehaviour
 
         jester.transform.DOKill();
 
-        // Bay lên khu vực đánh
         if (jesterPlayArea != null)
         {
             jester.transform.DOMove(
@@ -170,7 +133,6 @@ public class JesterHandManager : MonoBehaviour
 
         SetSortingOrder(jester, 100);
 
-        // Tắt interaction của 2 Jester trong lúc đang chọn
         SetJesterButtonsInteractable(false);
 
         Debug.Log(
@@ -178,9 +140,6 @@ public class JesterHandManager : MonoBehaviour
         );
     }
 
-    //==================================================
-    // CONFIRM
-    //==================================================
 
     public void ConfirmSelectedJester()
     {
@@ -199,77 +158,87 @@ public class JesterHandManager : MonoBehaviour
         StartCoroutine(ExecuteSelectedJester());
     }
 
-    //==================================================
-    // EXECUTE
-    //==================================================
-
     private IEnumerator ExecuteSelectedJester()
     {
         executing = true;
 
-        GameObject usedJester = selectedJester;
+        GameObject usedJester =
+            selectedJester;
 
-        // ---------------------------------------------
-        // RESET
-        // ---------------------------------------------
+        bool skillStarted = false;
+
 
         if (usedJester == resetJester)
         {
             if (!JesterManager.Instance.CanUseReset)
             {
                 CancelSelection();
+                executing = false;
                 yield break;
             }
 
-            // Skill thật sự chỉ được kích hoạt ở Confirm.
-            BattleManager.Instance.UseJesterReset();
-
-            yield return new WaitForSeconds(0.4f);
+            skillStarted =
+                BattleManager.Instance.UseJesterReset();
         }
 
-        // ---------------------------------------------
-        // INSTANT KILL
-        // ---------------------------------------------
 
         else if (usedJester == instantKillJester)
         {
             if (!JesterManager.Instance.CanUseInstantKill)
             {
                 CancelSelection();
+                executing = false;
                 yield break;
             }
 
-            // Skill thật sự chỉ được kích hoạt ở Confirm.
-            BattleManager.Instance.UseJesterInstantKill();
-
-            yield return new WaitForSeconds(0.4f);
+            skillStarted =
+                BattleManager.Instance.UseJesterInstantKill();
         }
 
-        // ---------------------------------------------
-        // LOCK
-        // ---------------------------------------------
+        if (!skillStarted)
+        {
+            Debug.LogWarning(
+                "[JESTER] Skill failed to start.");
 
-        LockUsedJester(usedJester);
+            CancelSelection();
 
-        // ---------------------------------------------
-        // RETURN TO JESTER HAND
-        // ---------------------------------------------
+            executing = false;
 
-        yield return ReturnJesterToHand(usedJester);
+            yield break;
+        }
+
+
+        if (usedJester == resetJester)
+        {
+
+            yield return new WaitUntil(
+                () =>
+                    BattleManager.Instance.CurrentState
+                    != BattleState.PlayerTurn ||
+                    BattleManager.Instance.Hand.handCards.Count >= 8
+            );
+        }
+        else
+        {
+            yield return null;
+        }
+
+        LockUsedJester(
+            usedJester);
+
+        yield return StartCoroutine(
+            ReturnJesterToHand(
+                usedJester));
 
         selectedJester = null;
+
         executing = false;
 
         Refresh();
 
         Debug.Log(
-            $"[JESTER] Finished: {usedJester.name}"
-        );
+            $"[JESTER] Finished: {usedJester.name}");
     }
-
-    //==================================================
-    // RETURN TO HAND
-    //==================================================
 
     private IEnumerator ReturnJesterToHand(
         GameObject jester)
@@ -310,10 +279,6 @@ public class JesterHandManager : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
         }
     }
-
-    //==================================================
-    // LOCK
-    //==================================================
 
     private void LockUsedJester(GameObject jester)
     {
@@ -359,10 +324,6 @@ public class JesterHandManager : MonoBehaviour
         );
     }
 
-    //==================================================
-    // CANCEL
-    //==================================================
-
     public void CancelSelection()
     {
         if (executing)
@@ -400,10 +361,6 @@ public class JesterHandManager : MonoBehaviour
 
         Refresh();
     }
-
-    //==================================================
-    // REFRESH
-    //==================================================
 
     public void Refresh()
     {
@@ -445,10 +402,6 @@ public class JesterHandManager : MonoBehaviour
         );
     }
 
-    //==================================================
-    // BUTTON / CARD INTERACTION
-    //==================================================
-
     private void SetJesterButtonsInteractable(
         bool value)
     {
@@ -483,10 +436,6 @@ public class JesterHandManager : MonoBehaviour
         }
     }
 
-    //==================================================
-    // SORTING
-    //==================================================
-
     private void SetSortingOrder(
         GameObject obj,
         int order)
@@ -502,9 +451,6 @@ public class JesterHandManager : MonoBehaviour
             display.SetSortingOrder(order);
         }
     }
-    //==================================================
-    // CARD INTERACTION
-    //==================================================
 
     public void SelectJesterCard(GameObject jester)
     {

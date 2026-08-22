@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
 
 [RequireComponent(typeof(CardDisplay), typeof(CardPhysics))]
@@ -38,9 +38,6 @@ public class CardInteraction : MonoBehaviour
 
     public bool IsLocked;
 
-    //==================================================
-    // JESTER CHECK
-    //==================================================
 
     private bool IsJesterCard
     {
@@ -53,13 +50,12 @@ public class CardInteraction : MonoBehaviour
         }
     }
 
-    //==================================================
-    // UNITY
-    //==================================================
 
     private void Awake()
     {
         originalScale = transform.localScale;
+
+        splineLocalPosition = transform.localPosition;
 
         handManager =
             Object.FindAnyObjectByType<HandManager>();
@@ -76,9 +72,6 @@ public class CardInteraction : MonoBehaviour
         transform.DOKill();
     }
 
-    //==================================================
-    // MOVE
-    //==================================================
 
     public void MoveTo(
         Vector3 localPos,
@@ -103,16 +96,11 @@ public class CardInteraction : MonoBehaviour
         ).SetEase(Ease.OutCubic);
     }
 
-    //==================================================
-    // MOUSE ENTER
-    //==================================================
-
     public void HandleMouseEnter()
     {
         if (IsLocked)
             return;
 
-        // JESTER không cần HandManager để hover.
         if (!IsJesterCard)
         {
             if (handManager == null)
@@ -124,9 +112,7 @@ public class CardInteraction : MonoBehaviour
 
         if (SoundManager.instance != null)
         {
-            SoundManager.instance.PlaySound2D(
-                "CardHover"
-            );
+            SoundManager.instance.PlaySound2D("CardHover");
         }
 
         if (isDragging)
@@ -134,13 +120,29 @@ public class CardInteraction : MonoBehaviour
 
         isHovered = true;
 
-        // Đưa card lên trên cùng
+        if (IsJesterCard)
+        {
+
+            if (cardDisplay != null)
+            {
+                cardDisplay.SetSortingOrder(10);
+            }
+
+            transform.DOKill();
+
+            transform.DOScale(
+                originalScale * hover.scale,
+                hover.duration
+            ).SetEase(Ease.OutCubic);
+
+            return;
+        }
+
         if (cardDisplay != null)
         {
             cardDisplay.SetSortingOrder(300);
         }
 
-        // Nếu đang ở giữa sân thì không nhấc lên
         if (isSelectedInCenter)
             return;
 
@@ -151,13 +153,6 @@ public class CardInteraction : MonoBehaviour
             hover.duration
         ).SetEase(Ease.OutCubic);
 
-        if (IsJesterCard)
-        {
-            // Jester đứng nguyên vị trí trong Jester Hand.
-            // Chỉ phóng to khi hover.
-            return;
-        }
-
         transform.DOLocalMove(
             splineLocalPosition +
             Vector3.up * hover.moveAmount,
@@ -165,9 +160,6 @@ public class CardInteraction : MonoBehaviour
         ).SetEase(Ease.OutCubic);
     }
 
-    //==================================================
-    // MOUSE EXIT
-    //==================================================
 
     public void HandleMouseExit()
     {
@@ -185,24 +177,28 @@ public class CardInteraction : MonoBehaviour
 
         isHovered = false;
 
-        //==================================================
-        // CARD ĐANG Ở GIỮA
-        //==================================================
+        if (IsJesterCard)
+        {
+            transform.DOKill();
+
+            transform.DOScale(
+                originalScale,
+                hover.duration
+            ).SetEase(Ease.OutCubic);
+
+            return;
+        }
+
 
         if (isSelectedInCenter)
         {
-            if (!IsJesterCard &&
-                handManager != null)
+            if (handManager != null)
             {
                 handManager.RearrangeSelectedCards();
             }
 
             return;
         }
-
-        //==================================================
-        // CARD ĐANG Ở HAND
-        //==================================================
 
         transform.DOKill();
 
@@ -211,25 +207,16 @@ public class CardInteraction : MonoBehaviour
             hover.duration
         ).SetEase(Ease.OutCubic);
 
-        if (!IsJesterCard)
-        {
-            transform.DOLocalMove(
-                splineLocalPosition,
-                hover.duration
-            ).SetEase(Ease.OutCubic);
-        }
+        transform.DOLocalMove(
+            splineLocalPosition,
+            hover.duration
+        ).SetEase(Ease.OutCubic);
 
-        // Jester không thuộc HandManager
-        if (!IsJesterCard &&
-            handManager != null)
+        if (handManager != null)
         {
             handManager.RepositionAllCards(null);
         }
     }
-
-    //==================================================
-    // DRAG START
-    //==================================================
 
     public void HandleDragStart()
     {
@@ -253,9 +240,6 @@ public class CardInteraction : MonoBehaviour
         }
     }
 
-    //==================================================
-    // DRAGGING
-    //==================================================
 
     public void HandleDragging(Vector3 targetWorldPos)
     {
@@ -280,7 +264,6 @@ public class CardInteraction : MonoBehaviour
                 cardPhysics.UpdatePendulumRotation();
             }
 
-            // Chỉ card thường mới reorder Hand
             if (!IsJesterCard &&
                 handManager != null)
             {
@@ -288,10 +271,6 @@ public class CardInteraction : MonoBehaviour
             }
         }
     }
-
-    //==================================================
-    // DRAG END
-    //==================================================
 
     public void HandleDragEnd(
         bool isClick,
@@ -315,19 +294,12 @@ public class CardInteraction : MonoBehaviour
         isDragging = false;
         isHovered = false;
 
-        //==================================================
-        // CLICK
-        //==================================================
-
         if (isClick)
         {
             ToggleCardSelection();
             return;
         }
 
-        //==================================================
-        // KIỂM TRA PLAY ZONE
-        //==================================================
 
         Collider2D hitCollider =
             Physics2D.OverlapPoint(
@@ -338,10 +310,6 @@ public class CardInteraction : MonoBehaviour
         bool isOverPlayZone =
             hitCollider != null &&
             hitCollider.CompareTag("PlayZone");
-
-        //==================================================
-        // CARD ĐANG ĐƯỢC CHỌN
-        //==================================================
 
         if (isSelectedInCenter)
         {
@@ -381,10 +349,6 @@ public class CardInteraction : MonoBehaviour
 
             return;
         }
-
-        //==================================================
-        // CARD CHƯA ĐƯỢC CHỌN
-        //==================================================
 
         if (isOverPlayZone)
         {
@@ -433,60 +397,72 @@ public class CardInteraction : MonoBehaviour
         }
     }
 
-    //==================================================
-    // CLICK SELECTION
-    //==================================================
 
     private void ToggleCardSelection()
     {
         if (IsLocked)
             return;
-
-        if (!IsJesterCard)
-        {
-            if (handManager == null)
-                return;
-
-            if (!handManager.CanInteract)
-                return;
-        }
-
-        transform.DOKill();
-
-        transform.DORotate(
-            Vector3.zero,
-            0.15f
-        );
-
-        isSelectedInCenter =
-            !isSelectedInCenter;
-
-        //==================================================
-        // JESTER
-        //==================================================
-
         if (IsJesterCard)
         {
             if (JesterHandManager.Instance == null)
                 return;
 
-            if (isSelectedInCenter)
+            if (JesterHandManager.Instance.HasSelectedJester)
             {
-                JesterHandManager.Instance
-                    .SelectJesterCard(gameObject);
+                if (JesterHandManager.Instance.SelectedJester
+                    == gameObject)
+                {
+                    isSelectedInCenter = false;
+
+                    JesterHandManager.Instance
+                        .DeselectJesterCard(gameObject);
+                }
+
+                return;
             }
-            else
+
+            bool canSelect = false;
+
+            if (cardDisplay.cardScriptableObject.type ==
+                CardSO.CardType.Jester)
             {
-                JesterHandManager.Instance
-                    .DeselectJesterCard(gameObject);
+                canSelect =
+                    JesterManager.Instance != null &&
+                    JesterManager.Instance.IsUnlocked;
             }
+
+            if (!canSelect)
+                return;
+
+            transform.DOKill();
+
+            transform.DORotate(
+                Vector3.zero,
+                0.15f);
+
+            isSelectedInCenter = true;
+
+            JesterHandManager.Instance
+                .SelectJesterCard(gameObject);
 
             return;
         }
 
-        //==================================================
-        // CARD THƯỜNG
-        //==================================================
+
+        if (handManager == null)
+            return;
+
+        if (!handManager.CanInteract)
+            return;
+
+        transform.DOKill();
+
+        transform.DORotate(
+            Vector3.zero,
+            0.15f);
+
+        isSelectedInCenter =
+            !isSelectedInCenter;
 
         if (isSelectedInCenter)
         {
@@ -497,10 +473,6 @@ public class CardInteraction : MonoBehaviour
             handManager.DeselectCard(gameObject);
         }
     }
-
-    //==================================================
-    // DESELECT
-    //==================================================
 
     public void HandleDeselect()
     {

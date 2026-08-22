@@ -51,6 +51,9 @@ TagManager:
   - name: background
     uniqueID: 3437396887
     locked: 0
+  - name: Jester
+    uniqueID: 2731992131
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

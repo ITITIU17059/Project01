@@ -362,8 +362,6 @@ public class BattleManager : MonoBehaviour
                     break;
             }
 
-            // Vừa hạ xong toàn bộ 4 Jack (chuyển sang stage Queen).
-            // Nếu người chơi CHƯA TỪNG gắn trait/skill nào -> mở khóa Jester.
             if (nextRank == BossRank.Queen &&
                 JesterManager.Instance != null &&
                 PlayerReward.Instance != null &&
@@ -372,7 +370,6 @@ public class BattleManager : MonoBehaviour
                 JesterManager.Instance.UnlockJesters();
             }
 
-            // Vừa vượt qua trọn 1 rank -> hồi thêm lượt Jester (nếu đã mở khóa)
             if (JesterManager.Instance != null)
             {
                 JesterManager.Instance.RecoverAfterRank(nextRank);
@@ -660,7 +657,6 @@ public class BattleManager : MonoBehaviour
                 boss.currentTrait.traitID == TraitID.Q_ROYAL_TAX &&
                 !BossManager.Instance.IsDead();
 
-            // Chỉ kích hoạt trait/reward ở phase discard đầu tiên
             if (!waitingExtraDiscard)
             {
                 TraitManager.Instance.InvokeBossEvent(
@@ -668,7 +664,6 @@ public class BattleManager : MonoBehaviour
                     0);
             }
 
-            // Sau phase 1 thì bắt discard thêm
             if (bossNeedExtraDiscard && !waitingExtraDiscard)
             {
                 waitingExtraDiscard = true;
@@ -744,16 +739,32 @@ public class BattleManager : MonoBehaviour
         if (CurrentState != BattleState.PlayerTurn)
             return;
 
+        if (JesterHandManager.Instance != null &&
+            JesterHandManager.Instance.HasSelectedJester)
+        {
+            SoundManager.instance?.PlaySound2D("CardPlay");
+
+            InteractConfirmButton(false);
+
+            JesterHandManager.Instance.ConfirmSelectedJester();
+
+            return;
+        }
+
         bool bossLimit =
             BossManager.Instance.CurrentBoss != null &&
             BossManager.Instance.CurrentBoss.currentTrait != null &&
-            BossManager.Instance.CurrentBoss.currentTrait.traitID == TraitID.Q_LONE_DUEL;
+            BossManager.Instance.CurrentBoss.currentTrait.traitID
+                == TraitID.Q_LONE_DUEL;
 
         if (bossLimit &&
             !waitingExtraAttack &&
             handManager.selectedCards.Count > 1)
         {
-            StartCoroutine(NotificationInfo.Instance.SetUp("Can only play one card this turn"));
+            StartCoroutine(
+                NotificationInfo.Instance.SetUp(
+                    "Can only play one card this turn"));
+
             return;
         }
 
@@ -762,13 +773,19 @@ public class BattleManager : MonoBehaviour
             if (handManager.selectedCards.Count == 0)
             {
                 waitingExtraAttack = false;
-                ChangeState(BattleState.CheckBattle);
+
+                ChangeState(
+                    BattleState.CheckBattle);
+
                 return;
             }
 
             if (handManager.selectedCards.Count != 1)
             {
-                StartCoroutine(NotificationInfo.Instance.SetUp("Can only play one card this turn"));
+                StartCoroutine(
+                    NotificationInfo.Instance.SetUp(
+                        "Can only play one card this turn"));
+
                 return;
             }
         }
@@ -780,19 +797,26 @@ public class BattleManager : MonoBehaviour
 
         foreach (GameObject obj in handManager.selectedCards)
         {
-            if (obj.TryGetComponent(out CardDisplay display))
-                cards.Add(display.cardScriptableObject);
+            if (obj.TryGetComponent(
+                out CardDisplay display))
+            {
+                cards.Add(
+                    display.cardScriptableObject);
+            }
         }
 
         if (!CardResolver.IsValidCombo(cards))
             return;
 
-        SoundManager.instance?.PlaySound2D("CardPlay");
+        SoundManager.instance?.PlaySound2D(
+            "CardPlay");
 
         handManager.SetInteractable(false);
+
         InteractConfirmButton(false);
 
-        StartCoroutine(ResolveSelectedCards());
+        StartCoroutine(
+            ResolveSelectedCards());
     }
 
     public void FinishDiscard(bool success)
@@ -957,7 +981,6 @@ public class BattleManager : MonoBehaviour
         if (!PlayerReward.Instance.HasReward(TraitID.K_ROYAL_DECREE))
             return;
 
-        // K3 chỉ kích hoạt khi đánh đúng 1 lá
         if (cards == null || cards.Count != 1)
             return;
 
@@ -983,11 +1006,9 @@ public class BattleManager : MonoBehaviour
             if (suit == CardSO.Suit.None)
                 continue;
 
-            // Không được random ra chính chất của lá
             if (suit == originalSuit)
                 continue;
 
-            // Không được random ra chất Boss kháng
             if (suit == bossResistance)
                 continue;
 
@@ -1039,24 +1060,28 @@ public class BattleManager : MonoBehaviour
             return;
         }
     }
-    public void UseJesterReset()
+    public bool UseJesterReset()
     {
         if (CurrentState != BattleState.PlayerTurn)
-            return;
+            return false;
 
         if (JesterManager.Instance == null)
-            return;
+            return false;
 
         if (!JesterManager.Instance.ConsumeReset())
-            return;
+            return false;
 
         StartCoroutine(JesterResetRoutine());
+
+        return true;
     }
+
     private IEnumerator JesterResetRoutine()
     {
         handManager.SetInteractable(false);
 
         InteractConfirmButton(false);
+
 
         BossSO boss =
             BossManager.Instance.CurrentBoss;
@@ -1073,12 +1098,15 @@ public class BattleManager : MonoBehaviour
             if (BossManager.Instance.BossDisplay != null)
             {
                 BossManager.Instance.BossDisplay
-                    .UpdateResistance(CardSO.Suit.None);
+                    .UpdateResistance(
+                        CardSO.Suit.None);
             }
         }
 
+
         foreach (GameObject obj in
-            new List<GameObject>(handManager.handCards))
+            new List<GameObject>(
+                handManager.handCards))
         {
             if (obj == null)
                 continue;
@@ -1110,7 +1138,8 @@ public class BattleManager : MonoBehaviour
             TarvernDeckManager.Instance.DrawCard(
                 handManager);
 
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(
+                0.15f);
         }
 
         handManager.RepositionAllCards(null);
@@ -1119,26 +1148,40 @@ public class BattleManager : MonoBehaviour
 
         InteractConfirmButton(true);
 
-        Debug.Log("[JESTER] Reset completed.");
+        Debug.Log(
+            "[JESTER] Reset completed.");
     }
 
-    public void UseJesterInstantKill()
+    public bool UseJesterInstantKill()
     {
         if (CurrentState != BattleState.PlayerTurn)
-            return;
+            return false;
 
         if (JesterManager.Instance == null)
-            return;
+            return false;
 
         if (!JesterManager.Instance.ConsumeInstantKill())
-            return;
+            return false;
 
-        jesterInstantKill = true;
+        int currentHP =
+            BossManager.Instance.CurrentHP;
 
-        BossManager.Instance.TakeDamage(
-            BossManager.Instance.CurrentHP);
+        if (currentHP > 0)
+        {
+            BossManager.Instance.TakeDamage(
+                currentHP);
+        }
 
-        ChangeState(BattleState.CheckBattle);
+        Debug.Log(
+            "[JESTER] Instant Kill activated.");
+
+        ChangeState(
+            BattleState.CheckBattle);
+
+        return true;
     }
+  
+
+   
 
 }
