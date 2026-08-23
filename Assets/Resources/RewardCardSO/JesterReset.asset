@@ -16,3 +16,5 @@ MonoBehaviour:
   value: 0
   suit: 0
   type: 5
+  cardName: Jester Red
+  description: Remove the Boss's Skill and Resistance. Draw 8 new cards.

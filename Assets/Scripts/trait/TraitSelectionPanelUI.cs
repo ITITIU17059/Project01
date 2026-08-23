@@ -37,6 +37,12 @@ public class TraitSelectionPanelUI : MonoBehaviour
         hand.SetInteractable(false);
         hand.ResetAllCardHover();
 
+        if (JesterHandManager.Instance != null)
+        {
+            JesterHandManager.Instance
+                .SetJesterInteractionLocked(true);
+        }
+
         gameObject.SetActive(true);
 
         transform.SetAsLastSibling();
@@ -50,10 +56,12 @@ public class TraitSelectionPanelUI : MonoBehaviour
         if (save != null &&
             save.currentTraitSelection.Count > 0)
         {
-            foreach (string traitName in save.currentTraitSelection)
+            foreach (string traitName in
+                     save.currentTraitSelection)
             {
                 BossTraitSO trait =
-                    TraitPoolManager.Instance.GetTraitByName(traitName);
+                    TraitPoolManager.Instance
+                        .GetTraitByName(traitName);
 
                 if (trait != null)
                     traits.Add(trait);
@@ -62,9 +70,10 @@ public class TraitSelectionPanelUI : MonoBehaviour
         else
         {
             traits =
-                TraitPoolManager.Instance.GetRandomTraits(
-                    boss.rank,
-                    3);
+                TraitPoolManager.Instance
+                    .GetRandomTraits(
+                        boss.rank,
+                        3);
         }
 
         currentTraits = traits;
@@ -72,7 +81,10 @@ public class TraitSelectionPanelUI : MonoBehaviour
         foreach (BossTraitSO trait in traits)
         {
             GameObject card =
-                Instantiate(traitCardPrefab, traitContainer);
+                Instantiate(
+                    traitCardPrefab,
+                    traitContainer
+                );
 
             TraitCardUI ui =
                 card.GetComponent<TraitCardUI>();
@@ -82,7 +94,10 @@ public class TraitSelectionPanelUI : MonoBehaviour
             TraitCardButton button =
                 card.GetComponent<TraitCardButton>();
 
-            button.Initialize(this, trait);
+            button.Initialize(
+                this,
+                trait
+            );
 
             spawnedCards.Add(card);
         }
@@ -106,17 +121,34 @@ public class TraitSelectionPanelUI : MonoBehaviour
 
         BossManager.Instance.RefreshBossInfo();
 
+
+        if (JesterHandManager.Instance != null)
+        {
+            JesterHandManager.Instance
+                .SetJesterInteractionLocked(false);
+        }
+
         gameObject.SetActive(false);
 
         hand.SetInteractable(true);
 
         BattleManager.Instance.StartBattleAfterTraitSelected();
-        SoundManager.instance.PlaySound2D(currentBoss.spawnSoundID);
+
+        SoundManager.instance.PlaySound2D(
+            currentBoss.spawnSoundID
+        );
     }
+
 
     public void SetVisible(bool visible)
     {
         gameObject.SetActive(visible);
+
+        if (JesterHandManager.Instance != null)
+        {
+            JesterHandManager.Instance
+                .SetJesterInteractionLocked(visible);
+        }
 
         if (!visible)
             return;

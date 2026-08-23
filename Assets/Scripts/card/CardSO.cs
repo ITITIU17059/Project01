@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "New Card", menuName = "Card / Create New Card")]
 public class CardSO : ScriptableObject
@@ -21,12 +20,20 @@ public class CardSO : ScriptableObject
         Queen,
         King,
         Jester
-
     }
 
+    [Header("Card")]
     public Sprite cardSprite;
+
     public int value;
+
     public Suit suit;
+
     public CardType type;
 
+    [Header("Description")]
+    public string cardName;
+
+    [TextArea(2, 5)]
+    public string description;
 }
