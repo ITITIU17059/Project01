@@ -119,6 +119,7 @@ public class CardInteraction : MonoBehaviour
             return;
 
         isHovered = true;
+        ShowJesterDescription();
 
         if (IsJesterCard)
         {
@@ -140,7 +141,14 @@ public class CardInteraction : MonoBehaviour
 
         if (cardDisplay != null)
         {
-            cardDisplay.SetSortingOrder(300);
+            if (IsJesterCard)
+            {
+                cardDisplay.SetSortingOrder(50);
+            }
+            else
+            {
+                cardDisplay.SetSortingOrder(300);
+            }
         }
 
         if (isSelectedInCenter)
@@ -176,6 +184,7 @@ public class CardInteraction : MonoBehaviour
             return;
 
         isHovered = false;
+        HideJesterDescription();
 
         if (IsJesterCard)
         {
@@ -490,5 +499,34 @@ public class CardInteraction : MonoBehaviour
             splineLocalPosition,
             hover.duration
         ).SetEase(Ease.OutCubic);
+    }
+    private void ShowJesterDescription()
+    {
+        if (!IsJesterCard)
+            return;
+
+        if (cardDisplay == null)
+            return;
+
+        if (cardDisplay.cardScriptableObject == null)
+            return;
+
+        if (JesterDescriptionUI.Instance == null)
+            return;
+
+        JesterDescriptionUI.Instance.Show(
+            cardDisplay.cardScriptableObject
+        );
+    }
+
+    private void HideJesterDescription()
+    {
+        if (!IsJesterCard)
+            return;
+
+        if (JesterDescriptionUI.Instance != null)
+        {
+            JesterDescriptionUI.Instance.Hide();
+        }
     }
 }

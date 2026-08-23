@@ -16,3 +16,5 @@ MonoBehaviour:
   value: 0
   suit: 0
   type: 5
+  cardName: Jester Black
+  description: Instantly defeat the Boss. Do not obtain its Boss Reward or Card.

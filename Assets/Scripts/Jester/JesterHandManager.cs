@@ -519,4 +519,35 @@ public class JesterHandManager : MonoBehaviour
 
         Refresh();
     }
+    public void SetJesterInteractionLocked(bool locked)
+    {
+        SetInteractionLock(resetJester, locked);
+        SetInteractionLock(instantKillJester, locked);
+    }
+
+    private void SetInteractionLock(
+        GameObject jester,
+        bool locked)
+    {
+        if (jester == null)
+            return;
+
+        CardInteraction interaction =
+            jester.GetComponent<CardInteraction>();
+
+        if (interaction == null)
+            return;
+
+        interaction.IsLocked = locked;
+
+        if (locked)
+        {
+            jester.transform.DOKill();
+
+            if (JesterDescriptionUI.Instance != null)
+            {
+                JesterDescriptionUI.Instance.Hide();
+            }
+        }
+    }
 }
