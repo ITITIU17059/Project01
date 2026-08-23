@@ -15,4 +15,4 @@ MonoBehaviour:
   traitID: 0
   icon: {fileID: 21300000, guid: 0825dfa25de4551469e65496af7b3c71, type: 3}
   rewardName: Royal Supply
-  description: Draw one additional card per turn
+  description: Draw one additional card per turn, if you use diamond suit + 1 card
