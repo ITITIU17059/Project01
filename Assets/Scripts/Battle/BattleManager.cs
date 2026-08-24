@@ -363,11 +363,22 @@ public class BattleManager : MonoBehaviour
             }
 
             if (nextRank == BossRank.Queen &&
-                JesterManager.Instance != null &&
-                PlayerReward.Instance != null &&
-                !PlayerReward.Instance.TraitHasAdd)
+      JesterManager.Instance != null &&
+      PlayerReward.Instance != null &&
+      !PlayerReward.Instance.TraitHasAdd)
             {
                 JesterManager.Instance.UnlockJesters();
+
+                if (JesterUnlockUI.Instance != null)
+                {
+                    JesterUnlockUI.Instance.Show();
+
+                    yield return new WaitUntil(
+                        () =>
+                            JesterUnlockUI.Instance == null ||
+                            !JesterUnlockUI.Instance.gameObject.activeSelf
+                    );
+                }
             }
 
             if (JesterManager.Instance != null)
@@ -1180,8 +1191,11 @@ public class BattleManager : MonoBehaviour
 
         return true;
     }
-  
-
-   
+    public void OnJesterUnlockPopupClosed()
+    {
+        Debug.Log(
+            "[JESTER] Unlock popup closed."
+        );
+    }
 
 }

@@ -24,6 +24,11 @@ public class JesterHandManager : MonoBehaviour
 
     private bool executing;
 
+    [Header("Jester Scale")]
+    [SerializeField] private Vector3 jesterPlayScale = Vector3.one;
+
+    private Vector3 resetHandScale;
+    private Vector3 instantKillHandScale;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -55,6 +60,18 @@ public class JesterHandManager : MonoBehaviour
 
     private void Start()
     {
+        if (resetJester != null)
+        {
+            resetHandScale =
+                resetJester.transform.localScale;
+        }
+
+        if (instantKillJester != null)
+        {
+            instantKillHandScale =
+                instantKillJester.transform.localScale;
+        }
+
         Refresh();
     }
 
@@ -113,23 +130,33 @@ public class JesterHandManager : MonoBehaviour
 
         jester.transform.DOKill();
 
+        Vector3 targetPlayScale = jesterPlayScale;
+
         if (jesterPlayArea != null)
         {
-            jester.transform.DOMove(
-                jesterPlayArea.position,
-                0.3f
-            ).SetEase(Ease.OutCubic);
+            jester.transform
+                .DOMove(
+                    jesterPlayArea.position,
+                    0.3f
+                )
+                .SetEase(Ease.OutCubic);
         }
 
-        jester.transform.DORotate(
-            Vector3.zero,
-            0.3f
-        ).SetEase(Ease.OutCubic);
+        jester.transform
+            .DORotate(
+                Vector3.zero,
+                0.3f
+            )
+            .SetEase(Ease.OutCubic);
 
-        jester.transform.DOScale(
-            Vector3.one,
-            0.3f
-        ).SetEase(Ease.OutCubic);
+        // Hand -> Play Zone
+        // Phóng to đúng theo scale của lá.
+        jester.transform
+            .DOScale(
+                targetPlayScale,
+                0.3f
+            )
+            .SetEase(Ease.OutBack);
 
         SetSortingOrder(jester, 100);
 
@@ -241,40 +268,53 @@ public class JesterHandManager : MonoBehaviour
     }
 
     private IEnumerator ReturnJesterToHand(
-        GameObject jester)
+       GameObject jester)
     {
         if (jester == null)
             yield break;
 
         Transform returnPoint = null;
+        Vector3 targetHandScale;
 
         if (jester == resetJester)
         {
             returnPoint = resetHandPoint;
+            targetHandScale = resetHandScale;
         }
         else if (jester == instantKillJester)
         {
             returnPoint = instantKillHandPoint;
+            targetHandScale = instantKillHandScale;
+        }
+        else
+        {
+            yield break;
         }
 
         if (returnPoint != null)
         {
             jester.transform.DOKill();
 
-            jester.transform.DOMove(
-                returnPoint.position,
-                0.3f
-            ).SetEase(Ease.OutCubic);
+            jester.transform
+                .DOMove(
+                    returnPoint.position,
+                    0.3f
+                )
+                .SetEase(Ease.OutCubic);
 
-            jester.transform.DORotate(
-                returnPoint.rotation.eulerAngles,
-                0.3f
-            ).SetEase(Ease.OutCubic);
+            jester.transform
+                .DORotate(
+                    returnPoint.rotation.eulerAngles,
+                    0.3f
+                )
+                .SetEase(Ease.OutCubic);
 
-            jester.transform.DOScale(
-                returnPoint.localScale,
-                0.3f
-            ).SetEase(Ease.OutCubic);
+            jester.transform
+                .DOScale(
+                    targetHandScale,
+                    0.3f
+                )
+                .SetEase(Ease.OutCubic);
 
             yield return new WaitForSeconds(0.3f);
         }
@@ -337,26 +377,47 @@ public class JesterHandManager : MonoBehaviour
         selectedJester = null;
 
         Transform returnPoint = null;
+        Vector3 targetHandScale;
 
         if (jester == resetJester)
+        {
             returnPoint = resetHandPoint;
-
-        if (jester == instantKillJester)
+            targetHandScale = resetHandScale;
+        }
+        else if (jester == instantKillJester)
+        {
             returnPoint = instantKillHandPoint;
+            targetHandScale = instantKillHandScale;
+        }
+        else
+        {
+            return;
+        }
 
         if (returnPoint != null)
         {
             jester.transform.DOKill();
 
-            jester.transform.DOMove(
-                returnPoint.position,
-                0.25f
-            ).SetEase(Ease.OutCubic);
+            jester.transform
+                .DOMove(
+                    returnPoint.position,
+                    0.25f
+                )
+                .SetEase(Ease.OutCubic);
 
-            jester.transform.DORotate(
-                returnPoint.rotation.eulerAngles,
-                0.25f
-            ).SetEase(Ease.OutCubic);
+            jester.transform
+                .DORotate(
+                    returnPoint.rotation.eulerAngles,
+                    0.25f
+                )
+                .SetEase(Ease.OutCubic);
+
+            jester.transform
+                .DOScale(
+                    targetHandScale,
+                    0.25f
+                )
+                .SetEase(Ease.OutCubic);
         }
 
         Refresh();
@@ -490,31 +551,47 @@ public class JesterHandManager : MonoBehaviour
         selectedJester = null;
 
         Transform returnPoint = null;
+        Vector3 targetHandScale;
 
         if (jester == resetJester)
+        {
             returnPoint = resetHandPoint;
-
+            targetHandScale = resetHandScale;
+        }
         else if (jester == instantKillJester)
+        {
             returnPoint = instantKillHandPoint;
+            targetHandScale = instantKillHandScale;
+        }
+        else
+        {
+            return;
+        }
 
         if (returnPoint != null)
         {
             jester.transform.DOKill();
 
-            jester.transform.DOMove(
-                returnPoint.position,
-                0.25f
-            ).SetEase(Ease.OutCubic);
+            jester.transform
+                .DOMove(
+                    returnPoint.position,
+                    0.25f
+                )
+                .SetEase(Ease.OutCubic);
 
-            jester.transform.DORotate(
-                returnPoint.rotation.eulerAngles,
-                0.25f
-            ).SetEase(Ease.OutCubic);
+            jester.transform
+                .DORotate(
+                    returnPoint.rotation.eulerAngles,
+                    0.25f
+                )
+                .SetEase(Ease.OutCubic);
 
-            jester.transform.DOScale(
-                returnPoint.localScale,
-                0.25f
-            ).SetEase(Ease.OutCubic);
+            jester.transform
+                .DOScale(
+                    targetHandScale,
+                    0.25f
+                )
+                .SetEase(Ease.OutCubic);
         }
 
         Refresh();
@@ -550,4 +627,57 @@ public class JesterHandManager : MonoBehaviour
             }
         }
     }
+    public void ReturnJesterToPlayZone(GameObject jester)
+    {
+        if (jester == null)
+            return;
+
+        if (jesterPlayArea == null)
+        {
+            Debug.LogWarning(
+                "[JESTER] Jester Play Area chưa được gán!"
+            );
+
+            return;
+        }
+
+        CardInteraction interaction =
+            jester.GetComponent<CardInteraction>();
+
+        if (interaction != null)
+        {
+            interaction.isSelectedInCenter = true;
+        }
+
+        jester.transform.DOKill();
+
+        // Bay trở lại Play Zone
+        jester.transform
+            .DOMove(
+                jesterPlayArea.position,
+                0.25f
+            )
+            .SetEase(Ease.OutCubic);
+
+        // Trở về hướng thẳng
+        jester.transform
+            .DORotate(
+                jesterPlayArea.rotation.eulerAngles,
+                0.2f
+            )
+            .SetEase(Ease.OutCubic);
+
+        // Play Zone luôn là 1,1,1
+        jester.transform
+            .DOScale(
+                jesterPlayScale,
+                0.2f
+            )
+            .SetEase(Ease.OutCubic);
+
+        Debug.Log(
+            $"[JESTER] {jester.name} returned to Play Zone."
+        );
+    }
+
 }
