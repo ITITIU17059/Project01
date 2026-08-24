@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using DG.Tweening;
-using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class JesterUnlockUI : MonoBehaviour
 {
@@ -10,26 +8,16 @@ public class JesterUnlockUI : MonoBehaviour
 
     [Header("Root")]
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private RectTransform content;
+    [SerializeField] private GameObject content;
 
-    [Header("Jester Cards")]
-    [SerializeField] private RectTransform resetJester;
-    [SerializeField] private RectTransform instantKillJester;
-
-    [Header("Text")]
+    [Header("UI")]
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text descriptionText;
 
-    [Header("Button")]
+    [SerializeField] private GameObject resetJester;
+    [SerializeField] private GameObject instantKillJester;
+
     [SerializeField] private Button continueButton;
-
-    [Header("Animation")]
-    [SerializeField] private float fadeDuration = 0.25f;
-    [SerializeField] private float popupDuration = 0.45f;
-
-    private bool isShowing;
-
-    private Vector3 contentOriginalScale;
 
     private void Awake()
     {
@@ -41,169 +29,115 @@ public class JesterUnlockUI : MonoBehaviour
 
         Instance = this;
 
-        if (content != null)
-        {
-            contentOriginalScale =
-                content.localScale;
-        }
-
         if (continueButton != null)
         {
-            continueButton.onClick.AddListener(
-                Hide
-            );
+            continueButton.onClick.AddListener(Hide);
         }
 
         HideImmediate();
     }
-
     public void Show()
     {
-        if (isShowing)
-            return;
-
-        StartCoroutine(
-            ShowRoutine()
-        );
+        ShowUnlock();
     }
-
-    private IEnumerator ShowRoutine()
+    public void ShowUnlock()
     {
-        isShowing = true;
+        Debug.Log("[JESTER UI] ShowUnlock called.");
+
+        if (resetJester != null)
+            resetJester.SetActive(true);
+
+        if (instantKillJester != null)
+            instantKillJester.SetActive(true);
+
+        if (titleText != null)
+            titleText.text = "JESTER UNLOCKED";
+
+        if (descriptionText != null)
+        {
+            descriptionText.text =
+                "You received 1 Reset Jester\n" +
+                "and 1 Instant Kill Jester.";
+        }
 
         gameObject.SetActive(true);
 
         if (canvasGroup != null)
         {
-            canvasGroup.alpha = 0f;
-            canvasGroup.blocksRaycasts = true;
+            canvasGroup.alpha = 1f;
             canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
         }
 
         if (content != null)
-        {
-            content.DOKill();
-            content.localScale =
-                contentOriginalScale * 0.75f;
-        }
+            content.SetActive(true);
+    }
+
+    public void ShowRankReward()
+    {
+        Debug.Log("[JESTER UI] ShowRankReward called.");
+
+        if (resetJester != null)
+            resetJester.SetActive(true);
+
+        if (instantKillJester != null)
+            instantKillJester.SetActive(true);
 
         if (titleText != null)
-        {
-            titleText.text =
-                "JESTER UNLOCKED";
-        }
+            titleText.text = "JESTER CHARGES +1";
 
         if (descriptionText != null)
         {
             descriptionText.text =
-                "You received two powerful Jester cards.";
+                "Reset Jester +1\n" +
+                "Instant Kill Jester +1";
         }
 
-        Sequence sequence =
-            DOTween.Sequence();
+        gameObject.SetActive(true);
 
         if (canvasGroup != null)
         {
-            sequence.Join(
-                canvasGroup.DOFade(
-                    1f,
-                    fadeDuration
-                )
-            );
+            canvasGroup.alpha = 1f;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
         }
 
         if (content != null)
-        {
-            sequence.Join(
-                content.DOScale(
-                    contentOriginalScale,
-                    popupDuration
-                )
-                .SetEase(
-                    Ease.OutBack
-                )
-            );
-        }
-
-        yield return sequence
-            .WaitForCompletion();
+            content.SetActive(true);
     }
 
     public void Hide()
     {
-        if (!isShowing)
-            return;
-
-        StartCoroutine(
-            HideRoutine()
-        );
-    }
-
-    private IEnumerator HideRoutine()
-    {
-        isShowing = false;
-
         if (canvasGroup != null)
         {
-            canvasGroup.blocksRaycasts = false;
+            canvasGroup.alpha = 0f;
             canvasGroup.interactable = false;
-        }
-
-        Sequence sequence =
-            DOTween.Sequence();
-
-        if (canvasGroup != null)
-        {
-            sequence.Join(
-                canvasGroup.DOFade(
-                    0f,
-                    fadeDuration
-                )
-            );
+            canvasGroup.blocksRaycasts = false;
         }
 
         if (content != null)
-        {
-            sequence.Join(
-                content.DOScale(
-                    contentOriginalScale * 0.85f,
-                    fadeDuration
-                )
-                .SetEase(
-                    Ease.InCubic
-                )
-            );
-        }
-
-        yield return sequence
-            .WaitForCompletion();
+            content.SetActive(false);
 
         gameObject.SetActive(false);
-
-        // Cho BattleManager biết popup đã đóng
-        if (BattleManager.Instance != null)
-        {
-            BattleManager.Instance.OnJesterUnlockPopupClosed();
-        }
     }
 
     private void HideImmediate()
     {
-        isShowing = false;
-
         if (canvasGroup != null)
         {
             canvasGroup.alpha = 0f;
-            canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
         }
 
         if (content != null)
-        {
-            content.localScale =
-                contentOriginalScale;
-        }
+            content.SetActive(false);
+    }
 
-        gameObject.SetActive(false);
+    // TEST
+    [ContextMenu("TEST Jester Popup")]
+    private void TestPopup()
+    {
+        ShowUnlock();
     }
 }
