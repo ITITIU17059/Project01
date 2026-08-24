@@ -383,7 +383,7 @@ public class CardInteraction : MonoBehaviour
             {
                 isSelectedInCenter = false;
 
-                if (handManager != null)
+                if (IsJesterCard)
                 {
                     if (JesterHandManager.Instance != null)
                     {
