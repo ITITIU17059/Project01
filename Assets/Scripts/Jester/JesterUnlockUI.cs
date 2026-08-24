@@ -31,24 +31,27 @@ public class JesterUnlockUI : MonoBehaviour
 
         if (continueButton != null)
         {
+            continueButton.onClick.RemoveListener(Hide);
             continueButton.onClick.AddListener(Hide);
         }
 
         HideImmediate();
+
+        Debug.Log("[JESTER UI] Initialized.");
     }
+
+    //==================================================
+    // SHOW FIRST UNLOCK
+    //==================================================
+
     public void Show()
     {
         ShowUnlock();
     }
+
     public void ShowUnlock()
     {
-        Debug.Log("[JESTER UI] ShowUnlock called.");
-
-        if (resetJester != null)
-            resetJester.SetActive(true);
-
-        if (instantKillJester != null)
-            instantKillJester.SetActive(true);
+        Debug.Log("[JESTER UI] SHOW UNLOCK");
 
         if (titleText != null)
             titleText.text = "JESTER UNLOCKED";
@@ -60,28 +63,22 @@ public class JesterUnlockUI : MonoBehaviour
                 "and 1 Instant Kill Jester.";
         }
 
-        gameObject.SetActive(true);
-
-        if (canvasGroup != null)
-        {
-            canvasGroup.alpha = 1f;
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
-        }
-
-        if (content != null)
-            content.SetActive(true);
-    }
-
-    public void ShowRankReward()
-    {
-        Debug.Log("[JESTER UI] ShowRankReward called.");
-
         if (resetJester != null)
             resetJester.SetActive(true);
 
         if (instantKillJester != null)
             instantKillJester.SetActive(true);
+
+        ShowPopup();
+    }
+
+    //==================================================
+    // SHOW RANK REWARD
+    //==================================================
+
+    public void ShowRankReward()
+    {
+        Debug.Log("[JESTER UI] SHOW RANK REWARD");
 
         if (titleText != null)
             titleText.text = "JESTER CHARGES +1";
@@ -89,25 +86,54 @@ public class JesterUnlockUI : MonoBehaviour
         if (descriptionText != null)
         {
             descriptionText.text =
-                "Reset Jester +1\n" +
-                "Instant Kill Jester +1";
+                "Reset Jester   +1\n" +
+                "Instant Kill   +1";
         }
 
-        gameObject.SetActive(true);
+        if (resetJester != null)
+            resetJester.SetActive(true);
 
-        if (canvasGroup != null)
+        if (instantKillJester != null)
+            instantKillJester.SetActive(true);
+
+        ShowPopup();
+    }
+
+    //==================================================
+    // SHOW
+    //==================================================
+
+    private void ShowPopup()
+    {
+        if (canvasGroup == null)
         {
-            canvasGroup.alpha = 1f;
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
+            Debug.LogError(
+                "[JESTER UI] CanvasGroup is NULL!"
+            );
+
+            return;
         }
 
         if (content != null)
             content.SetActive(true);
+
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+
+        transform.SetAsLastSibling();
+
+        Debug.Log("[JESTER UI] POPUP VISIBLE");
     }
+
+    //==================================================
+    // HIDE
+    //==================================================
 
     public void Hide()
     {
+        Debug.Log("[JESTER UI] HIDE");
+
         if (canvasGroup != null)
         {
             canvasGroup.alpha = 0f;
@@ -117,8 +143,6 @@ public class JesterUnlockUI : MonoBehaviour
 
         if (content != null)
             content.SetActive(false);
-
-        gameObject.SetActive(false);
     }
 
     private void HideImmediate()
@@ -132,12 +156,5 @@ public class JesterUnlockUI : MonoBehaviour
 
         if (content != null)
             content.SetActive(false);
-    }
-
-    // TEST
-    [ContextMenu("TEST Jester Popup")]
-    private void TestPopup()
-    {
-        ShowUnlock();
     }
 }

@@ -2434,7 +2434,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &171817030
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2518,14 +2518,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JesterUnlockUI
   canvasGroup: {fileID: 171817031}
-  content: {fileID: 1398058146}
-  resetJester: {fileID: 892304391}
-  instantKillJester: {fileID: 314209814}
+  content: {fileID: 1398058145}
   titleText: {fileID: 911106063}
   descriptionText: {fileID: 1289037122}
+  resetJester: {fileID: 892304390}
+  instantKillJester: {fileID: 314209813}
   continueButton: {fileID: 27281496}
-  fadeDuration: 0.25
-  popupDuration: 0.45
 --- !u!1 &179386226
 GameObject:
   m_ObjectHideFlags: 0
