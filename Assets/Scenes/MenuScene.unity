@@ -3444,7 +3444,7 @@ GameObject:
   - component: {fileID: 503708535}
   - component: {fileID: 503708534}
   m_Layer: 5
-  m_Name: Tutorial
+  m_Name: NewGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3536,7 +3536,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Click
+            m_StringArgument: ClickV2
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 1
@@ -4118,6 +4118,10 @@ PrefabInstance:
     - target: {fileID: 5129016256398789877, guid: 2207885558cce014180d3a35a21b9367, type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ButtonManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5129016256398789877, guid: 2207885558cce014180d3a35a21b9367, type: 3}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: ClickV2
       objectReference: {fileID: 0}
     - target: {fileID: 7441380027800078667, guid: 2207885558cce014180d3a35a21b9367, type: 3}
       propertyPath: m_Name
@@ -10237,7 +10241,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Click
+            m_StringArgument: ClickV2
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 1
@@ -11712,7 +11716,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5129016256398789877, guid: 2207885558cce014180d3a35a21b9367, type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
-      value: Click
+      value: ClickV2
       objectReference: {fileID: 0}
     - target: {fileID: 7441380027800078667, guid: 2207885558cce014180d3a35a21b9367, type: 3}
       propertyPath: m_Name
@@ -11986,6 +11990,10 @@ PrefabInstance:
     - target: {fileID: 5129016256398789877, guid: 2207885558cce014180d3a35a21b9367, type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ButtonManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5129016256398789877, guid: 2207885558cce014180d3a35a21b9367, type: 3}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: ClickV2
       objectReference: {fileID: 0}
     - target: {fileID: 7441380027800078667, guid: 2207885558cce014180d3a35a21b9367, type: 3}
       propertyPath: m_Name
@@ -13899,6 +13907,10 @@ PrefabInstance:
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7276832470535231654, guid: 3bacea76486735d4aa11c891d62dbfc0, type: 3}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: ClickV2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14180,6 +14192,10 @@ PrefabInstance:
     - target: {fileID: 4728334140569734505, guid: 95a17ccbbeadf8a4a9b088c1feb527ae, type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ButtonManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4728334140569734505, guid: 95a17ccbbeadf8a4a9b088c1feb527ae, type: 3}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: ClickV2
       objectReference: {fileID: 0}
     - target: {fileID: 5532474843061195869, guid: 95a17ccbbeadf8a4a9b088c1feb527ae, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
