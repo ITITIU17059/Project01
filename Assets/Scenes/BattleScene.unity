@@ -9177,6 +9177,8 @@ MonoBehaviour:
   diamondVFX: {fileID: 4582622227507476575, guid: acf9a3c02c20b1845b53c77f41a14489, type: 3}
   clubVFX: {fileID: 6946500816198159903, guid: 3be655c5fb45da64586f66d21d4b1711, type: 3}
   spadeVFX: {fileID: 4136971357355896572, guid: 507d9b1ceb5bff14188aadcf1c30deb0, type: 3}
+  JesterBlackVFX: {fileID: 8516699616499802518, guid: 840f88ef6f897104fa444bb87442558c, type: 3}
+  JesterRedVFX: {fileID: 82339705322874276, guid: cde68043939f9544e837fcd60393158f, type: 3}
   blockSuccessVFX: {fileID: 7159496930085498811, guid: a778d4ba87844634280a6c13b2a712cd, type: 3}
   blockFailVFX: {fileID: 1228584910659928805, guid: 821df742f3953284196ede4282c84bc2, type: 3}
 --- !u!1 &719684836
@@ -25170,11 +25172,11 @@ SceneRoots:
   - {fileID: 2091500579}
   - {fileID: 1680645535}
   - {fileID: 179386227}
-  - {fileID: 1379142240}
   - {fileID: 392851578}
   - {fileID: 1546014277}
   - {fileID: 6889526}
   - {fileID: 1480264100}
+  - {fileID: 1379142240}
   - {fileID: 1429574770}
   - {fileID: 1750712221}
   - {fileID: 959529420}
