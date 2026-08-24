@@ -296,6 +296,18 @@ public class BattleManager : MonoBehaviour
         bool hasNextBoss =
             BossManager.Instance.HasMoreBosses;
 
+        if (deadBoss.rank == BossRank.Jack)
+        {
+            hasPendingJokerEnding = true;
+
+            pendingBadEnding = true;
+
+            ChangeState(BattleState.Victory);
+            yield return StageManager.Instance.VictoryStage();
+
+            yield break;
+        }
+
         if (!hasNextBoss)
         {
             if (deadBoss.rank == BossRank.Joker)
@@ -306,15 +318,10 @@ public class BattleManager : MonoBehaviour
                     PlayerReward.Instance != null &&
                     PlayerReward.Instance.TraitHasAdd;
 
+
                 ChangeState(BattleState.Victory);
                 yield break;
             }
-
-            yield return StartCoroutine(
-                StageManager.Instance.VictoryStage());
-
-            ChangeState(BattleState.Victory);
-            yield break;
         }
         waitingForInventory = true;
 
@@ -928,13 +935,11 @@ public class BattleManager : MonoBehaviour
             {
                 pendingBadEnding = false;
 
-                LevelManager.instance.LoadScene(
-                    "BadEndingScene");
+                LevelManager.instance.LoadCutScene("badEndingFrames", "IntroTheme");
             }
             else
             {
-                LevelManager.instance.LoadScene(
-                    "GoodEndingScene");
+                LevelManager.instance.LoadCutScene("goodEndingFrames", "IntroTheme");
             }
 
             yield break;

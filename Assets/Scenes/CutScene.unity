@@ -258,33 +258,50 @@ MonoBehaviour:
   nextImage: {fileID: 1253551759}
   fadePanel: {fileID: 2023637427}
   voiceSource: {fileID: 1121091796}
-  introMusicName: IntroTheme
-  frames:
+  introFrames:
   - sprite: {fileID: 9182157284707403512, guid: 833d9f7224baa0b4a9ecf9c3fd420f14, type: 3}
     voiceClip: {fileID: 8300000, guid: 8535f564b5b32d14e9c8b01f64c48de3, type: 3}
     waitVoiceFinish: 1
-    duration: 4
+    duration: 0.5
   - sprite: {fileID: -5392625257635239999, guid: b878d60ec7d2b0145a9467be5fc1c77f, type: 3}
     voiceClip: {fileID: 8300000, guid: ef6f472e943e423439fed6dcb6b43c06, type: 3}
     waitVoiceFinish: 1
-    duration: 4
+    duration: 0.5
   - sprite: {fileID: 3275810401724867860, guid: 92846c5a52bbab24e8bd28ab9360f9d3, type: 3}
     voiceClip: {fileID: 8300000, guid: 41b7307a433096e49b74161a6a6514f2, type: 3}
     waitVoiceFinish: 1
-    duration: 4
+    duration: 0.5
   - sprite: {fileID: -1463966574967315270, guid: 13b509d9d135df844bda5ef3b4b5c0bb, type: 3}
     voiceClip: {fileID: 8300000, guid: c87ef8042b9323a4f8da3803cef28a91, type: 3}
     waitVoiceFinish: 1
-    duration: 4
+    duration: 0.5
   - sprite: {fileID: -4238758519034355421, guid: 7f3eb0a6dacae544eb6f5a9540b62d22, type: 3}
     voiceClip: {fileID: 8300000, guid: 504da32291ad27a48aa0f5af52befcc1, type: 3}
     waitVoiceFinish: 1
-    duration: 4
+    duration: 0.5
   - sprite: {fileID: 22816251889173891, guid: 3e1db241b7b9f5a4d923be114d58769a, type: 3}
     voiceClip: {fileID: 8300000, guid: 77d049ec77f7d644c8cb4cd1a155c2bf, type: 3}
     waitVoiceFinish: 1
-    duration: 4
-  fadeTime: 0.4
+    duration: 0.5
+  badEndingFrames:
+  - sprite: {fileID: -553816415763438932, guid: a2a74716bfb740c4191195a39d19b449, type: 3}
+    voiceClip: {fileID: 8300000, guid: 8535f564b5b32d14e9c8b01f64c48de3, type: 3}
+    waitVoiceFinish: 1
+    duration: 0.5
+  - sprite: {fileID: -6162542869206374902, guid: b93468d0915f51f4685b980cca243276, type: 3}
+    voiceClip: {fileID: 8300000, guid: ef6f472e943e423439fed6dcb6b43c06, type: 3}
+    waitVoiceFinish: 1
+    duration: 0.5
+  - sprite: {fileID: 4554127895159306648, guid: 46e0f3de320d93440961336f354a97a7, type: 3}
+    voiceClip: {fileID: 8300000, guid: 41b7307a433096e49b74161a6a6514f2, type: 3}
+    waitVoiceFinish: 1
+    duration: 0.5
+  - sprite: {fileID: 9053148851822721034, guid: b68360a37777b8a4d95c25f35e8894ce, type: 3}
+    voiceClip: {fileID: 8300000, guid: c87ef8042b9323a4f8da3803cef28a91, type: 3}
+    waitVoiceFinish: 1
+    duration: 0.5
+  goodEndingFrames: []
+  fadeTime: 3
 --- !u!4 &139794484
 Transform:
   m_ObjectHideFlags: 0
@@ -1460,6 +1477,10 @@ PrefabInstance:
       propertyPath: tracks.Array.data[19].trackName
       value: KingTheme4
       objectReference: {fileID: 0}
+    - target: {fileID: 1250398270541289572, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
+      propertyPath: m_TagString
+      value: AudioSource
+      objectReference: {fileID: 0}
     - target: {fileID: 7309919695954491340, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: m_TagString
       value: Music
@@ -1506,15 +1527,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[8].volume
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[9].volume
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[10].volume
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8059890643029201671, guid: 733a1b1b5018467418e45a106cdb3599, type: 3}
       propertyPath: soundEffects.Array.data[11].volume
