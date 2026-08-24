@@ -1,7 +1,12 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -23,6 +28,8 @@ public class CutsceneManager : MonoBehaviour
         public float duration = 3f;
     }
 
+    public static CutsceneManager Instance { get; set; }
+
     [Header("UI")]
     [SerializeField] private Image currentImage;
     [SerializeField] private Image nextImage;
@@ -32,10 +39,15 @@ public class CutsceneManager : MonoBehaviour
     [SerializeField] private AudioSource voiceSource;
 
     [Header("Background Music")]
-    [SerializeField] private string introMusicName = "IntroTheme";
+    [NonSerialized] public string introMusicName;
 
     [Header("Frames")]
-    [SerializeField] private CutsceneFrame[] frames;
+    [SerializeField] private List<CutsceneFrame> introFrames;
+    [SerializeField] private List<CutsceneFrame> badEndingFrames;
+    [SerializeField] private List<CutsceneFrame> goodEndingFrames;
+    [SerializeField] private Dictionary<string, List<CutsceneFrame>> allFrames;
+    private List<CutsceneFrame> frames;
+    [NonSerialized] public string cutSceneName;
 
     [Header("Transition")]
     [SerializeField] private float fadeTime = 0.4f;
@@ -44,12 +56,32 @@ public class CutsceneManager : MonoBehaviour
 
     private void Start()
     {
+        Instance = this;
+
+        voiceSource = GameObject.FindGameObjectWithTag("AudioSource").GetComponent<AudioSource>();
+
         Color color = fadePanel.color;
         color.a = 0;
         fadePanel.color = color;
-        currentImage.sprite = frames[0].sprite;
+        frames = new();
+        allFrames = new();
+        allFrames.Add("introFrames", introFrames);
+        allFrames.Add("badEndingFrames", badEndingFrames);
+        allFrames.Add("GoodEndingFrames", goodEndingFrames);
 
-        currentImage.color = Color.white;
+        if (LevelManager.instance != null)
+        {
+            cutSceneName = LevelManager.instance.pendingCutSceneName;
+            introMusicName = LevelManager.instance.pendingIntroMusicName;
+        }
+
+        foreach (string frame in allFrames.Keys)
+        {
+            if (frame == cutSceneName)
+            {
+                frames = allFrames[frame];
+            }
+        }
 
         Color c = nextImage.color;
         c.a = 0;
@@ -66,7 +98,7 @@ public class CutsceneManager : MonoBehaviour
 
     private IEnumerator PlayCutscene()
     {
-        if (frames.Length == 0)
+        if (frames.Count == 0)
         {
             EndCutscene();
             yield break;
@@ -75,6 +107,12 @@ public class CutsceneManager : MonoBehaviour
         // ===== Frame đầu =====
         currentImage.sprite = frames[0].sprite;
         currentImage.color = Color.white;
+
+        // SceneTransition transition =
+        // LevelManager.instance.transitions
+        //     .First(t => t.name == "CrossFade");
+
+        // yield return transition.AnimateTransitionOut();
 
         if (frames[0].voiceClip != null)
         {
@@ -93,7 +131,7 @@ public class CutsceneManager : MonoBehaviour
         }
 
         // ===== Các frame còn lại =====
-        for (int i = 1; i < frames.Length; i++)
+        for (int i = 1; i < frames.Count; i++)
         {
             CutsceneFrame frame = frames[i];
 
@@ -142,7 +180,16 @@ public class CutsceneManager : MonoBehaviour
             MusicManager.instance.SetMusicMultiplier(1f);
 
         if (LevelManager.instance != null)
-            LevelManager.instance.LoadIntro();
+        {
+            if (cutSceneName == "introFrames")
+            {
+                LevelManager.instance.LoadIntro();
+            }
+            else
+            {
+                LevelManager.instance.LoadMainMenu();
+            }
+        }
     }
 
     private IEnumerator ChangeImage(Sprite nextSprite)
