@@ -854,19 +854,19 @@ MonoBehaviour:
   introMusicName: IntroTheme
   frames:
   - sprite: {fileID: -553816415763438932, guid: a2a74716bfb740c4191195a39d19b449, type: 3}
-    voiceClip: {fileID: 0}
+    voiceClip: {fileID: 8300000, guid: 8535f564b5b32d14e9c8b01f64c48de3, type: 3}
     waitVoiceFinish: 1
     duration: 4
   - sprite: {fileID: -6162542869206374902, guid: b93468d0915f51f4685b980cca243276, type: 3}
-    voiceClip: {fileID: 0}
+    voiceClip: {fileID: 8300000, guid: ef6f472e943e423439fed6dcb6b43c06, type: 3}
     waitVoiceFinish: 1
     duration: 4
   - sprite: {fileID: 4554127895159306648, guid: 46e0f3de320d93440961336f354a97a7, type: 3}
-    voiceClip: {fileID: 0}
+    voiceClip: {fileID: 8300000, guid: 41b7307a433096e49b74161a6a6514f2, type: 3}
     waitVoiceFinish: 1
     duration: 4
   - sprite: {fileID: 9053148851822721034, guid: b68360a37777b8a4d95c25f35e8894ce, type: 3}
-    voiceClip: {fileID: 0}
+    voiceClip: {fileID: 8300000, guid: c87ef8042b9323a4f8da3803cef28a91, type: 3}
     waitVoiceFinish: 1
     duration: 4
   fadeTime: 0.4

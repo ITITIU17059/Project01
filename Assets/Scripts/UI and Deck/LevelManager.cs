@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -11,6 +12,8 @@ public class LevelManager : MonoBehaviour
     public GameObject transitionsContainer;
     [NonSerialized] public SceneTransition[] transitions;
     public string sceneTransName;
+    [NonSerialized] public string pendingCutSceneName = "introFrames";
+    [NonSerialized] public string pendingIntroMusicName = "IntroTheme";
 
     private bool isLoadingScene = false;
 
@@ -89,6 +92,14 @@ public class LevelManager : MonoBehaviour
     public void LoadIntro()
     {
         LoadScene("IntroScene");
+    }
+
+    public void LoadCutScene(string frameName, string introMusic)
+    {
+        pendingCutSceneName = frameName;
+        pendingIntroMusicName = introMusic;
+
+        LoadSceneAdditive("CutScene");
     }
 
 
