@@ -18,6 +18,9 @@ public class JesterUnlockUI : MonoBehaviour
     [SerializeField] private GameObject instantKillJester;
 
     [SerializeField] private Button continueButton;
+    [Header("Hands")]
+    [SerializeField] private GameObject normalHand;
+    [SerializeField] private GameObject jesterHand;
 
     private void Awake()
     {
@@ -37,13 +40,7 @@ public class JesterUnlockUI : MonoBehaviour
 
         HideImmediate();
 
-        Debug.Log("[JESTER UI] Initialized.");
     }
-
-    //==================================================
-    // SHOW FIRST UNLOCK
-    //==================================================
-
     public void Show()
     {
         ShowUnlock();
@@ -51,7 +48,6 @@ public class JesterUnlockUI : MonoBehaviour
 
     public void ShowUnlock()
     {
-        Debug.Log("[JESTER UI] SHOW UNLOCK");
 
         if (titleText != null)
             titleText.text = "JESTER UNLOCKED";
@@ -71,14 +67,8 @@ public class JesterUnlockUI : MonoBehaviour
 
         ShowPopup();
     }
-
-    //==================================================
-    // SHOW RANK REWARD
-    //==================================================
-
     public void ShowRankReward()
     {
-        Debug.Log("[JESTER UI] SHOW RANK REWARD");
 
         if (titleText != null)
             titleText.text = "JESTER CHARGES +1";
@@ -99,20 +89,20 @@ public class JesterUnlockUI : MonoBehaviour
         ShowPopup();
     }
 
-    //==================================================
-    // SHOW
-    //==================================================
-
     private void ShowPopup()
     {
         if (canvasGroup == null)
         {
-            Debug.LogError(
-                "[JESTER UI] CanvasGroup is NULL!"
-            );
 
             return;
         }
+
+        // Ẩn toàn bộ Hand
+        if (normalHand != null)
+            normalHand.SetActive(false);
+
+        if (jesterHand != null)
+            jesterHand.SetActive(false);
 
         if (content != null)
             content.SetActive(true);
@@ -123,16 +113,11 @@ public class JesterUnlockUI : MonoBehaviour
 
         transform.SetAsLastSibling();
 
-        Debug.Log("[JESTER UI] POPUP VISIBLE");
     }
-
-    //==================================================
-    // HIDE
-    //==================================================
 
     public void Hide()
     {
-        Debug.Log("[JESTER UI] HIDE");
+
 
         if (canvasGroup != null)
         {

@@ -296,18 +296,6 @@ public class BattleManager : MonoBehaviour
         bool hasNextBoss =
             BossManager.Instance.HasMoreBosses;
 
-        if (deadBoss.rank == BossRank.Jack)
-        {
-            hasPendingJokerEnding = true;
-
-            pendingBadEnding = true;
-
-            ChangeState(BattleState.Victory);
-            yield return StageManager.Instance.VictoryStage();
-
-            yield break;
-        }
-
         if (!hasNextBoss)
         {
             if (deadBoss.rank == BossRank.Joker)
