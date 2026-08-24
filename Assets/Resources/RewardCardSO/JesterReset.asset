@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
   cardSprite: {fileID: -6462194140118145075, guid: 0a9f990126a3f3d498088ba8b5599203, type: 3}
   value: 0
-  suit: 0
+  suit: 6
   type: 5
   cardName: Jester Red
   description: Remove the Boss's Skill and Resistance. Draw 8 new cards.

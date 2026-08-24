@@ -9,7 +9,9 @@ public class CardSO : ScriptableObject
         Hearts,
         Diamonds,
         Clubs,
-        Spades
+        Spades,
+        JesterBlack,
+        JesterRed
     }
 
     public enum CardType

@@ -167,6 +167,8 @@ public class JesterHandManager : MonoBehaviour
 
         bool skillStarted = false;
 
+        yield return CardResolver.PlaySuitFX(
+                HandManager.Instance.selectedCards);
 
         if (usedJester == resetJester)
         {

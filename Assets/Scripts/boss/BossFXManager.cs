@@ -11,6 +11,8 @@ public class BossFXManager : MonoBehaviour
     [SerializeField] private GameObject diamondVFX;
     [SerializeField] private GameObject clubVFX;
     [SerializeField] private GameObject spadeVFX;
+    [SerializeField] private GameObject JesterBlackVFX;
+    [SerializeField] private GameObject JesterRedVFX;
     [SerializeField] private GameObject blockSuccessVFX;
     [SerializeField] private GameObject blockFailVFX;
 
@@ -37,6 +39,12 @@ public class BossFXManager : MonoBehaviour
 
             case CardSO.Suit.Spades:
                 return "SpadeAttack";
+
+            case CardSO.Suit.JesterBlack:
+                return "JesterBlack";
+
+            case CardSO.Suit.JesterRed:
+                return "JesterRed";
         }
 
         return null;
@@ -64,6 +72,14 @@ public class BossFXManager : MonoBehaviour
 
             case CardSO.Suit.Spades:
                 prefab = spadeVFX;
+                break;
+
+            case CardSO.Suit.JesterBlack:
+                prefab = JesterBlackVFX;
+                break;
+
+            case CardSO.Suit.JesterRed:
+                prefab = JesterRedVFX;
                 break;
         }
 

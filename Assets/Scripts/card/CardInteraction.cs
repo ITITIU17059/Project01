@@ -332,6 +332,7 @@ public class CardInteraction : MonoBehaviour
                     {
                         JesterHandManager.Instance
                             .DeselectJesterCard(gameObject);
+                        HandManager.Instance.selectedCards.Remove(gameObject);
                     }
                 }
                 else
@@ -425,6 +426,9 @@ public class CardInteraction : MonoBehaviour
 
                     JesterHandManager.Instance
                         .DeselectJesterCard(gameObject);
+
+                    HandManager.Instance.selectedCards.Remove(gameObject);
+                    SoundManager.instance?.PlaySound2D("CardSelect");
                 }
 
                 return;
@@ -453,6 +457,10 @@ public class CardInteraction : MonoBehaviour
 
             JesterHandManager.Instance
                 .SelectJesterCard(gameObject);
+
+            HandManager.Instance.selectedCards.Add(gameObject);
+            SoundManager.instance?.PlaySound2D("CardSelect");
+            Debug.Log(HandManager.Instance.selectedCards.Count);
 
             return;
         }
