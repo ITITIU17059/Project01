@@ -923,11 +923,11 @@ public class BattleManager : MonoBehaviour
             {
                 pendingBadEnding = false;
 
-                LevelManager.instance.LoadCutScene("badEndingFrames", "IntroTheme");
+                LevelManager.instance.LoadCutScene("badEndingFrames", "BadEndingTheme");
             }
             else
             {
-                LevelManager.instance.LoadCutScene("goodEndingFrames", "IntroTheme");
+                LevelManager.instance.LoadCutScene("goodEndingFrames", "GoodEndingTheme");
             }
 
             yield break;

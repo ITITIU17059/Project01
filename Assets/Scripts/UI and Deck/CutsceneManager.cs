@@ -67,7 +67,7 @@ public class CutsceneManager : MonoBehaviour
         allFrames = new();
         allFrames.Add("introFrames", introFrames);
         allFrames.Add("badEndingFrames", badEndingFrames);
-        allFrames.Add("GoodEndingFrames", goodEndingFrames);
+        allFrames.Add("goodEndingFrames", goodEndingFrames);
 
         if (LevelManager.instance != null)
         {
@@ -89,7 +89,7 @@ public class CutsceneManager : MonoBehaviour
 
         if (MusicManager.instance != null)
         {
-            MusicManager.instance.SetMusicMultiplier(0.25f);
+            MusicManager.instance.SetMusicMultiplier(0.8f);
             MusicManager.instance.PlayMusic(introMusicName, 1f);
         }
 
@@ -107,12 +107,6 @@ public class CutsceneManager : MonoBehaviour
         // ===== Frame đầu =====
         currentImage.sprite = frames[0].sprite;
         currentImage.color = Color.white;
-
-        // SceneTransition transition =
-        // LevelManager.instance.transitions
-        //     .First(t => t.name == "CrossFade");
-
-        // yield return transition.AnimateTransitionOut();
 
         if (frames[0].voiceClip != null)
         {
@@ -173,7 +167,9 @@ public class CutsceneManager : MonoBehaviour
         StopAllCoroutines();
 
         if (voiceSource != null)
+        {
             voiceSource.Stop();
+        }
 
 
         if (MusicManager.instance != null)

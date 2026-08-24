@@ -383,7 +383,16 @@ public class CardInteraction : MonoBehaviour
             {
                 isSelectedInCenter = false;
 
-                if (handManager != null)
+                if (IsJesterCard)
+                {
+                    if (JesterHandManager.Instance != null)
+                    {
+                        JesterHandManager.Instance
+                            .DeselectJesterCard(gameObject);
+                        HandManager.Instance.selectedCards.Remove(gameObject);
+                    }
+                }
+                else
                 {
                     handManager.DeselectCard(gameObject);
                 }
@@ -502,6 +511,9 @@ public class CardInteraction : MonoBehaviour
 
                     JesterHandManager.Instance
                         .DeselectJesterCard(gameObject);
+
+                    HandManager.Instance.selectedCards.Remove(gameObject);
+                    SoundManager.instance?.PlaySound2D("CardSelect");
                 }
 
                 return;
@@ -532,6 +544,10 @@ public class CardInteraction : MonoBehaviour
 
             JesterHandManager.Instance
                 .SelectJesterCard(gameObject);
+
+            HandManager.Instance.selectedCards.Add(gameObject);
+            SoundManager.instance?.PlaySound2D("CardSelect");
+            Debug.Log(HandManager.Instance.selectedCards.Count);
 
             return;
         }
