@@ -24,6 +24,9 @@ public class CardInteraction : MonoBehaviour
 
     private Vector3 originalScale;
 
+    private Vector3 handScale;
+    private Vector3 playScale;
+
     private bool isHovered;
     private bool isDragging;
 
@@ -38,7 +41,6 @@ public class CardInteraction : MonoBehaviour
 
     public bool IsLocked;
 
-
     private bool IsJesterCard
     {
         get
@@ -50,12 +52,9 @@ public class CardInteraction : MonoBehaviour
         }
     }
 
-
     private void Awake()
     {
         originalScale = transform.localScale;
-
-        splineLocalPosition = transform.localPosition;
 
         handManager =
             Object.FindAnyObjectByType<HandManager>();
@@ -65,13 +64,16 @@ public class CardInteraction : MonoBehaviour
 
         cardPhysics =
             GetComponent<CardPhysics>();
+
+        handScale = originalScale;
+
+        playScale = Vector3.one;
     }
 
     private void OnDestroy()
     {
         transform.DOKill();
     }
-
 
     public void MoveTo(
         Vector3 localPos,
@@ -85,15 +87,13 @@ public class CardInteraction : MonoBehaviour
 
         transform.DOKill();
 
-        transform.DOLocalMove(
-            localPos,
-            duration
-        ).SetEase(Ease.OutCubic);
+        transform
+            .DOLocalMove(localPos, duration)
+            .SetEase(Ease.OutCubic);
 
-        transform.DOLocalRotateQuaternion(
-            rotation,
-            duration
-        ).SetEase(Ease.OutCubic);
+        transform
+            .DOLocalRotateQuaternion(rotation, duration)
+            .SetEase(Ease.OutCubic);
     }
 
     public void HandleMouseEnter()
@@ -119,36 +119,39 @@ public class CardInteraction : MonoBehaviour
             return;
 
         isHovered = true;
-        ShowJesterDescription();
 
         if (IsJesterCard)
         {
+            ShowJesterDescription();
 
             if (cardDisplay != null)
             {
-                cardDisplay.SetSortingOrder(10);
+                cardDisplay.SetSortingOrder(50);
             }
 
             transform.DOKill();
 
-            transform.DOScale(
-                originalScale * hover.scale,
-                hover.duration
-            ).SetEase(Ease.OutCubic);
+            if (isSelectedInCenter)
+            {
+                transform.localScale = playScale;
+            }
+            else
+            {
+   
+                transform
+                    .DOScale(
+                        handScale * hover.scale,
+                        hover.duration
+                    )
+                    .SetEase(Ease.OutCubic);
+            }
 
             return;
         }
 
         if (cardDisplay != null)
         {
-            if (IsJesterCard)
-            {
-                cardDisplay.SetSortingOrder(50);
-            }
-            else
-            {
-                cardDisplay.SetSortingOrder(300);
-            }
+            cardDisplay.SetSortingOrder(300);
         }
 
         if (isSelectedInCenter)
@@ -156,18 +159,21 @@ public class CardInteraction : MonoBehaviour
 
         transform.DOKill();
 
-        transform.DOScale(
-            originalScale * hover.scale,
-            hover.duration
-        ).SetEase(Ease.OutCubic);
+        transform
+            .DOScale(
+                originalScale * hover.scale,
+                hover.duration
+            )
+            .SetEase(Ease.OutCubic);
 
-        transform.DOLocalMove(
-            splineLocalPosition +
-            Vector3.up * hover.moveAmount,
-            hover.duration
-        ).SetEase(Ease.OutCubic);
+        transform
+            .DOLocalMove(
+                splineLocalPosition +
+                Vector3.up * hover.moveAmount,
+                hover.duration
+            )
+            .SetEase(Ease.OutCubic);
     }
-
 
     public void HandleMouseExit()
     {
@@ -184,20 +190,29 @@ public class CardInteraction : MonoBehaviour
             return;
 
         isHovered = false;
-        HideJesterDescription();
 
         if (IsJesterCard)
         {
+            HideJesterDescription();
+
             transform.DOKill();
 
-            transform.DOScale(
-                originalScale,
-                hover.duration
-            ).SetEase(Ease.OutCubic);
+            if (isSelectedInCenter)
+            {
+                transform.localScale = playScale;
+            }
+            else
+            {
+                transform
+                    .DOScale(
+                        handScale,
+                        hover.duration
+                    )
+                    .SetEase(Ease.OutCubic);
+            }
 
             return;
         }
-
 
         if (isSelectedInCenter)
         {
@@ -211,15 +226,19 @@ public class CardInteraction : MonoBehaviour
 
         transform.DOKill();
 
-        transform.DOScale(
-            originalScale,
-            hover.duration
-        ).SetEase(Ease.OutCubic);
+        transform
+            .DOScale(
+                originalScale,
+                hover.duration
+            )
+            .SetEase(Ease.OutCubic);
 
-        transform.DOLocalMove(
-            splineLocalPosition,
-            hover.duration
-        ).SetEase(Ease.OutCubic);
+        transform
+            .DOLocalMove(
+                splineLocalPosition,
+                hover.duration
+            )
+            .SetEase(Ease.OutCubic);
 
         if (handManager != null)
         {
@@ -248,7 +267,6 @@ public class CardInteraction : MonoBehaviour
             cardPhysics.ResetPhysics();
         }
     }
-
 
     public void HandleDragging(Vector3 targetWorldPos)
     {
@@ -309,7 +327,6 @@ public class CardInteraction : MonoBehaviour
             return;
         }
 
-
         Collider2D hitCollider =
             Physics2D.OverlapPoint(
                 mouseWorldPos,
@@ -320,8 +337,48 @@ public class CardInteraction : MonoBehaviour
             hitCollider != null &&
             hitCollider.CompareTag("PlayZone");
 
+
         if (isSelectedInCenter)
         {
+
+            if (IsJesterCard)
+            {
+                if (isOverPlayZone)
+                {
+                    // Vẫn nằm trong Play Zone
+                    transform.DORotate(
+                        Vector3.zero,
+                        0.15f
+                    );
+
+                    transform.DOScale(
+                        playScale,
+                        hover.duration
+                    ).SetEase(Ease.OutCubic);
+
+                    return;
+                }
+
+                transform.DOKill();
+
+                transform.DORotate(
+                    Vector3.zero,
+                    0.15f
+                );
+
+                transform.DOScale(
+                    playScale,
+                    hover.duration
+                ).SetEase(Ease.OutCubic);
+
+                JesterHandManager.Instance?.ReturnJesterToPlayZone(
+                    gameObject
+                );
+
+                return;
+            }
+
+
             if (!isOverPlayZone)
             {
                 isSelectedInCenter = false;
@@ -337,10 +394,7 @@ public class CardInteraction : MonoBehaviour
                 }
                 else
                 {
-                    if (handManager != null)
-                    {
-                        handManager.DeselectCard(gameObject);
-                    }
+                    handManager.DeselectCard(gameObject);
                 }
             }
             else
@@ -350,8 +404,7 @@ public class CardInteraction : MonoBehaviour
                     0.15f
                 );
 
-                if (!IsJesterCard &&
-                    handManager != null)
+                if (handManager != null)
                 {
                     handManager.RearrangeSelectedCards();
                 }
@@ -364,13 +417,23 @@ public class CardInteraction : MonoBehaviour
         {
             isSelectedInCenter = true;
 
-            transform.DORotate(
-                Vector3.zero,
-                0.15f
-            );
+            transform.DOKill();
+
+            transform
+                .DORotate(
+                    Vector3.zero,
+                    0.15f
+                );
 
             if (IsJesterCard)
             {
+                transform
+                    .DOScale(
+                        playScale,
+                        0.2f
+                    )
+                    .SetEase(Ease.OutBack);
+
                 if (JesterHandManager.Instance != null)
                 {
                     JesterHandManager.Instance
@@ -384,34 +447,56 @@ public class CardInteraction : MonoBehaviour
                     handManager.SelectCard(gameObject);
                 }
             }
-        }
-        else
-        {
-            transform.DOKill();
 
-            transform.DOScale(
+            return;
+        }
+
+        transform.DOKill();
+
+        if (IsJesterCard)
+        {
+            if (JesterHandManager.Instance != null)
+            {
+                JesterHandManager.Instance.DeselectJesterCard(gameObject);
+            }
+            else
+            {
+                transform
+                    .DOScale(
+                        handScale,
+                        hover.duration
+                    )
+                    .SetEase(Ease.OutCubic);
+            }
+
+            return;
+        }
+
+        transform
+            .DOScale(
                 originalScale,
                 hover.duration
-            );
+            )
+            .SetEase(Ease.OutCubic);
 
-            transform.DOLocalMove(
+        transform
+            .DOLocalMove(
                 splineLocalPosition,
                 hover.duration
-            );
+            )
+            .SetEase(Ease.OutCubic);
 
-            if (!IsJesterCard &&
-                handManager != null)
-            {
-                handManager.RepositionAllCards(null);
-            }
+        if (handManager != null)
+        {
+            handManager.RepositionAllCards(null);
         }
     }
-
 
     private void ToggleCardSelection()
     {
         if (IsLocked)
             return;
+
         if (IsJesterCard)
         {
             if (JesterHandManager.Instance == null)
@@ -434,15 +519,9 @@ public class CardInteraction : MonoBehaviour
                 return;
             }
 
-            bool canSelect = false;
-
-            if (cardDisplay.cardScriptableObject.type ==
-                CardSO.CardType.Jester)
-            {
-                canSelect =
-                    JesterManager.Instance != null &&
-                    JesterManager.Instance.IsUnlocked;
-            }
+            bool canSelect =
+                JesterManager.Instance != null &&
+                JesterManager.Instance.IsUnlocked;
 
             if (!canSelect)
                 return;
@@ -451,9 +530,17 @@ public class CardInteraction : MonoBehaviour
 
             transform.DORotate(
                 Vector3.zero,
-                0.15f);
+                0.15f
+            );
 
             isSelectedInCenter = true;
+
+            transform
+                .DOScale(
+                    playScale,
+                    0.2f
+                )
+                .SetEase(Ease.OutBack);
 
             JesterHandManager.Instance
                 .SelectJesterCard(gameObject);
@@ -465,7 +552,6 @@ public class CardInteraction : MonoBehaviour
             return;
         }
 
-
         if (handManager == null)
             return;
 
@@ -476,7 +562,8 @@ public class CardInteraction : MonoBehaviour
 
         transform.DORotate(
             Vector3.zero,
-            0.15f);
+            0.15f
+        );
 
         isSelectedInCenter =
             !isSelectedInCenter;
@@ -491,6 +578,7 @@ public class CardInteraction : MonoBehaviour
         }
     }
 
+
     public void HandleDeselect()
     {
         isSelectedInCenter = false;
@@ -498,16 +586,34 @@ public class CardInteraction : MonoBehaviour
 
         transform.DOKill();
 
-        transform.DOScale(
-            originalScale,
-            hover.duration
-        ).SetEase(Ease.OutCubic);
+        if (IsJesterCard)
+        {
+            transform
+                .DOScale(
+                    handScale,
+                    hover.duration
+                )
+                .SetEase(Ease.OutCubic);
+        }
+        else
+        {
+            transform
+                .DOScale(
+                    originalScale,
+                    hover.duration
+                )
+                .SetEase(Ease.OutCubic);
+        }
 
-        transform.DOLocalMove(
-            splineLocalPosition,
-            hover.duration
-        ).SetEase(Ease.OutCubic);
+        transform
+            .DOLocalMove(
+                splineLocalPosition,
+                hover.duration
+            )
+            .SetEase(Ease.OutCubic);
     }
+
+
     private void ShowJesterDescription()
     {
         if (!IsJesterCard)
