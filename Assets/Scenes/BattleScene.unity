@@ -2434,7 +2434,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &171817030
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11169,9 +11169,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b832b90ebeb07c64096bdf6b5ea9b3e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JesterManager
-  unlocked: 0
-  resetCharges: 0
-  instantKillCharges: 0
+  unlocked: 1
+  resetCharges: 1
+  instantKillCharges: 1
 --- !u!114 &837951012
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -67,6 +67,8 @@ public class CardInteraction : MonoBehaviour
 
         handScale = originalScale;
 
+        playZoneLayer = LayerMask.GetMask("PlayZone");
+
         playScale = Vector3.one;
     }
 
@@ -137,7 +139,7 @@ public class CardInteraction : MonoBehaviour
             }
             else
             {
-   
+
                 transform
                     .DOScale(
                         handScale * hover.scale,
@@ -378,24 +380,15 @@ public class CardInteraction : MonoBehaviour
                 return;
             }
 
-
             if (!isOverPlayZone)
             {
                 isSelectedInCenter = false;
 
-                if (IsJesterCard)
-                {
-                    if (JesterHandManager.Instance != null)
-                    {
-                        JesterHandManager.Instance
-                            .DeselectJesterCard(gameObject);
-                        HandManager.Instance.selectedCards.Remove(gameObject);
-                    }
-                }
-                else
+                if (handManager != null)
                 {
                     handManager.DeselectCard(gameObject);
                 }
+
             }
             else
             {
@@ -438,6 +431,7 @@ public class CardInteraction : MonoBehaviour
                 {
                     JesterHandManager.Instance
                         .SelectJesterCard(gameObject);
+                    HandManager.Instance.selectedCards.Add(gameObject);
                 }
             }
             else
@@ -453,42 +447,46 @@ public class CardInteraction : MonoBehaviour
 
         transform.DOKill();
 
-        if (IsJesterCard)
+        if (!isOverPlayZone)
         {
-            if (JesterHandManager.Instance != null)
+            if (IsJesterCard)
             {
-                JesterHandManager.Instance.DeselectJesterCard(gameObject);
+                if (JesterHandManager.Instance != null)
+                {
+                    Debug.Log("running");
+                    JesterHandManager.Instance.DeselectJesterCard(gameObject);
+                    HandManager.Instance.selectedCards.Remove(gameObject);
+                }
+                else
+                {
+                    transform
+                        .DOScale(
+                            handScale,
+                            hover.duration
+                        )
+                        .SetEase(Ease.OutCubic);
+                }
+
+                return;
             }
-            else
+            transform
+                        .DOScale(
+                            originalScale,
+                            hover.duration
+                        )
+                        .SetEase(Ease.OutCubic);
+
+            transform
+                .DOLocalMove(
+                    splineLocalPosition,
+                    hover.duration
+                )
+                .SetEase(Ease.OutCubic);
+
+            if (handManager != null)
             {
-                transform
-                    .DOScale(
-                        handScale,
-                        hover.duration
-                    )
-                    .SetEase(Ease.OutCubic);
+                handManager.RepositionAllCards(null);
             }
-
-            return;
-        }
-
-        transform
-            .DOScale(
-                originalScale,
-                hover.duration
-            )
-            .SetEase(Ease.OutCubic);
-
-        transform
-            .DOLocalMove(
-                splineLocalPosition,
-                hover.duration
-            )
-            .SetEase(Ease.OutCubic);
-
-        if (handManager != null)
-        {
-            handManager.RepositionAllCards(null);
         }
     }
 
