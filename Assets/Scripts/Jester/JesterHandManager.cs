@@ -547,55 +547,9 @@ public class JesterHandManager : MonoBehaviour
         if (executing)
             return;
 
-        if (selectedJester != jester)
-            return;
-
         selectedJester = null;
 
-        Transform returnPoint = null;
-        Vector3 targetHandScale;
-
-        if (jester == resetJester)
-        {
-            returnPoint = resetHandPoint;
-            targetHandScale = resetHandScale;
-        }
-        else if (jester == instantKillJester)
-        {
-            returnPoint = instantKillHandPoint;
-            targetHandScale = instantKillHandScale;
-        }
-        else
-        {
-            return;
-        }
-
-        if (returnPoint != null)
-        {
-            jester.transform.DOKill();
-
-            jester.transform
-                .DOMove(
-                    returnPoint.position,
-                    0.25f
-                )
-                .SetEase(Ease.OutCubic);
-
-            jester.transform
-                .DORotate(
-                    returnPoint.rotation.eulerAngles,
-                    0.25f
-                )
-                .SetEase(Ease.OutCubic);
-
-            jester.transform
-                .DOScale(
-                    targetHandScale,
-                    0.25f
-                )
-                .SetEase(Ease.OutCubic);
-        }
-
+        StartCoroutine(ReturnJesterToHand(jester));
         Refresh();
     }
     public void SetJesterInteractionLocked(bool locked)
