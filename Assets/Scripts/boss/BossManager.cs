@@ -277,7 +277,6 @@ public class BossManager : MonoBehaviour
         if (deadBoss == null)
             return;
 
-        // Joker không nằm trong trait pool thông thường
         if (deadBoss.currentTrait != null &&
             deadBoss.rank != BossRank.Joker &&
             TraitPoolManager.Instance != null)
@@ -287,7 +286,6 @@ public class BossManager : MonoBehaviour
                 deadBoss.currentTrait);
         }
 
-        // Trait Selection có thể không tồn tại / không active
         if (TraitSelectionPanelUI.Instance != null)
         {
             TraitSelectionPanelUI.Instance.ClearCurrentTraits();

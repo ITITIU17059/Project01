@@ -371,7 +371,7 @@ public class BattleManager : MonoBehaviour
                     yield return new WaitUntil(
                         () =>
                             JesterUnlockUI.Instance == null ||
-                            !JesterUnlockUI.Instance.gameObject.activeSelf
+                            !JesterUnlockUI.Instance.IsShowing
                     );
                 }
             }
