@@ -19,6 +19,44 @@ public class JesterHandManager : MonoBehaviour
 
     private GameObject selectedJester;
 
+    // Modal UI visual state for the actual Jester hand cards.
+    private bool jesterVisualsSuppressed = false;
+    private bool resetJesterWasActive = false;
+    private bool instantKillJesterWasActive = false;
+
+    public void SetVisualsSuppressed(bool suppressed)
+    {
+        if (jesterVisualsSuppressed == suppressed)
+            return;
+
+        jesterVisualsSuppressed = suppressed;
+
+        if (suppressed)
+        {
+            resetJesterWasActive =
+                resetJester != null && resetJester.activeSelf;
+
+            instantKillJesterWasActive =
+                instantKillJester != null && instantKillJester.activeSelf;
+
+            if (resetJester != null)
+                resetJester.SetActive(false);
+
+            if (instantKillJester != null)
+                instantKillJester.SetActive(false);
+        }
+        else
+        {
+            if (resetJester != null)
+                resetJester.SetActive(resetJesterWasActive);
+
+            if (instantKillJester != null)
+                instantKillJester.SetActive(instantKillJesterWasActive);
+
+            Refresh();
+        }
+    }
+
     private bool resetLocked;
     private bool instantKillLocked;
 
@@ -435,7 +473,7 @@ public class JesterHandManager : MonoBehaviour
 
         if (resetJester != null)
         {
-            resetJester.SetActive(unlocked);
+            resetJester.SetActive(jesterVisualsSuppressed ? false : unlocked);
 
             CardDisplay display =
                 resetJester.GetComponent<CardDisplay>();
@@ -448,7 +486,7 @@ public class JesterHandManager : MonoBehaviour
 
         if (instantKillJester != null)
         {
-            instantKillJester.SetActive(unlocked);
+            instantKillJester.SetActive(jesterVisualsSuppressed ? false : unlocked);
 
             CardDisplay display =
                 instantKillJester.GetComponent<CardDisplay>();

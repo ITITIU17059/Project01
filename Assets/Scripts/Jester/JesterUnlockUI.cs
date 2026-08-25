@@ -6,18 +6,23 @@ public class JesterUnlockUI : MonoBehaviour
 {
     public static JesterUnlockUI Instance { get; private set; }
 
-    [Header("Root")]
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private GameObject content;
+    [Header("Popup")]
+    [SerializeField] private GameObject popupRoot;
+    [SerializeField] private CanvasGroup popupCanvasGroup;
 
     [Header("UI")]
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text descriptionText;
-
-    [SerializeField] private GameObject resetJester;
-    [SerializeField] private GameObject instantKillJester;
-
     [SerializeField] private Button continueButton;
+
+    public bool IsShowing { get; private set; }
+
+    private bool keepHandsHiddenAfterClose = false;
+
+    public void SetKeepHandsHiddenAfterClose(bool value)
+    {
+        keepHandsHiddenAfterClose = value;
+    }
 
     private void Awake()
     {
@@ -31,17 +36,20 @@ public class JesterUnlockUI : MonoBehaviour
 
         if (continueButton != null)
         {
-            continueButton.onClick.RemoveListener(Hide);
-            continueButton.onClick.AddListener(Hide);
+            continueButton.onClick.RemoveListener(Continue);
+            continueButton.onClick.AddListener(Continue);
         }
 
         HideImmediate();
+    }
 
-        Debug.Log("[JESTER UI] Initialized.");
+    private void Start()
+    {
+        HideImmediate();
     }
 
     //==================================================
-    // SHOW FIRST UNLOCK
+    // SHOW
     //==================================================
 
     public void Show()
@@ -51,110 +59,190 @@ public class JesterUnlockUI : MonoBehaviour
 
     public void ShowUnlock()
     {
-        Debug.Log("[JESTER UI] SHOW UNLOCK");
+        Debug.Log("[JESTER UI] ShowUnlock()");
 
         if (titleText != null)
+        {
             titleText.text = "JESTER UNLOCKED";
+        }
 
         if (descriptionText != null)
         {
             descriptionText.text =
-                "You received 1 Reset Jester\n" +
-                "and 1 Instant Kill Jester.";
+                "Two powerful Jester cards have\r\nbeen added to your arsenal.";
         }
 
-        if (resetJester != null)
-            resetJester.SetActive(true);
-
-        if (instantKillJester != null)
-            instantKillJester.SetActive(true);
-
-        ShowPopup();
+        Open();
     }
 
     //==================================================
-    // SHOW RANK REWARD
+    // OPEN
     //==================================================
 
-    public void ShowRankReward()
+    private void Open()
     {
-        Debug.Log("[JESTER UI] SHOW RANK REWARD");
-
-        if (titleText != null)
-            titleText.text = "JESTER CHARGES +1";
-
-        if (descriptionText != null)
-        {
-            descriptionText.text =
-                "Reset Jester   +1\n" +
-                "Instant Kill   +1";
-        }
-
-        if (resetJester != null)
-            resetJester.SetActive(true);
-
-        if (instantKillJester != null)
-            instantKillJester.SetActive(true);
-
-        ShowPopup();
-    }
-
-    //==================================================
-    // SHOW
-    //==================================================
-
-    private void ShowPopup()
-    {
-        if (canvasGroup == null)
+        if (popupRoot == null)
         {
             Debug.LogError(
-                "[JESTER UI] CanvasGroup is NULL!"
+                "[JESTER UI] Popup Root is NULL!"
             );
 
             return;
         }
 
-        if (content != null)
-            content.SetActive(true);
-
-        canvasGroup.alpha = 1f;
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
-
-        transform.SetAsLastSibling();
-
-        Debug.Log("[JESTER UI] POPUP VISIBLE");
-    }
-
-    //==================================================
-    // HIDE
-    //==================================================
-
-    public void Hide()
-    {
-        Debug.Log("[JESTER UI] HIDE");
-
-        if (canvasGroup != null)
+        if (popupCanvasGroup == null)
         {
-            canvasGroup.alpha = 0f;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
+            Debug.LogError(
+                "[JESTER UI] Popup Canvas Group is NULL!"
+            );
+
+            return;
         }
 
-        if (content != null)
-            content.SetActive(false);
+        IsShowing = true;
+
+        // Đưa popup lên trên toàn bộ Battle UI
+        transform.SetAsLastSibling();
+
+        // Hiện popup
+        popupRoot.SetActive(true);
+
+        popupCanvasGroup.alpha = 1f;
+
+        popupCanvasGroup.interactable = true;
+
+        popupCanvasGroup.blocksRaycasts = true;
+
+        // Khóa gameplay
+        LockGameplay();
+
+        Debug.Log(
+            "[JESTER UI] OPENED"
+        );
     }
+
+    //==================================================
+    // LOCK GAMEPLAY
+    //==================================================
+
+    private void LockGameplay()
+    {
+        // Khóa + ẩn hand bài thường.
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.SetInteractable(false);
+            HandManager.Instance.SetVisualsSuppressed(true);
+        }
+
+        // Khóa + ẩn Jester Hand thật.
+        if (JesterHandManager.Instance != null)
+        {
+            JesterHandManager.Instance
+                .SetJesterInteractionLocked(true);
+
+            JesterHandManager.Instance
+                .SetVisualsSuppressed(true);
+        }
+    }
+
+    //==================================================
+    // CONTINUE
+    //==================================================
+
+    public void Continue()
+    {
+        if (!IsShowing)
+            return;
+
+        Debug.Log(
+            "[JESTER UI] Continue clicked"
+        );
+
+        Close();
+    }
+
+    //==================================================
+    // CLOSE
+    //==================================================
+
+    private void Close()
+    {
+        if (popupCanvasGroup != null)
+        {
+            popupCanvasGroup.alpha = 0f;
+
+            popupCanvasGroup.interactable = false;
+
+            popupCanvasGroup.blocksRaycasts = false;
+        }
+
+        if (popupRoot != null)
+        {
+            popupRoot.SetActive(false);
+        }
+
+        IsShowing = false;
+
+        UnlockGameplay();
+
+        Debug.Log(
+            "[JESTER UI] CLOSED"
+        );
+    }
+
+    //==================================================
+    // UNLOCK GAMEPLAY
+    //==================================================
+
+    private void UnlockGameplay()
+    {
+        // In the Queen unlock flow, keep both hands hidden until
+        // Trait Selection has finished.
+        if (keepHandsHiddenAfterClose)
+        {
+            if (HandManager.Instance != null)
+                HandManager.Instance.SetInteractable(false);
+
+            if (JesterHandManager.Instance != null)
+                JesterHandManager.Instance.SetJesterInteractionLocked(true);
+
+            return;
+        }
+
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.SetVisualsSuppressed(false);
+            HandManager.Instance.SetInteractable(true);
+        }
+
+        if (JesterHandManager.Instance != null)
+        {
+            JesterHandManager.Instance.SetVisualsSuppressed(false);
+            JesterHandManager.Instance.SetJesterInteractionLocked(false);
+            JesterHandManager.Instance.Refresh();
+        }
+    }
+
+    //==================================================
+    // INITIAL HIDE
+    //==================================================
 
     private void HideImmediate()
     {
-        if (canvasGroup != null)
+        IsShowing = false;
+
+        if (popupCanvasGroup != null)
         {
-            canvasGroup.alpha = 0f;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
+            popupCanvasGroup.alpha = 0f;
+
+            popupCanvasGroup.interactable = false;
+
+            popupCanvasGroup.blocksRaycasts = false;
         }
 
-        if (content != null)
-            content.SetActive(false);
+        if (popupRoot != null)
+        {
+            popupRoot.SetActive(false);
+        }
     }
 }
