@@ -36,11 +36,15 @@ public class TraitSelectionPanelUI : MonoBehaviour
 
         hand.SetInteractable(false);
         hand.ResetAllCardHover();
+        hand.SetVisualsSuppressed(true);
 
         if (JesterHandManager.Instance != null)
         {
             JesterHandManager.Instance
                 .SetJesterInteractionLocked(true);
+
+            JesterHandManager.Instance
+                .SetVisualsSuppressed(true);
         }
 
         gameObject.SetActive(true);
@@ -122,14 +126,21 @@ public class TraitSelectionPanelUI : MonoBehaviour
         BossManager.Instance.RefreshBossInfo();
 
 
+        if (JesterUnlockUI.Instance != null)
+            JesterUnlockUI.Instance.SetKeepHandsHiddenAfterClose(false);
+
         if (JesterHandManager.Instance != null)
         {
+            JesterHandManager.Instance
+                .SetVisualsSuppressed(false);
+
             JesterHandManager.Instance
                 .SetJesterInteractionLocked(false);
         }
 
         gameObject.SetActive(false);
 
+        hand.SetVisualsSuppressed(false);
         hand.SetInteractable(true);
 
         BattleManager.Instance.StartBattleAfterTraitSelected();
@@ -148,10 +159,18 @@ public class TraitSelectionPanelUI : MonoBehaviour
         {
             JesterHandManager.Instance
                 .SetJesterInteractionLocked(visible);
+
+            JesterHandManager.Instance
+                .SetVisualsSuppressed(visible);
         }
 
+        hand.SetVisualsSuppressed(visible);
+
         if (!visible)
+        {
+            hand.SetInteractable(true);
             return;
+        }
 
         hand.SetInteractable(false);
     }

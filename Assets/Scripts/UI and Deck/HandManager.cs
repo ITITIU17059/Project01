@@ -53,6 +53,31 @@ public class HandManager : MonoBehaviour
 
     }
     private bool canInteract = true;
+
+    // Modal UI visual state: hide the normal hand without touching individual cards.
+    private bool handVisualsSuppressed = false;
+    private bool handContainerWasActive = true;
+
+    public void SetVisualsSuppressed(bool suppressed)
+    {
+        if (handVisualsSuppressed == suppressed)
+            return;
+
+        handVisualsSuppressed = suppressed;
+
+        if (cardsContainer == null)
+            return;
+
+        if (suppressed)
+        {
+            handContainerWasActive = cardsContainer.gameObject.activeSelf;
+            cardsContainer.gameObject.SetActive(false);
+        }
+        else
+        {
+            cardsContainer.gameObject.SetActive(handContainerWasActive);
+        }
+    }
     public bool CanInteract => canInteract;
     public bool IsDiscardMode => isDiscardMode;
 

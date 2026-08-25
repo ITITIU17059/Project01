@@ -325,7 +325,17 @@ public class BattleManager : MonoBehaviour
         int newStageIndex =
      BossManager.Instance.CurrentStageIndex;
 
-        if (!BossManager.Instance.LoadNextBoss())
+        int previewStageIndex =
+            BossManager.Instance.CurrentStageIndex;
+
+        bool shouldShowJesterFirst =
+            previewStageIndex == 1 &&
+            JesterManager.Instance != null &&
+            PlayerReward.Instance != null &&
+            !PlayerReward.Instance.TraitHasAdd;
+
+        if (!BossManager.Instance.LoadNextBoss(
+            showTraitSelection: !shouldShowJesterFirst))
         {
             Debug.LogError(
                 "[BATTLE] Failed to load next boss.");
@@ -357,15 +367,20 @@ public class BattleManager : MonoBehaviour
                     break;
             }
 
-            if (nextRank == BossRank.Queen &&
-      JesterManager.Instance != null &&
-      PlayerReward.Instance != null &&
-      !PlayerReward.Instance.TraitHasAdd)
+            bool jesterUnlockFlow =
+                nextRank == BossRank.Queen &&
+                JesterManager.Instance != null &&
+                PlayerReward.Instance != null &&
+                !PlayerReward.Instance.TraitHasAdd;
+
+            if (jesterUnlockFlow)
             {
                 JesterManager.Instance.UnlockJesters();
 
                 if (JesterUnlockUI.Instance != null)
                 {
+                    // Keep both hands hidden until Trait Selection ends.
+                    JesterUnlockUI.Instance.SetKeepHandsHiddenAfterClose(true);
                     JesterUnlockUI.Instance.Show();
 
                     yield return new WaitUntil(
@@ -383,6 +398,14 @@ public class BattleManager : MonoBehaviour
 
             yield return StartCoroutine(
                 StageManager.Instance.ChangeStage(nextRank));
+
+            if (jesterUnlockFlow &&
+                TraitSelectionPanelUI.Instance != null &&
+                BossManager.Instance.CurrentBoss != null)
+            {
+                TraitSelectionPanelUI.Instance.Show(
+                    BossManager.Instance.CurrentBoss);
+            }
         }
         else
         {

@@ -165,7 +165,7 @@ public class BossManager : MonoBehaviour
         }
     }
 
-    public bool LoadNextBoss()
+    public bool LoadNextBoss(bool showTraitSelection = true)
     {
         if (CurrentBossIndex >= bossSequence.Count)
             return false;
@@ -214,8 +214,15 @@ public class BossManager : MonoBehaviour
         }
         else
         {
-            traitSelectionPanel.SetVisible(true);
-            traitSelectionPanel.Show(CurrentBoss);
+            if (showTraitSelection)
+            {
+                traitSelectionPanel.SetVisible(true);
+                traitSelectionPanel.Show(CurrentBoss);
+            }
+            else
+            {
+                traitSelectionPanel.SetVisible(false);
+            }
         }
 
         BossFXManager.Instance?.PlaySpawnFX(

@@ -17,6 +17,13 @@ public class JesterUnlockUI : MonoBehaviour
 
     public bool IsShowing { get; private set; }
 
+    private bool keepHandsHiddenAfterClose = false;
+
+    public void SetKeepHandsHiddenAfterClose(bool value)
+    {
+        keepHandsHiddenAfterClose = value;
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -120,17 +127,21 @@ public class JesterUnlockUI : MonoBehaviour
 
     private void LockGameplay()
     {
-        // Khóa hand bài thường
+        // Khóa + ẩn hand bài thường.
         if (HandManager.Instance != null)
         {
             HandManager.Instance.SetInteractable(false);
+            HandManager.Instance.SetVisualsSuppressed(true);
         }
 
-        // Khóa Jester
+        // Khóa + ẩn Jester Hand thật.
         if (JesterHandManager.Instance != null)
         {
             JesterHandManager.Instance
                 .SetJesterInteractionLocked(true);
+
+            JesterHandManager.Instance
+                .SetVisualsSuppressed(true);
         }
     }
 
@@ -185,16 +196,29 @@ public class JesterUnlockUI : MonoBehaviour
 
     private void UnlockGameplay()
     {
+        // In the Queen unlock flow, keep both hands hidden until
+        // Trait Selection has finished.
+        if (keepHandsHiddenAfterClose)
+        {
+            if (HandManager.Instance != null)
+                HandManager.Instance.SetInteractable(false);
+
+            if (JesterHandManager.Instance != null)
+                JesterHandManager.Instance.SetJesterInteractionLocked(true);
+
+            return;
+        }
+
         if (HandManager.Instance != null)
         {
+            HandManager.Instance.SetVisualsSuppressed(false);
             HandManager.Instance.SetInteractable(true);
         }
 
         if (JesterHandManager.Instance != null)
         {
-            JesterHandManager.Instance
-                .SetJesterInteractionLocked(false);
-
+            JesterHandManager.Instance.SetVisualsSuppressed(false);
+            JesterHandManager.Instance.SetJesterInteractionLocked(false);
             JesterHandManager.Instance.Refresh();
         }
     }
