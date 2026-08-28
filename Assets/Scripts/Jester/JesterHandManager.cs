@@ -21,6 +21,7 @@ public class JesterHandManager : MonoBehaviour
 
     // Modal UI visual state for the actual Jester hand cards.
     private bool jesterVisualsSuppressed = false;
+    private bool jesterInteractionLockedExternally = false;
     private bool resetJesterWasActive = false;
     private bool instantKillJesterWasActive = false;
 
@@ -187,8 +188,6 @@ public class JesterHandManager : MonoBehaviour
             )
             .SetEase(Ease.OutCubic);
 
-        // Hand -> Play Zone
-        // Phóng to đúng theo scale của lá.
         jester.transform
             .DOScale(
                 targetPlayScale,
@@ -231,9 +230,11 @@ public class JesterHandManager : MonoBehaviour
             selectedJester;
 
         bool skillStarted = false;
+        bool instantKillUsed =
+            usedJester == instantKillJester;
 
         yield return CardResolver.PlaySuitFX(
-                HandManager.Instance.selectedCards);
+            HandManager.Instance.selectedCards);
 
         if (usedJester == resetJester)
         {
@@ -247,8 +248,6 @@ public class JesterHandManager : MonoBehaviour
             skillStarted =
                 BattleManager.Instance.UseJesterReset();
         }
-
-
         else if (usedJester == instantKillJester)
         {
             if (!JesterManager.Instance.CanUseInstantKill)
@@ -264,47 +263,48 @@ public class JesterHandManager : MonoBehaviour
 
         if (!skillStarted)
         {
-            Debug.LogWarning(
-                "[JESTER] Skill failed to start.");
-
             CancelSelection();
-
             executing = false;
-
             yield break;
         }
 
+        // Instant Kill must enter the normal boss-death pipeline immediately.
+        // Do not wait for the Jester return animation: waiting here can race
+        // with other end-of-turn state changes and leave the next boss reload
+        // out of sync.
+        if (instantKillUsed &&
+            BattleManager.Instance != null &&
+            BattleManager.Instance.CurrentState ==
+                BattleState.PlayerTurn)
+        {
+            BattleManager.Instance.ChangeState(
+                BattleState.CheckBattle);
+        }
 
         if (usedJester == resetJester)
         {
-
             yield return new WaitUntil(
                 () =>
                     BattleManager.Instance.CurrentState
-                    != BattleState.PlayerTurn ||
+                        != BattleState.PlayerTurn ||
                     BattleManager.Instance.Hand.handCards.Count >= 8
             );
         }
-        else
+
+        LockUsedJester(usedJester);
+
+        if (HandManager.Instance != null)
         {
-            yield return null;
+            HandManager.Instance.selectedCards.Remove(usedJester);
         }
 
-        LockUsedJester(
-            usedJester);
-
         yield return StartCoroutine(
-            ReturnJesterToHand(
-                usedJester));
+            ReturnJesterToHand(usedJester));
 
         selectedJester = null;
-
         executing = false;
 
         Refresh();
-
-        Debug.Log(
-            $"[JESTER] Finished: {usedJester.name}");
     }
 
     private IEnumerator ReturnJesterToHand(
@@ -333,6 +333,15 @@ public class JesterHandManager : MonoBehaviour
 
         if (returnPoint != null)
         {
+            CardInteraction interaction =
+                jester.GetComponent<CardInteraction>();
+
+            if (interaction != null)
+            {
+                interaction.isSelectedInCenter = false;
+                interaction.IsLocked = true;
+            }
+
             jester.transform.DOKill();
 
             jester.transform
@@ -367,16 +376,12 @@ public class JesterHandManager : MonoBehaviour
 
         if (jester == resetJester)
         {
-            resetLocked =
-                JesterManager.Instance == null ||
-                !JesterManager.Instance.CanUseReset;
+            resetLocked = true;
         }
 
         if (jester == instantKillJester)
         {
-            instantKillLocked =
-                JesterManager.Instance == null ||
-                !JesterManager.Instance.CanUseInstantKill;
+            instantKillLocked = true;
         }
 
         CardDisplay display =
@@ -384,11 +389,7 @@ public class JesterHandManager : MonoBehaviour
 
         if (display != null)
         {
-            display.SetFade(
-                jester == resetJester
-                    ? resetLocked
-                    : instantKillLocked
-            );
+            display.SetFade(true);
         }
 
         CardInteraction interaction =
@@ -416,6 +417,11 @@ public class JesterHandManager : MonoBehaviour
 
         selectedJester = null;
 
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.selectedCards.Remove(jester);
+        }
+
         Transform returnPoint = null;
         Vector3 targetHandScale;
 
@@ -436,6 +442,15 @@ public class JesterHandManager : MonoBehaviour
 
         if (returnPoint != null)
         {
+            CardInteraction interaction =
+                jester.GetComponent<CardInteraction>();
+
+            if (interaction != null)
+            {
+                interaction.isSelectedInCenter = false;
+                interaction.IsLocked = false;
+            }
+
             jester.transform.DOKill();
 
             jester.transform
@@ -471,9 +486,19 @@ public class JesterHandManager : MonoBehaviour
         bool unlocked =
             JesterManager.Instance.IsUnlocked;
 
+        resetLocked =
+            !JesterManager.Instance.CanUseReset;
+
+        instantKillLocked =
+            !JesterManager.Instance.CanUseInstantKill;
+
         if (resetJester != null)
         {
-            resetJester.SetActive(jesterVisualsSuppressed ? false : unlocked);
+            resetJester.SetActive(
+                jesterVisualsSuppressed
+                    ? false
+                    : unlocked
+            );
 
             CardDisplay display =
                 resetJester.GetComponent<CardDisplay>();
@@ -482,11 +507,28 @@ public class JesterHandManager : MonoBehaviour
             {
                 display.SetFade(resetLocked);
             }
+
+            CardInteraction interaction =
+                resetJester.GetComponent<CardInteraction>();
+
+            if (interaction != null)
+            {
+                interaction.IsLocked =
+                    resetLocked ||
+                    jesterVisualsSuppressed ||
+                    jesterInteractionLockedExternally ||
+                    executing ||
+                    selectedJester != null;
+            }
         }
 
         if (instantKillJester != null)
         {
-            instantKillJester.SetActive(jesterVisualsSuppressed ? false : unlocked);
+            instantKillJester.SetActive(
+                jesterVisualsSuppressed
+                    ? false
+                    : unlocked
+            );
 
             CardDisplay display =
                 instantKillJester.GetComponent<CardDisplay>();
@@ -494,6 +536,19 @@ public class JesterHandManager : MonoBehaviour
             if (display != null)
             {
                 display.SetFade(instantKillLocked);
+            }
+
+            CardInteraction interaction =
+                instantKillJester.GetComponent<CardInteraction>();
+
+            if (interaction != null)
+            {
+                interaction.IsLocked =
+                    instantKillLocked ||
+                    jesterVisualsSuppressed ||
+                    jesterInteractionLockedExternally ||
+                    executing ||
+                    selectedJester != null;
             }
         }
 
@@ -504,8 +559,17 @@ public class JesterHandManager : MonoBehaviour
     }
 
     private void SetJesterButtonsInteractable(
-        bool value)
+        bool value
+    )
     {
+        bool canUseReset =
+            JesterManager.Instance != null &&
+            JesterManager.Instance.CanUseReset;
+
+        bool canUseInstantKill =
+            JesterManager.Instance != null &&
+            JesterManager.Instance.CanUseInstantKill;
+
         if (resetJester != null)
         {
             UnityEngine.UI.Button button =
@@ -515,9 +579,8 @@ public class JesterHandManager : MonoBehaviour
             {
                 button.interactable =
                     value &&
-                    !resetLocked &&
-                    JesterManager.Instance != null &&
-                    JesterManager.Instance.CanUseReset;
+                    canUseReset &&
+                    !resetLocked;
             }
         }
 
@@ -530,9 +593,8 @@ public class JesterHandManager : MonoBehaviour
             {
                 button.interactable =
                     value &&
-                    !instantKillLocked &&
-                    JesterManager.Instance != null &&
-                    JesterManager.Instance.CanUseInstantKill;
+                    canUseInstantKill &&
+                    !instantKillLocked;
             }
         }
     }
@@ -592,6 +654,12 @@ public class JesterHandManager : MonoBehaviour
     }
     public void SetJesterInteractionLocked(bool locked)
     {
+        // This lock must survive JesterManager.OnChanged -> Refresh().
+        // Without this flag, consuming a Jester charge calls Refresh() and
+        // immediately unlocks the other Jester while the battle/trait modal
+        // is still active.
+        jesterInteractionLockedExternally = locked;
+
         SetInteractionLock(resetJester, locked);
         SetInteractionLock(instantKillJester, locked);
     }
@@ -645,7 +713,6 @@ public class JesterHandManager : MonoBehaviour
 
         jester.transform.DOKill();
 
-        // Bay trở lại Play Zone
         jester.transform
             .DOMove(
                 jesterPlayArea.position,
@@ -653,7 +720,6 @@ public class JesterHandManager : MonoBehaviour
             )
             .SetEase(Ease.OutCubic);
 
-        // Trở về hướng thẳng
         jester.transform
             .DORotate(
                 jesterPlayArea.rotation.eulerAngles,
@@ -661,7 +727,6 @@ public class JesterHandManager : MonoBehaviour
             )
             .SetEase(Ease.OutCubic);
 
-        // Play Zone luôn là 1,1,1
         jester.transform
             .DOScale(
                 jesterPlayScale,

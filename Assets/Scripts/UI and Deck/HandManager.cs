@@ -47,14 +47,12 @@ public class HandManager : MonoBehaviour
         totalCardValue = 0;
     }
 
-    // Update is called once per frame
     void Update()
     {
 
     }
     private bool canInteract = true;
 
-    // Modal UI visual state: hide the normal hand without touching individual cards.
     private bool handVisualsSuppressed = false;
     private bool handContainerWasActive = true;
 
@@ -93,7 +91,6 @@ public class HandManager : MonoBehaviour
             return;
         }
 
-        // Chỉ giới hạn ở lượt đánh thêm
         if (BattleManager.Instance.IsExtraAttack &&
             selectedCards.Count >= 1)
         {
@@ -123,11 +120,9 @@ public class HandManager : MonoBehaviour
             SoundManager.instance?.PlaySound2D("CardSelect");
             totalCardValue += cardObjectValue;
 
-            // Ép kích thước bài về chuẩn ngay khi vừa được chọn
             cardObject.transform.DOKill();
             cardObject.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutCubic);
 
-            // Bật Layer hiển thị cao lên
             if (cardObject.TryGetComponent<CardDisplay>(out var display))
             {
                 display.SetSortingOrder(50 + selectedCards.Count);
@@ -138,7 +133,6 @@ public class HandManager : MonoBehaviour
         }
     }
 
-    // Hàm trả bài từ vùng chờ về lại trên tay (Nếu người chơi đổi ý click hủy)
     public void DeselectCard(GameObject cardObject)
     {
         if (!canInteract && !isDiscardMode)

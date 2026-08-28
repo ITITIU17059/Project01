@@ -42,6 +42,12 @@ public class BattleManager : MonoBehaviour
     private bool hasPendingJokerEnding = false;
     private bool pendingBadEnding = false;
     private bool jesterInstantKill = false;
+    private bool handlingBossDeath = false;
+
+    // Jester Reset disables the current boss trait during this fight,
+    // but the defeated boss must still award that trait when it dies.
+    private BossTraitSO jesterResetDisabledTrait;
+    private BossSO jesterResetBoss;
 
     public void ContinueFromInventory()
     {
@@ -109,6 +115,9 @@ public class BattleManager : MonoBehaviour
 
     private void StartBattle()
     {
+        handlingBossDeath = false;
+        jesterResetDisabledTrait = null;
+        jesterResetBoss = null;
         extraAttackUsed = false;
         waitingExtraAttack = false;
 
@@ -134,7 +143,6 @@ public class BattleManager : MonoBehaviour
             handManager.LoadHand(
                 save.handCards);
 
-            // Joker không có Trait Selection
             if (BossManager.Instance.CurrentBoss != null &&
                 BossManager.Instance.CurrentBoss.isJoker)
             {
@@ -152,7 +160,6 @@ public class BattleManager : MonoBehaviour
             deckManager.AddCardFromFirst()
         );
 
-        // Sau khi đã có hand mới bắt đầu lượt
         if (BossManager.Instance.CurrentBoss != null &&
             BossManager.Instance.CurrentBoss.isJoker)
         {
@@ -161,6 +168,7 @@ public class BattleManager : MonoBehaviour
     }
     private void StartPlayerTurn()
     {
+        handlingBossDeath = false;
         waitingExtraAttack = false;
         extraAttackUsed = false;
 
@@ -244,6 +252,11 @@ public class BattleManager : MonoBehaviour
 
         if (BossManager.Instance.IsDead())
         {
+            // Prevent Jester Instant Kill / normal turn flow from starting
+            // HandleBossDeath more than once for the same boss.
+            if (handlingBossDeath)
+                return;
+
             StartCoroutine(HandleBossDeath());
             return;
         }
@@ -253,12 +266,29 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandleBossDeath()
     {
+        handlingBossDeath = true;
+
         handManager.UnlockCard();
         handManager.SetInteractable(false);
         handManager.RevealAllHiddenCards();
 
         BossSO deadBoss =
             BossManager.Instance.CurrentBoss;
+
+        // Jester Reset temporarily clears CurrentBoss.currentTrait so the
+        // boss skill is disabled during the fight. Restore it here before
+        // rewards / trait-pool removal so the player still receives the
+        // defeated boss trait.
+        if (deadBoss != null &&
+            deadBoss == jesterResetBoss &&
+            jesterResetDisabledTrait != null)
+        {
+            deadBoss.currentTrait = jesterResetDisabledTrait;
+
+            Debug.Log(
+                $"[JESTER RESET] Restored defeated boss trait: " +
+                $"{deadBoss.currentTrait.name}");
+        }
 
         int oldStageIndex =
             BossManager.Instance.CurrentStageIndex;
@@ -293,6 +323,10 @@ public class BattleManager : MonoBehaviour
                 deadBoss.currentTrait.reward);
         }
 
+        // The trait is restored only long enough for death/reward handling.
+        jesterResetDisabledTrait = null;
+        jesterResetBoss = null;
+
         bool hasNextBoss =
             BossManager.Instance.HasMoreBosses;
 
@@ -321,21 +355,15 @@ public class BattleManager : MonoBehaviour
 
         LevelManager.instance.UnloadSceneAdditive(
             "InventoryScene");
-
+        // OnBossDefeated() has already advanced CurrentBossIndex and, if a
+        // rank is completed, updated CurrentStageIndex.
         int newStageIndex =
-     BossManager.Instance.CurrentStageIndex;
-
-        int previewStageIndex =
             BossManager.Instance.CurrentStageIndex;
 
-        bool shouldShowJesterFirst =
-            previewStageIndex == 1 &&
-            JesterManager.Instance != null &&
-            PlayerReward.Instance != null &&
-            !PlayerReward.Instance.TraitHasAdd;
-
+        // Load the next boss exactly once. Trait Selection is opened below
+        // after the stage/Jester setup is complete.
         if (!BossManager.Instance.LoadNextBoss(
-            showTraitSelection: !shouldShowJesterFirst))
+            showTraitSelection: false))
         {
             Debug.LogError(
                 "[BATTLE] Failed to load next boss.");
@@ -343,6 +371,13 @@ public class BattleManager : MonoBehaviour
             ChangeState(BattleState.Victory);
             yield break;
         }
+
+        BossSO nextBoss =
+            BossManager.Instance.CurrentBoss;
+
+        bool isNextBossJoker =
+            nextBoss != null &&
+            nextBoss.isJoker;
 
         if (newStageIndex != oldStageIndex)
         {
@@ -379,7 +414,6 @@ public class BattleManager : MonoBehaviour
 
                 if (JesterUnlockUI.Instance != null)
                 {
-                    // Keep both hands hidden until Trait Selection ends.
                     JesterUnlockUI.Instance.SetKeepHandsHiddenAfterClose(true);
                     JesterUnlockUI.Instance.Show();
 
@@ -398,20 +432,36 @@ public class BattleManager : MonoBehaviour
 
             yield return StartCoroutine(
                 StageManager.Instance.ChangeStage(nextRank));
-
-            if (jesterUnlockFlow &&
-                TraitSelectionPanelUI.Instance != null &&
-                BossManager.Instance.CurrentBoss != null)
-            {
-                TraitSelectionPanelUI.Instance.Show(
-                    BossManager.Instance.CurrentBoss);
-            }
         }
         else
         {
             yield return StartCoroutine(
                 StageManager.Instance.ChangeStage(deadBoss.rank));
         }
+
+        // Every non-Joker boss must go through Trait Selection.
+        // Do this only after the next boss has actually been loaded.
+        bool nextBossWaitingForTraitSelection = false;
+
+        if (!isNextBossJoker)
+        {
+            if (TraitSelectionPanelUI.Instance != null &&
+                BossManager.Instance.CurrentBoss != null)
+            {
+                TraitSelectionPanelUI.Instance.Show(
+                    BossManager.Instance.CurrentBoss);
+
+                nextBossWaitingForTraitSelection = true;
+            }
+            else
+            {
+                Debug.LogError(
+                    "[BATTLE] TraitSelectionPanelUI or next boss is missing. " +
+                    "Starting PlayerTurn as fallback.");
+            }
+        }
+
+
 
         bool drawBonusUnlocked =
            PlayerReward.Instance != null &&
@@ -480,9 +530,7 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-        BossSO currentBoss = BossManager.Instance.CurrentBoss;
-
-        if (currentBoss != null && currentBoss.isJoker)
+        if (!nextBossWaitingForTraitSelection)
         {
             ChangeState(BattleState.PlayerTurn);
         }
@@ -1115,18 +1163,29 @@ public class BattleManager : MonoBehaviour
 
         if (boss != null)
         {
-            boss.currentTrait = null;
+            // IMPORTANT: do not destroy the trait. We temporarily remove it
+            // from CurrentBoss so TraitManager/CardResolver see no boss
+            // skill during the reset fight. The original trait is restored
+            // when this exact boss dies, so its reward is still granted.
+            jesterResetBoss = boss;
+            jesterResetDisabledTrait = boss.currentTrait;
 
-            boss.resistanceSuit =
-                CardSO.Suit.None;
+            Debug.Log(
+                $"[JESTER RESET] Boss skill disabled. " +
+                $"Saved trait = " +
+                (jesterResetDisabledTrait != null
+                    ? jesterResetDisabledTrait.name
+                    : "NONE"));
+
+            boss.currentTrait = null;
+            boss.resistanceSuit = CardSO.Suit.None;
 
             BossManager.Instance.RefreshBossInfo();
 
             if (BossManager.Instance.BossDisplay != null)
             {
                 BossManager.Instance.BossDisplay
-                    .UpdateResistance(
-                        CardSO.Suit.None);
+                    .UpdateResistance(CardSO.Suit.None);
             }
         }
 
@@ -1175,8 +1234,6 @@ public class BattleManager : MonoBehaviour
 
         InteractConfirmButton(true);
 
-        Debug.Log(
-            "[JESTER] Reset completed.");
     }
 
     public bool UseJesterInstantKill()
@@ -1199,19 +1256,7 @@ public class BattleManager : MonoBehaviour
                 currentHP);
         }
 
-        Debug.Log(
-            "[JESTER] Instant Kill activated.");
-
-        ChangeState(
-            BattleState.CheckBattle);
-
         return true;
-    }
-    public void OnJesterUnlockPopupClosed()
-    {
-        Debug.Log(
-            "[JESTER] Unlock popup closed."
-        );
     }
 
 }

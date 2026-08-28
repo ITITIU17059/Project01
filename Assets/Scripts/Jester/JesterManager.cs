@@ -66,20 +66,43 @@ public class JesterManager : MonoBehaviour
         if (!unlocked)
             return;
 
+        // This method is called only when the whole rank is cleared
+        // (4 bosses of the same rank). The Jesters get exactly one use
+        // each for the newly entered rank.
         if (rank != BossRank.Queen &&
             rank != BossRank.King)
             return;
 
-        resetCharges++;
-        instantKillCharges++;
+        resetCharges = 1;
+        instantKillCharges = 1;
 
         NotifyChanged();
 
         Debug.Log(
             $"[JESTER] {rank} cleared. " +
-            $"Reset = {resetCharges}, " +
+            $"New rank charges: Reset = {resetCharges}, " +
             $"Instant Kill = {instantKillCharges}"
         );
+    }
+
+
+    /// <summary>
+    /// Removes the Jester cards when the player equips a reward trait.
+    /// Jesters are the alternative reward path, so equipping a reward
+    /// immediately revokes the Jester unlock and all remaining charges.
+    /// </summary>
+    public void RevokeJesters()
+    {
+        if (!unlocked && resetCharges <= 0 && instantKillCharges <= 0)
+            return;
+
+        unlocked = false;
+        resetCharges = 0;
+        instantKillCharges = 0;
+
+        NotifyChanged();
+
+        Debug.Log("[JESTER] Revoked because a reward trait was equipped.");
     }
 
 

@@ -15,7 +15,7 @@ public class PlayerReward : MonoBehaviour
     public IReadOnlyList<RewardSO> OwnedRewards => ownedRewards;
     public RewardSO[] EquippedRewards => equippedRewards;
     public static event Action OnEquipmentChanged;
-    
+
     private bool traitHasAdd = false;
     public bool TraitHasAdd => traitHasAdd;
 
@@ -106,6 +106,13 @@ public class PlayerReward : MonoBehaviour
         equippedRewards[slotIndex] = reward;
         RefreshHandSize();
         traitHasAdd = true;
+
+        // Equipping a Reward Trait switches away from the Jester reward path.
+        if (JesterManager.Instance != null)
+        {
+            JesterManager.Instance.RevokeJesters();
+        }
+
         OnEquipmentChanged?.Invoke();
 
         return true;
