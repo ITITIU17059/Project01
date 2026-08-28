@@ -34,6 +34,7 @@ public class BossManager : MonoBehaviour
     private int defeatedJack;
     private int defeatedQueen;
     private int defeatedKing;
+    private BossSO lastDefeatedBoss;
 
     [SerializeField] private List<BossSO> illusionBosses;
     public BossSO CurrentBoss { get; private set; }
@@ -175,6 +176,10 @@ public class BossManager : MonoBehaviour
         if (CurrentBoss == null)
             return false;
 
+        Debug.Log(
+            $"[BOSS] Loading boss index {CurrentBossIndex}: " +
+            $"{CurrentBoss.name} | Rank = {CurrentBoss.rank}");
+
         if (PlayerReward.Instance != null)
         {
             PlayerReward.Instance.ResetAceHandBonus();
@@ -227,6 +232,9 @@ public class BossManager : MonoBehaviour
 
         BossFXManager.Instance?.PlaySpawnFX(
            bossDisplay.transform);
+
+        Debug.Log(
+            $"[BOSS] Loaded new boss successfully: {CurrentBoss.name}");
 
         return true;
     }
@@ -283,6 +291,22 @@ public class BossManager : MonoBehaviour
     {
         if (deadBoss == null)
             return;
+
+        // A Jester Instant Kill and normal CheckBattle can both reach the
+        // death pipeline in the same frame. Never advance the boss sequence
+        // twice for the same BossSO.
+        if (lastDefeatedBoss == deadBoss)
+        {
+            Debug.LogWarning(
+                $"[BOSS] Ignored duplicate OnBossDefeated for {deadBoss.name}");
+            return;
+        }
+
+        lastDefeatedBoss = deadBoss;
+
+        Debug.Log(
+            $"[BOSS] Defeated {deadBoss.name}. " +
+            $"Index before = {CurrentBossIndex}");
 
         if (deadBoss.currentTrait != null &&
             deadBoss.rank != BossRank.Joker &&
