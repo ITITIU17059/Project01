@@ -14,6 +14,10 @@ public class JesterManager : MonoBehaviour
     [SerializeField] private int resetCharges = 0;
     [SerializeField] private int instantKillCharges = 0;
 
+    // Max stack for each Jester charge type (per bug fix: recovering after
+    // a rank should stack, capped at 2 per Jester).
+    private const int MaxChargesPerJester = 2;
+
 
     public bool IsUnlocked => unlocked;
 
@@ -66,21 +70,25 @@ public class JesterManager : MonoBehaviour
         if (!unlocked)
             return;
 
-        // This method is called only when the whole rank is cleared
-        // (4 bosses of the same rank). The Jesters get exactly one use
-        // each for the newly entered rank.
-        if (rank != BossRank.Queen &&
-            rank != BossRank.King)
+        // This method is called every time a full rank of 4 bosses has
+        // been cleared (Jack, Queen or King), right as the next rank
+        // (Queen, King or Joker respectively) is entered. Jack itself is
+        // excluded because Jesters unlock only once Queen is reached, so
+        // there is nothing to recover yet at that point.
+        if (rank == BossRank.Jack)
             return;
 
-        resetCharges = 1;
-        instantKillCharges = 1;
+        resetCharges =
+            Mathf.Min(MaxChargesPerJester, resetCharges + 1);
+
+        instantKillCharges =
+            Mathf.Min(MaxChargesPerJester, instantKillCharges + 1);
 
         NotifyChanged();
 
         Debug.Log(
-            $"[JESTER] {rank} cleared. " +
-            $"New rank charges: Reset = {resetCharges}, " +
+            $"[JESTER] Rank cleared, entering {rank}. " +
+            $"Charges: Reset = {resetCharges}, " +
             $"Instant Kill = {instantKillCharges}"
         );
     }
