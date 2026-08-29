@@ -47,6 +47,7 @@ public class BattleManager : MonoBehaviour
     // Jester Reset disables the current boss trait during this fight,
     // but the defeated boss must still award that trait when it dies.
     private BossTraitSO jesterResetDisabledTrait;
+    private CardSO.Suit jesterResetDisabledResistance;
     private BossSO jesterResetBoss;
 
     public void ContinueFromInventory()
@@ -280,14 +281,18 @@ public class BattleManager : MonoBehaviour
         // rewards / trait-pool removal so the player still receives the
         // defeated boss trait.
         if (deadBoss != null &&
-            deadBoss == jesterResetBoss &&
-            jesterResetDisabledTrait != null)
+            deadBoss == jesterResetBoss)
         {
-            deadBoss.currentTrait = jesterResetDisabledTrait;
+            if (jesterResetDisabledTrait != null)
+            {
+                deadBoss.currentTrait = jesterResetDisabledTrait;
 
-            Debug.Log(
-                $"[JESTER RESET] Restored defeated boss trait: " +
-                $"{deadBoss.currentTrait.name}");
+                Debug.Log(
+                    $"[JESTER RESET] Restored defeated boss trait: " +
+                    $"{deadBoss.currentTrait.name}");
+            }
+
+            deadBoss.resistanceSuit = jesterResetDisabledResistance;
         }
 
         int oldStageIndex =
@@ -406,7 +411,11 @@ public class BattleManager : MonoBehaviour
                 }
             }
 
-            if (JesterManager.Instance != null)
+            // Skip on the unlock turn: UnlockJesters() already grants the
+            // starting charge for this rank, so recovering again here
+            // would incorrectly stack a second charge immediately.
+            if (!jesterUnlockFlow &&
+                JesterManager.Instance != null)
             {
                 JesterManager.Instance.RecoverAfterRank(nextRank);
             }
@@ -1168,29 +1177,48 @@ public class BattleManager : MonoBehaviour
 
         if (boss != null)
         {
-            // IMPORTANT: do not destroy the trait. We temporarily remove it
-            // from CurrentBoss so TraitManager/CardResolver see no boss
-            // skill during the reset fight. The original trait is restored
-            // when this exact boss dies, so its reward is still granted.
-            jesterResetBoss = boss;
-            jesterResetDisabledTrait = boss.currentTrait;
-
-            Debug.Log(
-                $"[JESTER RESET] Boss skill disabled. " +
-                $"Saved trait = " +
-                (jesterResetDisabledTrait != null
-                    ? jesterResetDisabledTrait.name
-                    : "NONE"));
-
-            boss.currentTrait = null;
-            boss.resistanceSuit = CardSO.Suit.None;
-
-            BossManager.Instance.RefreshBossInfo();
-
-            if (BossManager.Instance.BossDisplay != null)
+            // Only capture/disable on the FIRST Reset used against this
+            // boss in the current fight. If Reset is used again on the
+            // same still-alive boss (e.g. 2 stacked Jester charges spent
+            // in one King fight), boss.currentTrait/resistanceSuit are
+            // already null from the first Reset - re-capturing here would
+            // overwrite the saved original trait with null and the boss
+            // would never award its trait/reward on death.
+            if (jesterResetBoss != boss)
             {
-                BossManager.Instance.BossDisplay
-                    .UpdateResistance(CardSO.Suit.None);
+                // IMPORTANT: do not destroy the trait. We temporarily remove
+                // it from CurrentBoss so TraitManager/CardResolver see no
+                // boss skill during the reset fight. The original trait is
+                // restored when this exact boss dies, so its reward is
+                // still granted.
+                jesterResetBoss = boss;
+                jesterResetDisabledTrait = boss.currentTrait;
+                jesterResetDisabledResistance = boss.resistanceSuit;
+
+                Debug.Log(
+                    $"[JESTER RESET] Boss skill disabled. " +
+                    $"Saved trait = " +
+                    (jesterResetDisabledTrait != null
+                        ? jesterResetDisabledTrait.name
+                        : "NONE"));
+
+                boss.currentTrait = null;
+                boss.resistanceSuit = CardSO.Suit.None;
+
+                BossManager.Instance.RefreshBossInfo();
+
+                if (BossManager.Instance.BossDisplay != null)
+                {
+                    BossManager.Instance.BossDisplay
+                        .UpdateResistance(CardSO.Suit.None);
+                }
+            }
+            else
+            {
+                Debug.Log(
+                    "[JESTER RESET] Reset used again on the same boss; " +
+                    "trait/resistance already disabled, original values " +
+                    "already saved.");
             }
         }
 
