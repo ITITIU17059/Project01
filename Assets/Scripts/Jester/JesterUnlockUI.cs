@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
+using System.Collections;
 
 public class JesterUnlockUI : MonoBehaviour
 {
@@ -72,14 +74,14 @@ public class JesterUnlockUI : MonoBehaviour
                 "Two powerful Jester cards have\r\nbeen added to your arsenal.";
         }
 
-        Open();
+        StartCoroutine(Open());
     }
 
     //==================================================
     // OPEN
     //==================================================
 
-    private void Open()
+    private IEnumerator Open()
     {
         if (popupRoot == null)
         {
@@ -87,7 +89,7 @@ public class JesterUnlockUI : MonoBehaviour
                 "[JESTER UI] Popup Root is NULL!"
             );
 
-            return;
+            yield break;
         }
 
         if (popupCanvasGroup == null)
@@ -96,13 +98,17 @@ public class JesterUnlockUI : MonoBehaviour
                 "[JESTER UI] Popup Canvas Group is NULL!"
             );
 
-            return;
+            yield break;
         }
 
         IsShowing = true;
 
         // Đưa popup lên trên toàn bộ Battle UI
         transform.SetAsLastSibling();
+        SceneTransition transition =
+            LevelManager.instance.transitions.First(t => t.name == "CrossFade");
+
+        yield return transition.AnimateTransitionIn();
 
         // Hiện popup
         popupRoot.SetActive(true);
@@ -115,6 +121,7 @@ public class JesterUnlockUI : MonoBehaviour
 
         // Khóa gameplay
         LockGameplay();
+        yield return transition.AnimateTransitionOut();
 
         Debug.Log(
             "[JESTER UI] OPENED"
@@ -158,15 +165,20 @@ public class JesterUnlockUI : MonoBehaviour
             "[JESTER UI] Continue clicked"
         );
 
-        Close();
+        StartCoroutine(Close());
     }
 
     //==================================================
     // CLOSE
     //==================================================
 
-    private void Close()
+    private IEnumerator Close()
     {
+        SceneTransition transition =
+            LevelManager.instance.transitions.First(t => t.name == "CrossFade");
+
+        yield return transition.AnimateTransitionIn();
+
         if (popupCanvasGroup != null)
         {
             popupCanvasGroup.alpha = 0f;

@@ -360,25 +360,6 @@ public class BattleManager : MonoBehaviour
         int newStageIndex =
             BossManager.Instance.CurrentStageIndex;
 
-        // Load the next boss exactly once. Trait Selection is opened below
-        // after the stage/Jester setup is complete.
-        if (!BossManager.Instance.LoadNextBoss(
-            showTraitSelection: false))
-        {
-            Debug.LogError(
-                "[BATTLE] Failed to load next boss.");
-
-            ChangeState(BattleState.Victory);
-            yield break;
-        }
-
-        BossSO nextBoss =
-            BossManager.Instance.CurrentBoss;
-
-        bool isNextBossJoker =
-            nextBoss != null &&
-            nextBoss.isJoker;
-
         if (newStageIndex != oldStageIndex)
         {
             BossRank nextRank;
@@ -438,6 +419,30 @@ public class BattleManager : MonoBehaviour
             yield return StartCoroutine(
                 StageManager.Instance.ChangeStage(deadBoss.rank));
         }
+
+        // Load the next boss exactly once. Trait Selection is opened below
+        // after the stage/Jester setup is complete.
+        if (!BossManager.Instance.LoadNextBoss(
+            showTraitSelection: false))
+        {
+            Debug.LogError(
+                "[BATTLE] Failed to load next boss.");
+
+            ChangeState(BattleState.Victory);
+            yield break;
+        }
+
+        if (newStageIndex != oldStageIndex)
+        {
+            LevelManager.instance.FadeOut();
+        }
+
+        BossSO nextBoss =
+            BossManager.Instance.CurrentBoss;
+
+        bool isNextBossJoker =
+            nextBoss != null &&
+            nextBoss.isJoker;
 
         // Every non-Joker boss must go through Trait Selection.
         // Do this only after the next boss has actually been loaded.
