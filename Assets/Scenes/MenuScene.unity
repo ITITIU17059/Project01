@@ -3322,6 +3322,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -239
       objectReference: {fileID: 0}
+    - target: {fileID: 3652569331389379093, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: videoPlayer
+      value: 
+      objectReference: {fileID: 2036294399}
     - target: {fileID: 3863564610283662263, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -3470,6 +3474,10 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7744996217712010697, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: videoPlayer
+      value: 
+      objectReference: {fileID: 2036294399}
     - target: {fileID: 7902874597630500686, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_Name
       value: TutorialCanvas
