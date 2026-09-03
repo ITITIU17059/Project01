@@ -126,6 +126,7 @@ public class BattleManager : MonoBehaviour
     private void StartBattle()
     {
         handlingBossDeath = false;
+        jesterInstantKill = false;
         jesterResetDisabledTrait = null;
         jesterResetBoss = null;
         extraAttackUsed = false;
@@ -325,7 +326,24 @@ public class BattleManager : MonoBehaviour
         BossManager.Instance.OnBossDefeated(
             deadBoss);
 
-        if (deadBoss.currentTrait != null)
+        // Jester Kill is an alternative kill path: the boss still dies,
+        // but NONE of that boss's normal rewards are kept.
+        if (jesterInstantKill)
+        {
+            if (deadBoss.currentTrait != null &&
+                deadBoss.currentTrait.reward != null &&
+                PlayerReward.Instance != null)
+            {
+                PlayerReward.Instance.RemoveReward(
+                    deadBoss.currentTrait.reward);
+            }
+
+            Debug.Log(
+                $"[JESTER KILL] {deadBoss.name} killed by Jester. " +
+                "Boss trait reward removed/not granted.");
+        }
+        else if (deadBoss.currentTrait != null &&
+                 PlayerReward.Instance != null)
         {
             PlayerReward.Instance.AddReward(
                 deadBoss.currentTrait.reward);
@@ -493,7 +511,13 @@ public class BattleManager : MonoBehaviour
             DrawBonusCards(1);
         }
 
-        if (BossManager.Instance.LastKillWasPerfect)
+        if (jesterInstantKill)
+        {
+            // Jester Kill does not award the defeated boss card.
+            Debug.Log(
+                $"[JESTER KILL] {deadBoss.name} boss card was NOT awarded.");
+        }
+        else if (BossManager.Instance.LastKillWasPerfect)
         {
             deckManager.allCards.Insert(
                 0,
@@ -506,6 +530,9 @@ public class BattleManager : MonoBehaviour
             GraveyardManager.Instance.AddToGraveyard(
                 deadBoss.bossCard);
         }
+
+        // The flag only applies to this boss.
+        jesterInstantKill = false;
 
         if (handManager.handCards.Count == 0)
         {
@@ -1239,6 +1266,10 @@ public class BattleManager : MonoBehaviour
 
         if (!JesterManager.Instance.ConsumeInstantKill())
             return false;
+
+        // This boss was killed through Jester Kill, so its normal rewards
+        // must be skipped/removed in HandleBossDeath().
+        jesterInstantKill = true;
 
         int currentHP =
             BossManager.Instance.CurrentHP;
