@@ -139,7 +139,6 @@ public class CardInteraction : MonoBehaviour
             }
             else
             {
-
                 transform
                     .DOScale(
                         handScale * hover.scale,
@@ -339,15 +338,12 @@ public class CardInteraction : MonoBehaviour
             hitCollider != null &&
             hitCollider.CompareTag("PlayZone");
 
-
         if (isSelectedInCenter)
         {
-
             if (IsJesterCard)
             {
                 if (isOverPlayZone)
                 {
-                    // Vẫn nằm trong Play Zone
                     transform.DORotate(
                         Vector3.zero,
                         0.15f
@@ -388,7 +384,6 @@ public class CardInteraction : MonoBehaviour
                 {
                     handManager.DeselectCard(gameObject);
                 }
-
             }
             else
             {
@@ -408,6 +403,61 @@ public class CardInteraction : MonoBehaviour
 
         if (isOverPlayZone)
         {
+   
+            if (IsJesterCard)
+            {
+                if (HandManager.Instance != null &&
+                    HandManager.Instance.selectedCards.Count > 0)
+                {
+                    NotificationInfo.Instance?.SetUp("Invalid Combo");
+
+                    transform.DOKill();
+
+                    transform
+                        .DOScale(
+                            handScale,
+                            hover.duration
+                        )
+                        .SetEase(Ease.OutCubic);
+
+                    transform
+                        .DOLocalMove(
+                            splineLocalPosition,
+                            hover.duration
+                        )
+                        .SetEase(Ease.OutCubic);
+
+                    return;
+                }
+            }
+
+            else
+            {
+                if (JesterHandManager.Instance != null &&
+                    JesterHandManager.Instance.HasSelectedJester)
+                {
+                    NotificationInfo.Instance?.SetUp("Invalid Combo");
+
+                    transform.DOKill();
+
+                    transform
+                        .DOScale(
+                            originalScale,
+                            hover.duration
+                        )
+                        .SetEase(Ease.OutCubic);
+
+                    transform
+                        .DOLocalMove(
+                            splineLocalPosition,
+                            hover.duration
+                        )
+                        .SetEase(Ease.OutCubic);
+
+                    return;
+                }
+            }
+
             isSelectedInCenter = true;
 
             transform.DOKill();
@@ -431,7 +481,12 @@ public class CardInteraction : MonoBehaviour
                 {
                     JesterHandManager.Instance
                         .SelectJesterCard(gameObject);
-                    HandManager.Instance.selectedCards.Add(gameObject);
+
+                    if (HandManager.Instance != null &&
+                        !HandManager.Instance.selectedCards.Contains(gameObject))
+                    {
+                        HandManager.Instance.selectedCards.Add(gameObject);
+                    }
                 }
             }
             else
@@ -454,8 +509,16 @@ public class CardInteraction : MonoBehaviour
                 if (JesterHandManager.Instance != null)
                 {
                     Debug.Log("running");
-                    JesterHandManager.Instance.DeselectJesterCard(gameObject);
-                    HandManager.Instance.selectedCards.Remove(gameObject);
+
+                    JesterHandManager.Instance
+                        .DeselectJesterCard(gameObject);
+
+                    if (HandManager.Instance != null)
+                    {
+                        HandManager.Instance
+                            .selectedCards
+                            .Remove(gameObject);
+                    }
                 }
                 else
                 {
@@ -469,12 +532,13 @@ public class CardInteraction : MonoBehaviour
 
                 return;
             }
+
             transform
-                        .DOScale(
-                            originalScale,
-                            hover.duration
-                        )
-                        .SetEase(Ease.OutCubic);
+                .DOScale(
+                    originalScale,
+                    hover.duration
+                )
+                .SetEase(Ease.OutCubic);
 
             transform
                 .DOLocalMove(
@@ -502,8 +566,7 @@ public class CardInteraction : MonoBehaviour
 
             if (JesterHandManager.Instance.HasSelectedJester)
             {
-                if (JesterHandManager.Instance.SelectedJester
-                    == gameObject)
+                if (JesterHandManager.Instance.SelectedJester == gameObject)
                 {
                     isSelectedInCenter = false;
 
@@ -511,7 +574,28 @@ public class CardInteraction : MonoBehaviour
                         .DeselectJesterCard(gameObject);
 
                     HandManager.Instance.selectedCards.Remove(gameObject);
+
                     SoundManager.instance?.PlaySound2D("CardSelect");
+                }
+
+                return;
+            }
+
+
+            if (HandManager.Instance != null &&
+                HandManager.Instance.selectedCards.Count > 0)
+            {
+                Debug.Log("INVALID COMBO: Normal card -> Jester");
+
+                if (NotificationInfo.Instance != null)
+                {
+                    StartCoroutine(
+                        NotificationInfo.Instance.SetUp("Invalid Combo")
+                    );
+                }
+                else
+                {
+                    Debug.LogError("NotificationInfo.Instance is NULL!");
                 }
 
                 return;
@@ -543,9 +627,13 @@ public class CardInteraction : MonoBehaviour
             JesterHandManager.Instance
                 .SelectJesterCard(gameObject);
 
-            HandManager.Instance.selectedCards.Add(gameObject);
+            if (HandManager.Instance != null &&
+                !HandManager.Instance.selectedCards.Contains(gameObject))
+            {
+                HandManager.Instance.selectedCards.Add(gameObject);
+            }
+
             SoundManager.instance?.PlaySound2D("CardSelect");
-            Debug.Log(HandManager.Instance.selectedCards.Count);
 
             return;
         }
@@ -555,6 +643,25 @@ public class CardInteraction : MonoBehaviour
 
         if (!handManager.CanInteract)
             return;
+
+        if (JesterHandManager.Instance != null &&
+            JesterHandManager.Instance.HasSelectedJester)
+        {
+            Debug.Log("INVALID COMBO: Jester -> Normal card");
+
+            if (NotificationInfo.Instance != null)
+            {
+                StartCoroutine(
+                    NotificationInfo.Instance.SetUp("Invalid Combo")
+                );
+            }
+            else
+            {
+                Debug.LogError("NotificationInfo.Instance is NULL!");
+            }
+
+            return;
+        }
 
         transform.DOKill();
 
@@ -610,7 +717,6 @@ public class CardInteraction : MonoBehaviour
             )
             .SetEase(Ease.OutCubic);
     }
-
 
     private void ShowJesterDescription()
     {
