@@ -479,41 +479,18 @@ public class BattleManager : MonoBehaviour
         {
             if (handWasEmptyAfterPlay)
             {
-                while (handManager.handCards.Count <
-                    handManager.maxHandSize &&
-                    deckManager.allCards.Count > 0)
-                {
-                    deckManager.DrawCard(
-                        handManager);
-
-                    handManager.HideNextCardIfNeeded();
-                }
+                DrawBonusCards(8);
             }
             else
             {
-                for (int i = 0; i < 2; i++)
-                {
-                    if (deckManager.allCards.Count == 0)
-                        break;
-
-                    if (
-                        handManager.handCards.Count >=
-                        handManager.maxHandSize)
-                        break;
-
-                    deckManager.DrawCard(
-                        handManager);
-
-                    handManager.HideNextCardIfNeeded();
-                }
+                DrawBonusCards(2);
             }
         }
         else if (handManager.handCards.Count == 0 &&
                  deckManager.allCards.Count > 0)
         {
 
-            deckManager.DrawCard(handManager);
-            handManager.HideNextCardIfNeeded();
+            DrawBonusCards(1);
         }
 
         if (BossManager.Instance.LastKillWasPerfect)
@@ -1243,18 +1220,7 @@ public class BattleManager : MonoBehaviour
         handManager.handCards.Clear();
         handManager.selectedCards.Clear();
 
-        while (
-            handManager.handCards.Count < 8 &&
-            TarvernDeckManager.Instance != null &&
-            TarvernDeckManager.Instance.allCards.Count > 0)
-        {
-            TarvernDeckManager.Instance.DrawCard(
-                handManager);
-
-            yield return new WaitForSeconds(
-                0.15f);
-        }
-
+        yield return DrawCardRoutine(8);
         handManager.RepositionAllCards(null);
 
         handManager.SetInteractable(true);
