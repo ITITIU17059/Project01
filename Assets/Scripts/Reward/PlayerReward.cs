@@ -65,6 +65,17 @@ public class PlayerReward : MonoBehaviour
     {
         traitHasAdd = false;
     }
+
+    public bool HasAnyRewardEquipped()
+    {
+        foreach (RewardSO r in equippedRewards)
+        {
+            if (r != null)
+                return true;
+        }
+
+        return false;
+    }
     public bool IsEquipped(RewardSO reward)
     {
         foreach (RewardSO r in equippedRewards)
@@ -105,13 +116,6 @@ public class PlayerReward : MonoBehaviour
 
         equippedRewards[slotIndex] = reward;
         RefreshHandSize();
-        traitHasAdd = true;
-
-        // Equipping a Reward Trait switches away from the Jester reward path.
-        if (JesterManager.Instance != null)
-        {
-            JesterManager.Instance.RevokeJesters();
-        }
 
         OnEquipmentChanged?.Invoke();
 
