@@ -61,6 +61,41 @@ public class PlayerReward : MonoBehaviour
 
         return true;
     }
+    /// <summary>
+    /// Completely removes a reward from the player's inventory and any
+    /// equipped slot. Used by Jester Kill because that boss gives no reward.
+    /// </summary>
+    public bool RemoveReward(RewardSO reward)
+    {
+        if (reward == null)
+            return false;
+
+        bool removed = ownedRewards.Remove(reward);
+        bool unequipped = false;
+
+        for (int i = 0; i < equippedRewards.Length; i++)
+        {
+            if (equippedRewards[i] == reward)
+            {
+                equippedRewards[i] = null;
+                unequipped = true;
+            }
+        }
+
+        if (removed || unequipped)
+        {
+            RefreshHandSize();
+
+            if (!HasAnyRewardEquipped())
+                traitHasAdd = false;
+
+            OnEquipmentChanged?.Invoke();
+            return true;
+        }
+
+        return false;
+    }
+
     public void ResetTraitHasAdd()
     {
         traitHasAdd = false;
