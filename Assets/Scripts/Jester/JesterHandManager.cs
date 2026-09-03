@@ -18,8 +18,6 @@ public class JesterHandManager : MonoBehaviour
     [SerializeField] private Transform jesterPlayArea;
 
     private GameObject selectedJester;
-
-    // Modal UI visual state for the actual Jester hand cards.
     private bool jesterVisualsSuppressed = false;
     private bool jesterInteractionLockedExternally = false;
     private bool resetJesterWasActive = false;
@@ -267,11 +265,6 @@ public class JesterHandManager : MonoBehaviour
             executing = false;
             yield break;
         }
-
-        // Instant Kill must enter the normal boss-death pipeline immediately.
-        // Do not wait for the Jester return animation: waiting here can race
-        // with other end-of-turn state changes and leave the next boss reload
-        // out of sync.
         if (instantKillUsed &&
             BattleManager.Instance != null &&
             BattleManager.Instance.CurrentState ==
@@ -654,10 +647,6 @@ public class JesterHandManager : MonoBehaviour
     }
     public void SetJesterInteractionLocked(bool locked)
     {
-        // This lock must survive JesterManager.OnChanged -> Refresh().
-        // Without this flag, consuming a Jester charge calls Refresh() and
-        // immediately unlocks the other Jester while the battle/trait modal
-        // is still active.
         jesterInteractionLockedExternally = locked;
 
         SetInteractionLock(resetJester, locked);
