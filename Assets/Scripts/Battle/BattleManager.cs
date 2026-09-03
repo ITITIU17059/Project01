@@ -44,14 +44,23 @@ public class BattleManager : MonoBehaviour
     private bool jesterInstantKill = false;
     private bool handlingBossDeath = false;
 
-    // Jester Reset disables the current boss trait during this fight,
-    // but the defeated boss must still award that trait when it dies.
     private BossTraitSO jesterResetDisabledTrait;
     private CardSO.Suit jesterResetDisabledResistance;
     private BossSO jesterResetBoss;
 
     public void ContinueFromInventory()
     {
+        if (PlayerReward.Instance != null &&
+            PlayerReward.Instance.HasAnyRewardEquipped())
+        {
+            PlayerReward.Instance.MarkTraitHasAdd();
+
+            if (JesterManager.Instance != null)
+            {
+                JesterManager.Instance.RevokeJesters();
+            }
+        }
+
         waitingForInventory = false;
     }
 
@@ -253,8 +262,6 @@ public class BattleManager : MonoBehaviour
 
         if (BossManager.Instance.IsDead())
         {
-            // Prevent Jester Instant Kill / normal turn flow from starting
-            // HandleBossDeath more than once for the same boss.
             if (handlingBossDeath)
                 return;
 
@@ -276,10 +283,6 @@ public class BattleManager : MonoBehaviour
         BossSO deadBoss =
             BossManager.Instance.CurrentBoss;
 
-        // Jester Reset temporarily clears CurrentBoss.currentTrait so the
-        // boss skill is disabled during the fight. Restore it here before
-        // rewards / trait-pool removal so the player still receives the
-        // defeated boss trait.
         if (deadBoss != null &&
             deadBoss == jesterResetBoss)
         {
@@ -328,7 +331,6 @@ public class BattleManager : MonoBehaviour
                 deadBoss.currentTrait.reward);
         }
 
-        // The trait is restored only long enough for death/reward handling.
         jesterResetDisabledTrait = null;
         jesterResetBoss = null;
 
@@ -360,8 +362,7 @@ public class BattleManager : MonoBehaviour
 
         LevelManager.instance.UnloadSceneAdditive(
             "InventoryScene");
-        // OnBossDefeated() has already advanced CurrentBossIndex and, if a
-        // rank is completed, updated CurrentStageIndex.
+
         int newStageIndex =
             BossManager.Instance.CurrentStageIndex;
 
@@ -411,9 +412,6 @@ public class BattleManager : MonoBehaviour
                 }
             }
 
-            // Skip on the unlock turn: UnlockJesters() already grants the
-            // starting charge for this rank, so recovering again here
-            // would incorrectly stack a second charge immediately.
             if (!jesterUnlockFlow &&
                 JesterManager.Instance != null)
             {
@@ -429,8 +427,6 @@ public class BattleManager : MonoBehaviour
                 StageManager.Instance.ChangeStage(deadBoss.rank));
         }
 
-        // Load the next boss exactly once. Trait Selection is opened below
-        // after the stage/Jester setup is complete.
         if (!BossManager.Instance.LoadNextBoss(
             showTraitSelection: false))
         {
@@ -453,8 +449,6 @@ public class BattleManager : MonoBehaviour
             nextBoss != null &&
             nextBoss.isJoker;
 
-        // Every non-Joker boss must go through Trait Selection.
-        // Do this only after the next boss has actually been loaded.
         bool nextBossWaitingForTraitSelection = false;
 
         if (!isNextBossJoker)
