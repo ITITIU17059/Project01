@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine.Splines;
 using DG.Tweening;
-using System;
+using Unity.Burst.Intrinsics;
+using UnityEngine;
+using UnityEngine.Splines;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -102,7 +103,7 @@ public class HandManager : MonoBehaviour
             var cardObjectValue = cardObject.GetComponent<CardDisplay>().cardScriptableObject.value;
             if (!CanSelectCard(cardObjectValue))
             {
-                StartCoroutine(NotificationInfo.Instance.SetUp("Invalid Play"));
+                StartCoroutine(NotificationInfo.Instance.SetUp("Invalid Combo"));
 
                 cardObject.transform.DOKill();
                 cardObject.transform.DOScale(Vector3.one, 0.2f)
