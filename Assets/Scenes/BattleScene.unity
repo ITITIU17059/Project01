@@ -4857,7 +4857,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Instantly defeat the current boss, but receive no rewards upon doing so.
+  m_text: Instantly defeat the current boss.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11766,9 +11766,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b832b90ebeb07c64096bdf6b5ea9b3e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JesterManager
-  unlocked: 0
-  resetCharges: 0
-  instantKillCharges: 0
+  unlocked: 1
+  resetCharges: 1
+  instantKillCharges: 1
 --- !u!114 &837951012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22920,7 +22920,7 @@ MonoBehaviour:
   tutorialName: {fileID: 1726130894}
   tutorialContent: {fileID: 424947984}
   renderTexture: {fileID: 8400000, guid: 0024b16767efe3f43bcee29e8c77325e, type: 2}
-  videoClip: {fileID: 32900000, guid: 037589e353487684996b3ba626d4c431, type: 3}
+  videoClip: {fileID: 32900000, guid: 8ee297f0f64f6d847b2f1111f8fbf59f, type: 3}
   videoPlayer: {fileID: 516785169}
 --- !u!114 &1825160533
 MonoBehaviour:

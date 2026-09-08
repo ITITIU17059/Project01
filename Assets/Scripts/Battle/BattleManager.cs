@@ -307,6 +307,12 @@ public class BattleManager : MonoBehaviour
         yield return BossFXManager.Instance.PlayDeathFX(
             BossManager.Instance.BossTransform);
 
+        if (JesterManager.Instance.IsUnlocked == true)
+        {
+            JesterHandManager.Instance.resetJester.SetActive(false);
+            JesterHandManager.Instance.instantKillJester.SetActive(false);
+        }
+
         if (BossEliminatedUI.Instance != null)
         {
             Debug.Log("BossEleminatePlay");
@@ -408,7 +414,7 @@ public class BattleManager : MonoBehaviour
             }
 
             bool jesterUnlockFlow =
-                nextRank == BossRank.Queen &&
+                (nextRank == BossRank.Queen || nextRank == BossRank.King) &&
                 JesterManager.Instance != null &&
                 PlayerReward.Instance != null &&
                 !PlayerReward.Instance.TraitHasAdd;
@@ -453,6 +459,12 @@ public class BattleManager : MonoBehaviour
 
             ChangeState(BattleState.Victory);
             yield break;
+        }
+
+        if (JesterManager.Instance.IsUnlocked == true)
+        {
+            JesterHandManager.Instance.resetJester.SetActive(true);
+            JesterHandManager.Instance.instantKillJester.SetActive(true);
         }
 
         if (newStageIndex != oldStageIndex)
