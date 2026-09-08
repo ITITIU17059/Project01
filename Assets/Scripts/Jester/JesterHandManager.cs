@@ -7,8 +7,8 @@ public class JesterHandManager : MonoBehaviour
     public static JesterHandManager Instance { get; private set; }
 
     [Header("Jester Cards")]
-    [SerializeField] private GameObject resetJester;
-    [SerializeField] private GameObject instantKillJester;
+    public GameObject resetJester;
+    public GameObject instantKillJester;
 
     [Header("Jester Hand")]
     [SerializeField] private Transform resetHandPoint;
@@ -385,14 +385,6 @@ public class JesterHandManager : MonoBehaviour
             display.SetFade(true);
         }
 
-        CardInteraction interaction =
-            jester.GetComponent<CardInteraction>();
-
-        if (interaction != null)
-        {
-            interaction.IsLocked = true;
-        }
-
         Debug.Log(
             $"[JESTER] Locked: {jester.name}"
         );
@@ -536,12 +528,14 @@ public class JesterHandManager : MonoBehaviour
 
             if (interaction != null)
             {
+                Debug.Log("Instant Kill: " + instantKillLocked);
                 interaction.IsLocked =
                     instantKillLocked ||
                     jesterVisualsSuppressed ||
                     jesterInteractionLockedExternally ||
                     executing ||
                     selectedJester != null;
+                Debug.Log("isLocked: " + interaction.IsLocked);
             }
         }
 

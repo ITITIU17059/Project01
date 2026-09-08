@@ -3004,7 +3004,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 16677124818278517, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.6432517
+      value: 0.63128924
       objectReference: {fileID: 0}
     - target: {fileID: 16677124818278517, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3012,7 +3012,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 16677124818278517, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.35674828
+      value: 0.36871088
       objectReference: {fileID: 0}
     - target: {fileID: 273742122994339598, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoPlayer
@@ -3222,6 +3222,14 @@ PrefabInstance:
       propertyPath: videoPlayer
       value: 
       objectReference: {fileID: 2036294399}
+    - target: {fileID: 3429239911428954623, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3456840415501002296, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_text
+      value: Instantly defeat the current boss.
+      objectReference: {fileID: 0}
     - target: {fileID: 3486857247126713682, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoPlayer
       value: 
@@ -3323,6 +3331,10 @@ PrefabInstance:
       value: -239
       objectReference: {fileID: 0}
     - target: {fileID: 3652569331389379093, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: videoClip
+      value: 
+      objectReference: {fileID: 32900000, guid: 8ee297f0f64f6d847b2f1111f8fbf59f, type: 3}
+    - target: {fileID: 3652569331389379093, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoPlayer
       value: 
       objectReference: {fileID: 2036294399}
@@ -3340,12 +3352,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3863564610283662263, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -759
+      value: -799
       objectReference: {fileID: 0}
     - target: {fileID: 3964073197518094434, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoPlayer
       value: 
       objectReference: {fileID: 2036294399}
+    - target: {fileID: 4257974720423619743, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257974720423619743, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257974720423619743, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 61.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257974720423619743, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -759
+      objectReference: {fileID: 0}
     - target: {fileID: 5039589639987574440, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -3392,7 +3420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5608311110762614644, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -799
+      value: -839
       objectReference: {fileID: 0}
     - target: {fileID: 5746634412446281549, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoPlayer
@@ -3406,6 +3434,22 @@ PrefabInstance:
       propertyPath: videoPlayer
       value: 
       objectReference: {fileID: 2036294399}
+    - target: {fileID: 6301802363571150835, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6301802363571150835, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6301802363571150835, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 61.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 6301802363571150835, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -919
+      objectReference: {fileID: 0}
     - target: {fileID: 6551175475400484266, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -3436,7 +3480,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6751893619426040950, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -839
+      value: -879
       objectReference: {fileID: 0}
     - target: {fileID: 6760899558615819497, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoPlayer
@@ -3524,7 +3568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8647174307050008519, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 878
+      value: 958
       objectReference: {fileID: 0}
     - target: {fileID: 9147461489205643493, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_AnchorMax.y
