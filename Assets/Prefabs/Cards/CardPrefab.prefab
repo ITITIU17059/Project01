@@ -55,7 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f3559f673033724c8017c492f822f0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardDisplay
-  cardScriptableObject: {fileID: 11400000, guid: 2f637f09ffef2434b90d6138e5dbeb47, type: 2}
+  cardScriptableObject: {fileID: 11400000, guid: c7c3d8188269fea43ae488f2728104d6, type: 2}
   cardSpriteRenderer: {fileID: 84387954114038891}
   cardBackSprite: {fileID: -8246103488371625927, guid: 19970555c9a11a84d9a6fdcbda4bc851, type: 3}
 --- !u!114 &4077469916708904582
@@ -161,11 +161,11 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1682275229
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8246103488371625927, guid: 19970555c9a11a84d9a6fdcbda4bc851, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -173,7 +173,7 @@ SpriteRenderer:
   m_Size: {x: 1.5859375, y: 2.4101562}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!61 &-8312107047823936541
 BoxCollider2D:
