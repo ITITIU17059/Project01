@@ -47,10 +47,6 @@ public static class RewardSkill
         InitializeAttackModifiers();
     }
 
-    //========================================================
-    // EVENT
-    //========================================================
-
     private static void InitializeEvents()
     {
         eventTable = new();
@@ -122,10 +118,6 @@ public static class RewardSkill
     
     }
 
-    //========================================================
-    // DRAW
-    //========================================================
-
     private static void InitializeDrawModifiers()
     {
         drawModifiers = new();
@@ -134,10 +126,6 @@ public static class RewardSkill
             TraitID.J_GREEDY_TRIBUTE,
             JackGreedyTribute_DrawReward);
     }
-
-    //========================================================
-    // HEAL
-    //========================================================
 
     private static void InitializeHealModifiers()
     {
@@ -148,10 +136,6 @@ public static class RewardSkill
             JackWitheredBlessing_HealReward);
     }
 
-    //========================================================
-    // SHIELD
-    //========================================================
-
     private static void InitializeShieldModifiers()
     {
         shieldModifiers = new();
@@ -161,10 +145,6 @@ public static class RewardSkill
             JackHeavyGuard_ShieldReward);
     }
 
-    //========================================================
-    // ATTACK
-    //========================================================
-
     private static void InitializeAttackModifiers()
     {
         attackModifiers = new();
@@ -173,11 +153,6 @@ public static class RewardSkill
             TraitID.J_BROKEN_FORCE,
             JackBrokenForce_AttackReward);
     }
-
-
-    //========================================================
-    // MODIFY
-    //========================================================
 
     public static int ModifyDrawAmount(
         IReadOnlyList<RewardSO> rewards,
@@ -284,10 +259,6 @@ public static class RewardSkill
         return finalValue;
     }
 
-    //========================================================
-    // JACK EVENT
-    //========================================================
-
     private static void JackGreedyTribute_PlayerTurnReward()
     {
 
@@ -300,19 +271,12 @@ public static class RewardSkill
         BattleManager.Instance.HealDeck(2);
     }
 
-    //========================================================
-    // JACK DRAW
-    //========================================================
-
     private static int JackGreedyTribute_DrawReward(int amount)
     {
 
         return amount + 1;
     }
 
-    //========================================================
-    // JACK HEAL
-    //========================================================
 
     private static int JackWitheredBlessing_HealReward(int amount)
     {
@@ -320,18 +284,12 @@ public static class RewardSkill
         return amount + 2;
     }
 
-    //========================================================
-    // JACK SHIELD
-    //========================================================
 
     private static int JackHeavyGuard_ShieldReward(int amount)
     {
         return amount + 3;
     }
 
-    //========================================================
-    // JACK ATTACK
-    //========================================================
 
     private static int JackBrokenForce_AttackReward(
         CardSO card,

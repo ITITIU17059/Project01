@@ -50,9 +50,6 @@ public class JesterUnlockUI : MonoBehaviour
         HideImmediate();
     }
 
-    //==================================================
-    // SHOW
-    //==================================================
 
     public void Show()
     {
@@ -77,9 +74,6 @@ public class JesterUnlockUI : MonoBehaviour
         StartCoroutine(Open());
     }
 
-    //==================================================
-    // OPEN
-    //==================================================
 
     private IEnumerator Open()
     {
@@ -103,14 +97,12 @@ public class JesterUnlockUI : MonoBehaviour
 
         IsShowing = true;
 
-        // Đưa popup lên trên toàn bộ Battle UI
         transform.SetAsLastSibling();
         SceneTransition transition =
             LevelManager.instance.transitions.First(t => t.name == "CrossFade");
 
         yield return transition.AnimateTransitionIn();
 
-        // Hiện popup
         popupRoot.SetActive(true);
 
         popupCanvasGroup.alpha = 1f;
@@ -119,7 +111,6 @@ public class JesterUnlockUI : MonoBehaviour
 
         popupCanvasGroup.blocksRaycasts = true;
 
-        // Khóa gameplay
         LockGameplay();
         yield return transition.AnimateTransitionOut();
 
@@ -127,10 +118,6 @@ public class JesterUnlockUI : MonoBehaviour
             "[JESTER UI] OPENED"
         );
     }
-
-    //==================================================
-    // LOCK GAMEPLAY
-    //==================================================
 
     private void LockGameplay()
     {
@@ -152,10 +139,6 @@ public class JesterUnlockUI : MonoBehaviour
         }
     }
 
-    //==================================================
-    // CONTINUE
-    //==================================================
-
     public void Continue()
     {
         if (!IsShowing)
@@ -167,10 +150,6 @@ public class JesterUnlockUI : MonoBehaviour
 
         StartCoroutine(Close());
     }
-
-    //==================================================
-    // CLOSE
-    //==================================================
 
     private IEnumerator Close()
     {
@@ -202,14 +181,9 @@ public class JesterUnlockUI : MonoBehaviour
         );
     }
 
-    //==================================================
-    // UNLOCK GAMEPLAY
-    //==================================================
-
     private void UnlockGameplay()
     {
-        // In the Queen unlock flow, keep both hands hidden until
-        // Trait Selection has finished.
+
         if (keepHandsHiddenAfterClose)
         {
             if (HandManager.Instance != null)
@@ -234,10 +208,6 @@ public class JesterUnlockUI : MonoBehaviour
             JesterHandManager.Instance.Refresh();
         }
     }
-
-    //==================================================
-    // INITIAL HIDE
-    //==================================================
 
     private void HideImmediate()
     {

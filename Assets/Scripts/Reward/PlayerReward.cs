@@ -61,10 +61,7 @@ public class PlayerReward : MonoBehaviour
 
         return true;
     }
-    /// <summary>
-    /// Completely removes a reward from the player's inventory and any
-    /// equipped slot. Used by Jester Kill because that boss gives no reward.
-    /// </summary>
+
     public bool RemoveReward(RewardSO reward)
     {
         if (reward == null)
