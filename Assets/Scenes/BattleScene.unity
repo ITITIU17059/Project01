@@ -139,6 +139,10 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1562975165
       objectReference: {fileID: 0}
+    - target: {fileID: 2641574380540894778, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
+      propertyPath: cardScriptableObject
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f637f09ffef2434b90d6138e5dbeb47, type: 2}
     - target: {fileID: 3005099668849131276, guid: b68f52794d1c6f54388b4d13b59be504, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -13850,7 +13854,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -299.6, y: 158.3}
+  m_AnchoredPosition: {x: -301.4, y: 158.3}
   m_SizeDelta: {x: 58.81, y: 52.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &997981769
