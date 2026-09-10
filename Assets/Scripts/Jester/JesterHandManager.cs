@@ -385,6 +385,15 @@ public class JesterHandManager : MonoBehaviour
             display.SetFade(true);
         }
 
+        CardInteraction interaction =
+            jester.GetComponent<CardInteraction>();
+
+        if (interaction != null)
+        {
+            interaction.isSelectedInCenter = false;
+            interaction.IsLocked = true;
+        }
+
         Debug.Log(
             $"[JESTER] Locked: {jester.name}"
         );
@@ -433,7 +442,21 @@ public class JesterHandManager : MonoBehaviour
             if (interaction != null)
             {
                 interaction.isSelectedInCenter = false;
-                interaction.IsLocked = false;
+
+                bool stillUsable = false;
+
+                if (jester == resetJester &&
+                    JesterManager.Instance != null)
+                {
+                    stillUsable = JesterManager.Instance.CanUseReset;
+                }
+                else if (jester == instantKillJester &&
+                         JesterManager.Instance != null)
+                {
+                    stillUsable = JesterManager.Instance.CanUseInstantKill;
+                }
+
+                interaction.IsLocked = !stillUsable;
             }
 
             jester.transform.DOKill();
@@ -641,10 +664,14 @@ public class JesterHandManager : MonoBehaviour
     }
     public void SetJesterInteractionLocked(bool locked)
     {
-        jesterInteractionLockedExternally = locked;
+        if (locked)
+        {
+            SetInteractionLock(resetJester, true);
+            SetInteractionLock(instantKillJester, true);
+            return;
+        }
 
-        SetInteractionLock(resetJester, locked);
-        SetInteractionLock(instantKillJester, locked);
+        Refresh();
     }
 
     private void SetInteractionLock(
@@ -672,6 +699,7 @@ public class JesterHandManager : MonoBehaviour
             }
         }
     }
+
     public void ReturnJesterToPlayZone(GameObject jester)
     {
         if (jester == null)
