@@ -18,6 +18,7 @@ MonoBehaviour:
   bossIcon: {fileID: -8998020000199108719, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
   bossSpawnText: Run if you wish. I'll find you.
   boss50Text: Your strength fades... slowly.
+  bossDeathText: ...KHH...!
   hp: 20
   atk: 10
   possibleTraits:
@@ -38,6 +39,7 @@ MonoBehaviour:
   rank: 0
   spawnSoundID: JackSpade
   bossHalfHealthSound: JackS50
+  bossDeathSound: JackS0
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
   jokerDamageSuit: 0

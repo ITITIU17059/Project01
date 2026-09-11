@@ -18,6 +18,7 @@ MonoBehaviour:
   bossIcon: {fileID: -8820941772801714666, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
   bossSpawnText: Your faith was decided long ago.
   boss50Text: Let your strength wither.
+  bossDeathText: AAAHHHH... NO...
   hp: 30
   atk: 15
   possibleTraits:
@@ -38,6 +39,7 @@ MonoBehaviour:
   rank: 1
   spawnSoundID: QueenSpade
   bossHalfHealthSound: QueenS50
+  bossDeathSound: QueenS0
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
   jokerDamageSuit: 0

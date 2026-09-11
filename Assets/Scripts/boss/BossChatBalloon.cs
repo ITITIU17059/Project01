@@ -27,15 +27,17 @@ public class BossChatBalloon : MonoBehaviour
         StartCoroutine(TurnOnChatBox(bossText));
     }
 
-    private IEnumerator TurnOnChatBox(string bossText)
+    public IEnumerator TurnOnChatBox(string bossText)
     {
+        AudioSource audioSource = GameObject.FindGameObjectWithTag("AudioSource")
+                                    .GetComponent<AudioSource>();
         iconChat.sprite = BossManager.Instance.CurrentBoss.bossIcon;
         textChat.text = bossText;
         iconChat.gameObject.SetActive(true);
         textChat.gameObject.SetActive(true);
         chatBox.SetActive(true);
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitWhile(() => audioSource.isPlaying);
 
         iconChat.gameObject.SetActive(false);
         textChat.gameObject.SetActive(false);

@@ -300,6 +300,9 @@ public class BattleManager : MonoBehaviour
             deadBoss.resistanceSuit = jesterResetDisabledResistance;
         }
 
+        SoundManager.instance.PlaySound2D(deadBoss.bossDeathSound);
+        yield return StartCoroutine(BossChatBalloon.Instance.TurnOnChatBox(deadBoss.bossDeathText));
+
         int oldStageIndex =
             BossManager.Instance.CurrentStageIndex;
 

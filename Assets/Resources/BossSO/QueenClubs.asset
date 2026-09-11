@@ -18,6 +18,7 @@ MonoBehaviour:
   bossIcon: {fileID: 8149264288960603418, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
   bossSpawnText: The forest thirsts for blood. Run... if you still can.
   boss50Text: Kneel before overwhelming power.
+  bossDeathText: AAAHH... KHHH...
   hp: 30
   atk: 15
   possibleTraits:
@@ -38,6 +39,7 @@ MonoBehaviour:
   rank: 1
   spawnSoundID: QueenClub
   bossHalfHealthSound: QueenC50
+  bossDeathSound: QueenC0
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
   jokerDamageSuit: 0
