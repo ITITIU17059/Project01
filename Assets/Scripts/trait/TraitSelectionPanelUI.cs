@@ -148,6 +148,8 @@ public class TraitSelectionPanelUI : MonoBehaviour
         SoundManager.instance.PlaySound2D(
             currentBoss.spawnSoundID
         );
+
+        BossChatBalloon.Instance.SetUp(currentBoss.bossSpawnText);
     }
 
 

@@ -15,6 +15,9 @@ MonoBehaviour:
   bossName: King of Spades
   cardSprite: {fileID: 1397268560801288203, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 4
+  bossIcon: {fileID: 6307520133085728012, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
+  bossSpawnText: Lay down your cards. Hope has already abandoned you.
+  boss50Text: Your power ends here.
   hp: 40
   atk: 20
   possibleTraits:
@@ -34,5 +37,7 @@ MonoBehaviour:
   turnCounter: 0
   rank: 2
   spawnSoundID: KingSpade
+  bossHalfHealthSound: KingS50
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
+  jokerDamageSuit: 0

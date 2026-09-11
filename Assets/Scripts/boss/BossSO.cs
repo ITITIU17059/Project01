@@ -17,6 +17,9 @@ public class BossSO : ScriptableObject
     public string bossName;
     public Sprite cardSprite;
     public Suit suit;
+    public Sprite bossIcon;
+    public string bossSpawnText;
+    public string boss50Text;
 
     public int hp;
     public int atk;
@@ -52,6 +55,7 @@ public class BossSO : ScriptableObject
 
     [Header("Sound")]
     public string spawnSoundID;
+    public string bossHalfHealthSound;
 
     [HideInInspector]
     public CardSO.Suit requiredSuit = CardSO.Suit.None;

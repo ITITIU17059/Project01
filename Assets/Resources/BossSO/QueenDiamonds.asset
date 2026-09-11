@@ -15,6 +15,9 @@ MonoBehaviour:
   bossName: Queen of Diamonds
   cardSprite: {fileID: -345346804325407456, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 2
+  bossIcon: {fileID: -2817739306630200771, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
+  bossSpawnText: Kings crave power. I command wealth itself.
+  boss50Text: Your fortune is running out.
   hp: 30
   atk: 15
   possibleTraits:
@@ -34,5 +37,7 @@ MonoBehaviour:
   turnCounter: 0
   rank: 1
   spawnSoundID: QueenDiamond
+  bossHalfHealthSound: QueenD50
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
+  jokerDamageSuit: 0

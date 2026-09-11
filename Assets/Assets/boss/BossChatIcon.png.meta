@@ -1,0 +1,580 @@
+fileFormatVersion: 2
+guid: 9e5745245fe704e4f94482c5db0e00d3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4538467624708594236
+    second: BossChatIcon_0
+  - first:
+      213: -8998020000199108719
+    second: BossChatIcon_1
+  - first:
+      213: -5375722761704230795
+    second: BossChatIcon_2
+  - first:
+      213: -8820941772801714666
+    second: BossChatIcon_3
+  - first:
+      213: 6307520133085728012
+    second: BossChatIcon_4
+  - first:
+      213: -3995521180923201303
+    second: BossChatIcon_5
+  - first:
+      213: 2217169916473891253
+    second: BossChatIcon_6
+  - first:
+      213: 2774026659162872418
+    second: BossChatIcon_7
+  - first:
+      213: -7033555687755255503
+    second: BossChatIcon_8
+  - first:
+      213: -1037358471676692850
+    second: BossChatIcon_9
+  - first:
+      213: -7818385976783608175
+    second: BossChatIcon_10
+  - first:
+      213: -2955054621649010314
+    second: BossChatIcon_11
+  - first:
+      213: -1332958242328198984
+    second: BossChatIcon_12
+  - first:
+      213: 1271942016101039411
+    second: BossChatIcon_13
+  - first:
+      213: -2817739306630200771
+    second: BossChatIcon_14
+  - first:
+      213: -9174031709848567198
+    second: BossChatIcon_15
+  - first:
+      213: 2045745521817657508
+    second: BossChatIcon_16
+  - first:
+      213: -8674800993397896962
+    second: BossChatIcon_17
+  - first:
+      213: 8478550175415035242
+    second: BossChatIcon_18
+  - first:
+      213: 604061094153221523
+    second: BossChatIcon_19
+  - first:
+      213: -6797531371360519339
+    second: BossChatIcon_20
+  - first:
+      213: 8574181553867167569
+    second: BossChatIcon_21
+  - first:
+      213: -991935536370916853
+    second: BossChatIcon_22
+  - first:
+      213: 4508076869922548971
+    second: BossChatIcon_23
+  - first:
+      213: -6634029270494963895
+    second: BossChatIcon_24
+  - first:
+      213: -7171657339026587023
+    second: BossChatIcon_25
+  - first:
+      213: 1419859079481995680
+    second: BossChatIcon_26
+  - first:
+      213: 8324136202624173304
+    second: BossChatIcon_27
+  - first:
+      213: 6763436159712531458
+    second: BossChatIcon_28
+  - first:
+      213: -30953647719959571
+    second: BossChatIcon_29
+  - first:
+      213: 5024076829572574366
+    second: BossChatIcon_30
+  - first:
+      213: -7227174228755011982
+    second: BossChatIcon_31
+  - first:
+      213: -537509010784688395
+    second: BossChatIcon_32
+  - first:
+      213: 1234549009407907503
+    second: BossChatIcon_33
+  - first:
+      213: 8149264288960603418
+    second: BossChatIcon_34
+  - first:
+      213: 7781961411661679807
+    second: BossChatIcon_35
+  - first:
+      213: -298973885214767692
+    second: BossChatIcon_36
+  - first:
+      213: 842335195548796215
+    second: BossChatIcon_37
+  - first:
+      213: -4568142217495603266
+    second: BossChatIcon_38
+  - first:
+      213: -3225584684488354283
+    second: BossChatIcon_39
+  - first:
+      213: -1749578156817027732
+    second: BossChatIcon_40
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BossChatIcon_1
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 679
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 197954ebb7c902380800000000000000
+      internalID: -8998020000199108719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_2
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 356
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57033a941a89565b0800000000000000
+      internalID: -5375722761704230795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_3
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 677
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 616dfb76138b59580800000000000000
+      internalID: -8820941772801714666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_4
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 681
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0d03327420d88750800000000000000
+      internalID: 6307520133085728012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_5
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 672
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e8f586b7ae0d88c0800000000000000
+      internalID: -3995521180923201303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_7
+      rect:
+        serializedVersion: 2
+        x: 1219
+        y: 678
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26addd09c825f7620800000000000000
+      internalID: 2774026659162872418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_12
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 39
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b049997a81608de0800000000000000
+      internalID: -1332958242328198984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_13
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 39
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33db89c4688d6a110800000000000000
+      internalID: 1271942016101039411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_14
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 361
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d32c6a6970165e8d0800000000000000
+      internalID: -2817739306630200771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_27
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 355
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f4026be5c5458370800000000000000
+      internalID: 8324136202624173304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_29
+      rect:
+        serializedVersion: 2
+        x: 921
+        y: 357
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de3362742d7029ff0800000000000000
+      internalID: -30953647719959571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_34
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 36
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a15e544b1b0081170800000000000000
+      internalID: 8149264288960603418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossChatIcon_35
+      rect:
+        serializedVersion: 2
+        x: 1221
+        y: 353
+        width: 283
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbc44ed5ca41ffb60800000000000000
+      internalID: 7781961411661679807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 61ef951647b993d42aaec6b5cffdac62
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BossChatIcon_0: -4538467624708594236
+      BossChatIcon_1: -8998020000199108719
+      BossChatIcon_10: -7818385976783608175
+      BossChatIcon_11: -2955054621649010314
+      BossChatIcon_12: -1332958242328198984
+      BossChatIcon_13: 1271942016101039411
+      BossChatIcon_14: -2817739306630200771
+      BossChatIcon_15: -9174031709848567198
+      BossChatIcon_16: 2045745521817657508
+      BossChatIcon_17: -8674800993397896962
+      BossChatIcon_18: 8478550175415035242
+      BossChatIcon_19: 604061094153221523
+      BossChatIcon_2: -5375722761704230795
+      BossChatIcon_20: -6797531371360519339
+      BossChatIcon_21: 8574181553867167569
+      BossChatIcon_22: -991935536370916853
+      BossChatIcon_23: 4508076869922548971
+      BossChatIcon_24: -6634029270494963895
+      BossChatIcon_25: -7171657339026587023
+      BossChatIcon_26: 1419859079481995680
+      BossChatIcon_27: 8324136202624173304
+      BossChatIcon_28: 6763436159712531458
+      BossChatIcon_29: -30953647719959571
+      BossChatIcon_3: -8820941772801714666
+      BossChatIcon_30: 5024076829572574366
+      BossChatIcon_31: -7227174228755011982
+      BossChatIcon_32: -537509010784688395
+      BossChatIcon_33: 1234549009407907503
+      BossChatIcon_34: 8149264288960603418
+      BossChatIcon_35: 7781961411661679807
+      BossChatIcon_36: -298973885214767692
+      BossChatIcon_37: 842335195548796215
+      BossChatIcon_38: -4568142217495603266
+      BossChatIcon_39: -3225584684488354283
+      BossChatIcon_4: 6307520133085728012
+      BossChatIcon_40: -1749578156817027732
+      BossChatIcon_5: -3995521180923201303
+      BossChatIcon_6: 2217169916473891253
+      BossChatIcon_7: 2774026659162872418
+      BossChatIcon_8: -7033555687755255503
+      BossChatIcon_9: -1037358471676692850
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
