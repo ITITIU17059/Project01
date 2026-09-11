@@ -192,6 +192,7 @@ public class BattleManager : MonoBehaviour
         {
             BossManager.Instance.RandomizeJokerDisguise();
             SoundManager.instance.PlaySound2D(boss.spawnSoundID);
+            BossChatBalloon.Instance.SetUp(boss.bossSpawnText);
         }
 
         handManager.SetInteractable(false);

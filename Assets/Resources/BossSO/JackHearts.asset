@@ -15,6 +15,9 @@ MonoBehaviour:
   bossName: Jack of Hearts
   cardSprite: {fileID: -4641394141059741634, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 1
+  bossIcon: {fileID: -3995521180923201303, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
+  bossSpawnText: Mercy belongs to the weak. I buried mine long ago.
+  boss50Text: My wounds will not stop me.
   hp: 20
   atk: 10
   possibleTraits:
@@ -26,7 +29,7 @@ MonoBehaviour:
   bossCard: {fileID: 11400000, guid: baa1fb82cc4d75b4b89d2eca16c50938, type: 2}
   isJoker: 0
   resistanceSuit: 1
-  currentATK: 1
+  currentATK: 0
   attackVFX: {fileID: 5453914515797376023, guid: 86f6f0700445378479325d1398169de5, type: 3}
   hitVFX: {fileID: 393033613081136493, guid: d251affd0d7059c49ac9c07f6e891fc4, type: 3}
   attackSoundID: JackAttack
@@ -34,5 +37,7 @@ MonoBehaviour:
   turnCounter: 0
   rank: 0
   spawnSoundID: JackHearth
+  bossHalfHealthSound: JackH50
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
+  jokerDamageSuit: 0

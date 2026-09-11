@@ -15,6 +15,9 @@ MonoBehaviour:
   bossName: Jack of Clubs
   cardSprite: {fileID: 8155656575593630016, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 3
+  bossIcon: {fileID: 7781961411661679807, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
+  bossSpawnText: Steel alone decides the worthy. Show me your strength.
+  boss50Text: Now, feel my true strength!
   hp: 20
   atk: 10
   possibleTraits:
@@ -22,11 +25,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8b4b0c50f406fb041b6c5956b8405c57, type: 2}
   - {fileID: 11400000, guid: 7ba2675673164ff45ab8d730dd2289f4, type: 2}
   - {fileID: 11400000, guid: 4e5f99ef7d9bc7a41af4fd3e0c68e8cc, type: 2}
-  currentTrait: {fileID: 11400000, guid: 4e5f99ef7d9bc7a41af4fd3e0c68e8cc, type: 2}
+  currentTrait: {fileID: 11400000, guid: 3b06283b4d406ac489ff9af0e7a337d7, type: 2}
   bossCard: {fileID: 11400000, guid: 1cfa6d749ddbd254ba56f7d0fb5f7a88, type: 2}
   isJoker: 0
   resistanceSuit: 3
-  currentATK: 0
+  currentATK: 3
   attackVFX: {fileID: 407130811912978984, guid: d83d1a0fa14a05e4f9dca45d8694406b, type: 3}
   hitVFX: {fileID: 393033613081136493, guid: d251affd0d7059c49ac9c07f6e891fc4, type: 3}
   attackSoundID: JackAttack
@@ -34,6 +37,7 @@ MonoBehaviour:
   turnCounter: 0
   rank: 0
   spawnSoundID: JackClub
+  bossHalfHealthSound: JackC50
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
   jokerDamageSuit: 0

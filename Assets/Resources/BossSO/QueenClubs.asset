@@ -15,6 +15,9 @@ MonoBehaviour:
   bossName: Queen of Clubs
   cardSprite: {fileID: 6654820268744509969, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 3
+  bossIcon: {fileID: 8149264288960603418, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
+  bossSpawnText: The forest thirsts for blood. Run... if you still can.
+  boss50Text: Kneel before overwhelming power.
   hp: 30
   atk: 15
   possibleTraits:
@@ -34,5 +37,7 @@ MonoBehaviour:
   turnCounter: 0
   rank: 1
   spawnSoundID: QueenClub
+  bossHalfHealthSound: QueenC50
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
+  jokerDamageSuit: 0

@@ -15,6 +15,9 @@ MonoBehaviour:
   bossName: King of Diamonds
   cardSprite: {fileID: 645457689055715373, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 2
+  bossIcon: {fileID: -30953647719959571, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
+  bossSpawnText: Empires rise on gold... and fall beneath my command.
+  boss50Text: The final wager begins.
   hp: 40
   atk: 20
   possibleTraits:
@@ -34,5 +37,7 @@ MonoBehaviour:
   turnCounter: 0
   rank: 2
   spawnSoundID: KingDiamond
+  bossHalfHealthSound: KingD50
   requiredSuit: 1
   currentDisguiseSprite: {fileID: 3595503678859460682, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
+  jokerDamageSuit: 0

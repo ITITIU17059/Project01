@@ -28,6 +28,7 @@ public class BossManager : MonoBehaviour
 
     private readonly List<BossSO> bossSequence = new();
     private bool initialized;
+    private bool isHalfHealthOneTime = true;
     public int CurrentBossIndex { get; private set; }
     public int CurrentStageIndex { get; private set; }
 
@@ -236,6 +237,8 @@ public class BossManager : MonoBehaviour
         Debug.Log(
             $"[BOSS] Loaded new boss successfully: {CurrentBoss.name}");
 
+        isHalfHealthOneTime = true;
+
         return true;
     }
     private void SetupJokerRuntime()
@@ -369,6 +372,12 @@ public class BossManager : MonoBehaviour
         sign_heal_boss.text = "-";
 
         LastKillWasPerfect = false;
+        if (isHalfHealth() && isHalfHealthOneTime)
+        {
+            SoundManager.instance.PlaySound2D(CurrentBoss.bossHalfHealthSound);
+            BossChatBalloon.Instance.SetUp(CurrentBoss.boss50Text);
+            isHalfHealthOneTime = false;
+        }
 
         if (CurrentHP <= 0)
         {
@@ -383,6 +392,13 @@ public class BossManager : MonoBehaviour
     {
         CurrentHP -= damage;
         sign_heal_boss.text = "-";
+
+        if (isHalfHealth() && isHalfHealthOneTime)
+        {
+            SoundManager.instance.PlaySound2D(CurrentBoss.bossHalfHealthSound);
+            BossChatBalloon.Instance.SetUp(CurrentBoss.boss50Text);
+            isHalfHealthOneTime = false;
+        }
 
         if (CurrentHP < 0)
             CurrentHP = 0;
@@ -534,6 +550,18 @@ public class BossManager : MonoBehaviour
         Debug.Log(
             $"[JOKER] Disguise: {disguise.bossName} | " +
             $"Damage Suit: {CurrentBoss.jokerDamageSuit}");
+    }
+
+    public bool isHalfHealth()
+    {
+        int bossHalfHealth = CurrentBoss.hp / 2;
+
+        if (CurrentHP <= bossHalfHealth && CurrentHP > 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 
 }

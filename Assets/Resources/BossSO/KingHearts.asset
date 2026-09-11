@@ -15,6 +15,9 @@ MonoBehaviour:
   bossName: King of Hearts
   cardSprite: {fileID: 3595503678859460682, guid: e7dfe46ae45bd1542be2b1514c0c192f, type: 3}
   suit: 1
+  bossIcon: {fileID: 8324136202624173304, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
+  bossSpawnText: You cannot kill what refuses to die
+  boss50Text: Death cannot claim me yet.
   hp: 40
   atk: 20
   possibleTraits:
@@ -34,5 +37,7 @@ MonoBehaviour:
   turnCounter: 2
   rank: 2
   spawnSoundID: KingHearth
+  bossHalfHealthSound: KingH50
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
+  jokerDamageSuit: 0
