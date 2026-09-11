@@ -372,6 +372,9 @@ public class BossManager : MonoBehaviour
         sign_heal_boss.text = "-";
 
         LastKillWasPerfect = false;
+
+        BossCrackManager.Instance.SetUp();
+
         if (isHalfHealth() && isHalfHealthOneTime)
         {
             SoundManager.instance.PlaySound2D(CurrentBoss.bossHalfHealthSound);
@@ -392,6 +395,8 @@ public class BossManager : MonoBehaviour
     {
         CurrentHP -= damage;
         sign_heal_boss.text = "-";
+
+        BossCrackManager.Instance.SetUp();
 
         if (isHalfHealth() && isHalfHealthOneTime)
         {
