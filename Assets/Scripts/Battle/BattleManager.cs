@@ -303,6 +303,8 @@ public class BattleManager : MonoBehaviour
         SoundManager.instance.PlaySound2D(deadBoss.bossDeathSound);
         yield return StartCoroutine(BossChatBalloon.Instance.TurnOnChatBox(deadBoss.bossDeathText));
 
+        BossCrackManager.Instance.ResetCrackLine();
+
         int oldStageIndex =
             BossManager.Instance.CurrentStageIndex;
 

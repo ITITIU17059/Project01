@@ -37,7 +37,7 @@ public class BossChatBalloon : MonoBehaviour
         textChat.gameObject.SetActive(true);
         chatBox.SetActive(true);
 
-        yield return new WaitWhile(() => audioSource.isPlaying);
+        yield return new WaitForSeconds(audioSource.clip.length);
 
         iconChat.gameObject.SetActive(false);
         textChat.gameObject.SetActive(false);
