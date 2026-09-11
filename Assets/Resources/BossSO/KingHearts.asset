@@ -18,6 +18,7 @@ MonoBehaviour:
   bossIcon: {fileID: 8324136202624173304, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
   bossSpawnText: You cannot kill what refuses to die
   boss50Text: Death cannot claim me yet.
+  bossDeathText: AAAHHHH... NO...
   hp: 40
   atk: 20
   possibleTraits:
@@ -38,6 +39,7 @@ MonoBehaviour:
   rank: 2
   spawnSoundID: KingHearth
   bossHalfHealthSound: KingH50
+  bossDeathSound: KingH0
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
   jokerDamageSuit: 0

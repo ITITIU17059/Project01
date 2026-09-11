@@ -18,6 +18,7 @@ MonoBehaviour:
   bossIcon: {fileID: -5375722761704230795, guid: 9e5745245fe704e4f94482c5db0e00d3, type: 3}
   bossSpawnText: Every card has a price... and today, yours is your life.
   boss50Text: Every card has its price.
+  bossDeathText: AAAHH... KHHH...
   hp: 20
   atk: 10
   possibleTraits:
@@ -25,11 +26,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3b06283b4d406ac489ff9af0e7a337d7, type: 2}
   - {fileID: 11400000, guid: 7ba2675673164ff45ab8d730dd2289f4, type: 2}
   - {fileID: 11400000, guid: 8b4b0c50f406fb041b6c5956b8405c57, type: 2}
-  currentTrait: {fileID: 11400000, guid: 3b06283b4d406ac489ff9af0e7a337d7, type: 2}
+  currentTrait: {fileID: 11400000, guid: 4e5f99ef7d9bc7a41af4fd3e0c68e8cc, type: 2}
   bossCard: {fileID: 11400000, guid: 19d54a09451cc7a44b48692c8173723f, type: 2}
   isJoker: 0
   resistanceSuit: 2
-  currentATK: 0
+  currentATK: 10
   attackVFX: {fileID: 2886169635815326610, guid: 99187281868479849b8e6fbd6983af3b, type: 3}
   hitVFX: {fileID: 393033613081136493, guid: d251affd0d7059c49ac9c07f6e891fc4, type: 3}
   attackSoundID: JackAttack
@@ -38,6 +39,7 @@ MonoBehaviour:
   rank: 0
   spawnSoundID: JackDiamond
   bossHalfHealthSound: JackD50
+  bossDeathSound: JackD0
   requiredSuit: 0
   currentDisguiseSprite: {fileID: 0}
   jokerDamageSuit: 0
