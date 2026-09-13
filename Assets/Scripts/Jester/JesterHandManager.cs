@@ -360,22 +360,14 @@ public class JesterHandManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.3f);
         }
+
+        Refresh();
     }
 
     private void LockUsedJester(GameObject jester)
     {
         if (jester == null)
             return;
-
-        if (jester == resetJester)
-        {
-            resetLocked = true;
-        }
-
-        if (jester == instantKillJester)
-        {
-            instantKillLocked = true;
-        }
 
         CardDisplay display =
             jester.GetComponent<CardDisplay>();
@@ -395,7 +387,7 @@ public class JesterHandManager : MonoBehaviour
         }
 
         Debug.Log(
-            $"[JESTER] Locked: {jester.name}"
+            $"[JESTER] Used: {jester.name}"
         );
     }
 
@@ -551,14 +543,12 @@ public class JesterHandManager : MonoBehaviour
 
             if (interaction != null)
             {
-                Debug.Log("Instant Kill: " + instantKillLocked);
                 interaction.IsLocked =
                     instantKillLocked ||
                     jesterVisualsSuppressed ||
                     jesterInteractionLockedExternally ||
                     executing ||
                     selectedJester != null;
-                Debug.Log("isLocked: " + interaction.IsLocked);
             }
         }
 
@@ -662,8 +652,11 @@ public class JesterHandManager : MonoBehaviour
         StartCoroutine(ReturnJesterToHand(jester));
         Refresh();
     }
+
     public void SetJesterInteractionLocked(bool locked)
     {
+        jesterInteractionLockedExternally = locked;
+
         if (locked)
         {
             SetInteractionLock(resetJester, true);
