@@ -80,6 +80,14 @@ public class BattleManager : MonoBehaviour
 
     #region State Machine
 
+    private bool HasUsableJester()
+    {
+        return JesterManager.Instance != null &&
+               JesterManager.Instance.IsUnlocked &&
+               (JesterManager.Instance.CanUseReset ||
+                JesterManager.Instance.CanUseInstantKill);
+    }
+
     public void ChangeState(BattleState newState)
     {
         CurrentState = newState;
@@ -207,7 +215,7 @@ public class BattleManager : MonoBehaviour
 
         handManager.SetInteractable(true);
 
-        if (handManager.handCards.Count == 0)
+        if (handManager.handCards.Count == 0 && !HasUsableJester())
         {
             ChangeState(BattleState.Defeat);
             return;
@@ -338,8 +346,6 @@ public class BattleManager : MonoBehaviour
         BossManager.Instance.OnBossDefeated(
             deadBoss);
 
-        // Jester Kill is an alternative kill path: the boss still dies,
-        // but NONE of that boss's normal rewards are kept.
         if (jesterInstantKill)
         {
             if (deadBoss.currentTrait != null &&
@@ -552,7 +558,7 @@ public class BattleManager : MonoBehaviour
         // The flag only applies to this boss.
         jesterInstantKill = false;
 
-        if (handManager.handCards.Count == 0)
+        if (handManager.handCards.Count == 0 && !HasUsableJester())
         {
             ChangeState(
                 BattleState.Defeat);
@@ -1193,20 +1199,10 @@ public class BattleManager : MonoBehaviour
 
         if (boss != null)
         {
-            // Only capture/disable on the FIRST Reset used against this
-            // boss in the current fight. If Reset is used again on the
-            // same still-alive boss (e.g. 2 stacked Jester charges spent
-            // in one King fight), boss.currentTrait/resistanceSuit are
-            // already null from the first Reset - re-capturing here would
-            // overwrite the saved original trait with null and the boss
-            // would never award its trait/reward on death.
+   
             if (jesterResetBoss != boss)
             {
-                // IMPORTANT: do not destroy the trait. We temporarily remove
-                // it from CurrentBoss so TraitManager/CardResolver see no
-                // boss skill during the reset fight. The original trait is
-                // restored when this exact boss dies, so its reward is
-                // still granted.
+      
                 jesterResetBoss = boss;
                 jesterResetDisabledTrait = boss.currentTrait;
                 jesterResetDisabledResistance = boss.resistanceSuit;
@@ -1285,8 +1281,6 @@ public class BattleManager : MonoBehaviour
         if (!JesterManager.Instance.ConsumeInstantKill())
             return false;
 
-        // This boss was killed through Jester Kill, so its normal rewards
-        // must be skipped/removed in HandleBossDeath().
         jesterInstantKill = true;
 
         int currentHP =
