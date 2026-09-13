@@ -13,9 +13,6 @@ public class JesterManager : MonoBehaviour
     [Header("Jester Charges")]
     [SerializeField] private int resetCharges = 0;
     [SerializeField] private int instantKillCharges = 0;
-
-    // Max stack for each Jester charge type (per bug fix: recovering after
-    // a rank should stack, capped at 2 per Jester).
     private const int MaxChargesPerJester = 2;
 
 
@@ -69,12 +66,6 @@ public class JesterManager : MonoBehaviour
     {
         if (!unlocked)
             return;
-
-        // This method is called every time a full rank of 4 bosses has
-        // been cleared (Jack, Queen or King), right as the next rank
-        // (Queen, King or Joker respectively) is entered. Jack itself is
-        // excluded because Jesters unlock only once Queen is reached, so
-        // there is nothing to recover yet at that point.
         if (rank == BossRank.Jack)
             return;
 
@@ -93,12 +84,6 @@ public class JesterManager : MonoBehaviour
         );
     }
 
-
-    /// <summary>
-    /// Removes the Jester cards when the player equips a reward trait.
-    /// Jesters are the alternative reward path, so equipping a reward
-    /// immediately revokes the Jester unlock and all remaining charges.
-    /// </summary>
     public void RevokeJesters()
     {
         if (!unlocked && resetCharges <= 0 && instantKillCharges <= 0)
