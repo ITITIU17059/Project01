@@ -335,7 +335,6 @@ public class BossManager : MonoBehaviour
                 if (defeatedJack == jackBosses.Count)
                 {
                     CurrentStageIndex = 1;
-                    JesterManager.Instance?.RecoverAfterRank(BossRank.Jack);
                 }
 
                 break;
@@ -347,7 +346,6 @@ public class BossManager : MonoBehaviour
                 {
                     CurrentStageIndex = 2;
 
-                    JesterManager.Instance?.RecoverAfterRank(BossRank.Queen);
                 }
 
                 break;
@@ -359,7 +357,6 @@ public class BossManager : MonoBehaviour
                 {
                     CurrentStageIndex = 3;
 
-                    JesterManager.Instance?.RecoverAfterRank(BossRank.King);
                 }
 
                 break;

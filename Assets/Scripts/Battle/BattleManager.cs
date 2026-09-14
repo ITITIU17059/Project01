@@ -199,8 +199,6 @@ public class BattleManager : MonoBehaviour
         if (boss != null && boss.isJoker)
         {
             BossManager.Instance.RandomizeJokerDisguise();
-            SoundManager.instance.PlaySound2D(boss.spawnSoundID);
-            BossChatBalloon.Instance.SetUp(boss.bossSpawnText, 4f);
         }
 
         handManager.SetInteractable(false);
@@ -308,6 +306,19 @@ public class BattleManager : MonoBehaviour
             deadBoss.resistanceSuit = jesterResetDisabledResistance;
         }
 
+        if (deadBoss.rank == BossRank.Joker)
+        {
+            hasPendingJokerEnding = true;
+
+            pendingBadEnding =
+                PlayerReward.Instance != null &&
+                PlayerReward.Instance.TraitHasAdd;
+
+
+            ChangeState(BattleState.Victory);
+            yield break;
+        }
+
         SoundManager.instance.PlaySound2D(deadBoss.bossDeathSound);
         yield return StartCoroutine(BossChatBalloon.Instance.TurnOnChatBox(deadBoss.bossDeathText, 1.5f));
 
@@ -370,24 +381,6 @@ public class BattleManager : MonoBehaviour
         jesterResetDisabledTrait = null;
         jesterResetBoss = null;
 
-        bool hasNextBoss =
-            BossManager.Instance.HasMoreBosses;
-
-        if (!hasNextBoss)
-        {
-            if (deadBoss.rank == BossRank.Joker)
-            {
-                hasPendingJokerEnding = true;
-
-                pendingBadEnding =
-                    PlayerReward.Instance != null &&
-                    PlayerReward.Instance.TraitHasAdd;
-
-
-                ChangeState(BattleState.Victory);
-                yield break;
-            }
-        }
         waitingForInventory = true;
 
         LevelManager.instance.LoadSceneAdditive(
@@ -433,7 +426,11 @@ public class BattleManager : MonoBehaviour
 
             if (jesterUnlockFlow)
             {
-                JesterManager.Instance.UnlockJesters();
+                if (nextRank == BossRank.Queen)
+                    JesterManager.Instance.UnlockJesters();
+
+                if (nextRank == BossRank.King)
+                    JesterManager.Instance.RecoverAfterRank(nextRank);
 
                 if (JesterUnlockUI.Instance != null)
                 {
@@ -446,12 +443,6 @@ public class BattleManager : MonoBehaviour
                             !JesterUnlockUI.Instance.IsShowing
                     );
                 }
-            }
-
-            if (!jesterUnlockFlow &&
-                JesterManager.Instance != null)
-            {
-                JesterManager.Instance.RecoverAfterRank(nextRank);
             }
 
             yield return StartCoroutine(
@@ -568,6 +559,8 @@ public class BattleManager : MonoBehaviour
 
         if (!nextBossWaitingForTraitSelection)
         {
+            SoundManager.instance.PlaySound2D(nextBoss.spawnSoundID);
+            BossChatBalloon.Instance.SetUp(nextBoss.bossSpawnText, 4f);
             ChangeState(BattleState.PlayerTurn);
         }
 
@@ -1199,10 +1192,10 @@ public class BattleManager : MonoBehaviour
 
         if (boss != null)
         {
-   
+
             if (jesterResetBoss != boss)
             {
-      
+
                 jesterResetBoss = boss;
                 jesterResetDisabledTrait = boss.currentTrait;
                 jesterResetDisabledResistance = boss.resistanceSuit;
