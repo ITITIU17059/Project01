@@ -22,12 +22,12 @@ public class BossChatBalloon : MonoBehaviour
         }
     }
 
-    public void SetUp(string bossText)
+    public void SetUp(string bossText, float duration)
     {
-        StartCoroutine(TurnOnChatBox(bossText));
+        StartCoroutine(TurnOnChatBox(bossText, duration));
     }
 
-    public IEnumerator TurnOnChatBox(string bossText)
+    public IEnumerator TurnOnChatBox(string bossText, float duration)
     {
         AudioSource audioSource = GameObject.FindGameObjectWithTag("AudioSource")
                                     .GetComponent<AudioSource>();
@@ -37,7 +37,7 @@ public class BossChatBalloon : MonoBehaviour
         textChat.gameObject.SetActive(true);
         chatBox.SetActive(true);
 
-        yield return new WaitForSeconds(audioSource.clip.length);
+        yield return new WaitForSeconds(duration);
 
         iconChat.gameObject.SetActive(false);
         textChat.gameObject.SetActive(false);
