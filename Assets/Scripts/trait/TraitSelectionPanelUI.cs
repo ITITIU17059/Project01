@@ -149,7 +149,7 @@ public class TraitSelectionPanelUI : MonoBehaviour
             currentBoss.spawnSoundID
         );
 
-        BossChatBalloon.Instance.SetUp(currentBoss.bossSpawnText);
+        BossChatBalloon.Instance.SetUp(currentBoss.bossSpawnText, 4f);
     }
 
 

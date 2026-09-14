@@ -192,7 +192,7 @@ public class BattleManager : MonoBehaviour
         {
             BossManager.Instance.RandomizeJokerDisguise();
             SoundManager.instance.PlaySound2D(boss.spawnSoundID);
-            BossChatBalloon.Instance.SetUp(boss.bossSpawnText);
+            BossChatBalloon.Instance.SetUp(boss.bossSpawnText, 4f);
         }
 
         handManager.SetInteractable(false);
@@ -301,7 +301,7 @@ public class BattleManager : MonoBehaviour
         }
 
         SoundManager.instance.PlaySound2D(deadBoss.bossDeathSound);
-        yield return StartCoroutine(BossChatBalloon.Instance.TurnOnChatBox(deadBoss.bossDeathText));
+        yield return StartCoroutine(BossChatBalloon.Instance.TurnOnChatBox(deadBoss.bossDeathText, 1.5f));
 
         BossCrackManager.Instance.ResetCrackLine();
 

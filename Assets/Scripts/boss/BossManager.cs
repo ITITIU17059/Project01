@@ -378,7 +378,7 @@ public class BossManager : MonoBehaviour
         if (isHalfHealth() && isHalfHealthOneTime)
         {
             SoundManager.instance.PlaySound2D(CurrentBoss.bossHalfHealthSound);
-            BossChatBalloon.Instance.SetUp(CurrentBoss.boss50Text);
+            BossChatBalloon.Instance.SetUp(CurrentBoss.boss50Text, 2f);
             isHalfHealthOneTime = false;
         }
 
@@ -401,7 +401,7 @@ public class BossManager : MonoBehaviour
         if (isHalfHealth() && isHalfHealthOneTime)
         {
             SoundManager.instance.PlaySound2D(CurrentBoss.bossHalfHealthSound);
-            BossChatBalloon.Instance.SetUp(CurrentBoss.boss50Text);
+            BossChatBalloon.Instance.SetUp(CurrentBoss.boss50Text, 2f);
             isHalfHealthOneTime = false;
         }
 
