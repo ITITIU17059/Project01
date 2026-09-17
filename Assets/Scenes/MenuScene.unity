@@ -1965,7 +1965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5129016256398789877, guid: 2207885558cce014180d3a35a21b9367, type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
-      value: ClickV2
+      value: Click
       objectReference: {fileID: 0}
     - target: {fileID: 7441380027800078667, guid: 2207885558cce014180d3a35a21b9367, type: 3}
       propertyPath: m_Name
@@ -3110,6 +3110,13 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -719
       objectReference: {fileID: 0}
+    - target: {fileID: 1735696303622913479, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
+      propertyPath: m_text
+      value: "If you defeat the boss without using a trait, you will receive an additional
+        reward:\n\t1. If you still have cards in hand, you will draw 2 cards at the
+        start of your turn against the next boss.\n\t2. If you have no cards in hand,
+        you will draw 8 cards at the start of your turn against the next boss."
+      objectReference: {fileID: 0}
     - target: {fileID: 1767269870316545577, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoPlayer
       value: 
@@ -3236,7 +3243,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3456840415501002296, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: m_text
-      value: Instantly defeat the current boss.
+      value: Instantly defeat the current boss. However, you will not recieve the
+        reward from the traits you choose
       objectReference: {fileID: 0}
     - target: {fileID: 3486857247126713682, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoPlayer
@@ -3341,7 +3349,7 @@ PrefabInstance:
     - target: {fileID: 3652569331389379093, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoClip
       value: 
-      objectReference: {fileID: 32900000, guid: 8ee297f0f64f6d847b2f1111f8fbf59f, type: 3}
+      objectReference: {fileID: 32900000, guid: 9eab43c54ad385d45a0a32c98455b11d, type: 3}
     - target: {fileID: 3652569331389379093, guid: 2c548e3203c5dc445a48b3910db787ed, type: 3}
       propertyPath: videoPlayer
       value: 
