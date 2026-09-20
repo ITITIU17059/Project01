@@ -51,35 +51,32 @@ public static class RewardSkill
     {
         eventTable = new();
 
-    RegisterEvent(
-        TraitID.J_GREEDY_TRIBUTE,
-        TraitEventType.PlayerTurn,
-        JackGreedyTribute_PlayerTurnReward);
+        RegisterEvent(
+            TraitID.J_GREEDY_TRIBUTE,
+            TraitEventType.PlayerTurn,
+            JackGreedyTribute_PlayerTurnReward);
 
-    RegisterEvent(
-        TraitID.J_WITHERED_BLESSING,
-        TraitEventType.Discard,
-        JackWitheredBlessing_DiscardReward);
+        RegisterEvent(
+            TraitID.J_WITHERED_BLESSING,
+            TraitEventType.Discard,
+            JackWitheredBlessing_DiscardReward);
 
-    RegisterEvent(
-        TraitID.Q_LIFE_LEECH,
-        TraitEventType.GainCard,
-        () => QueenLifeLeech_Draw(1));
+        RegisterEvent(
+            TraitID.Q_LIFE_LEECH,
+            TraitEventType.GainCard,
+            () => QueenLifeLeech_Draw(1));
 
-    RegisterEvent(
-        TraitID.Q_ROYAL_TAX,
-        TraitEventType.Discard,
-        QueenRoyalTax_DiscardReward);
+        RegisterEvent(
+            TraitID.Q_ROYAL_TAX,
+            TraitEventType.Discard,
+            QueenRoyalTax_DiscardReward);
 
         RegisterEvent(
         TraitID.K_ENDLESS_WRATH,
         TraitEventType.Discard,
         KingCrushingDiscard_DiscardReward);
 
-        RegisterEvent(
-    TraitID.K_ROYAL_DECREE,
-    TraitEventType.PlayCard,
-    KingRoyalDecree_PlayCardReward);
+
     }
 
     private static void RegisterEvent(
@@ -115,7 +112,7 @@ public static class RewardSkill
                 evt.Invoke();
             }
         }
-    
+
     }
 
     private static void InitializeDrawModifiers()
@@ -324,21 +321,5 @@ public static class RewardSkill
 
         BossManager.Instance.ReduceAttack(overflow);
     }
-    private static void KingRoyalDecree_PlayCardReward()
-    {
-        HandManager hand = BattleManager.Instance.Hand;
 
-        if (hand.selectedCards.Count != 1)
-            return;
-
-        CardDisplay display =
-            hand.selectedCards[0].GetComponent<CardDisplay>();
-
-        if (display == null)
-            return;
-
-        BattleManager.Instance.OverrideSuit =
-            (CardSO.Suit)Random.Range(1, 5);
-
-    }
 }

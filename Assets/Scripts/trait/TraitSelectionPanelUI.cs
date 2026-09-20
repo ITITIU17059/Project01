@@ -30,7 +30,7 @@ public class TraitSelectionPanelUI : MonoBehaviour
         return data;
     }
 
-    public void Show(BossSO boss)
+    public void Show(BossSO boss, bool restoreFromSave = true)
     {
         currentBoss = boss;
 
@@ -53,7 +53,10 @@ public class TraitSelectionPanelUI : MonoBehaviour
 
         ClearCards();
 
-        SaveData save = SaveManager.Instance.LoadProgress();
+        SaveData save =
+            restoreFromSave
+                ? SaveManager.Instance.LoadProgress()
+                : null;
 
         List<BossTraitSO> traits = new();
 

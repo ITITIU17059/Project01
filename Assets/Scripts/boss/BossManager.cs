@@ -76,6 +76,14 @@ public class BossManager : MonoBehaviour
             save.equippedRewards);
             PlayerReward.Instance.LoadTraitHasAdd(
     save.traitHasAdd);
+
+            if (JesterManager.Instance != null)
+            {
+                JesterManager.Instance.LoadData(
+                    save.jesterUnlocked,
+                    save.jesterResetCharges,
+                    save.jesterInstantKillCharges);
+            }
             TraitPoolManager.Instance.LoadPool(
                 BossRank.Jack,
                 save.jackTraitPool);
@@ -87,14 +95,6 @@ public class BossManager : MonoBehaviour
             TraitPoolManager.Instance.LoadPool(
                 BossRank.King,
                 save.kingTraitPool);
-
-            if (JesterManager.Instance != null)
-            {
-                JesterManager.Instance.LoadData(
-                    save.jesterUnlocked,
-                    save.jesterResetCharges,
-                    save.jesterInstantKillCharges);
-            }
 
             defeatedJack = Mathf.Min(CurrentBossIndex, jackBosses.Count);
 
@@ -111,10 +111,6 @@ public class BossManager : MonoBehaviour
             CurrentBossIndex = 0;
             CurrentStageIndex = 0;
             PlayerReward.Instance.ResetTraitHasAdd();
-
-            if (JesterManager.Instance != null)
-                JesterManager.Instance.ResetData();
-
             CreateQueue();
         }
 
@@ -198,7 +194,6 @@ public class BossManager : MonoBehaviour
             PlayerReward.Instance.ResetAceHandBonus();
         }
 
-        // Reset trait của boss mới
         if (!CurrentBoss.isJoker)
         {
             CurrentBoss.currentTrait = null;
@@ -344,6 +339,7 @@ public class BossManager : MonoBehaviour
                 if (defeatedJack == jackBosses.Count)
                 {
                     CurrentStageIndex = 1;
+                    JesterManager.Instance?.RecoverAfterRank(BossRank.Jack);
                 }
 
                 break;
@@ -355,6 +351,7 @@ public class BossManager : MonoBehaviour
                 {
                     CurrentStageIndex = 2;
 
+                    JesterManager.Instance?.RecoverAfterRank(BossRank.Queen);
                 }
 
                 break;
@@ -366,6 +363,7 @@ public class BossManager : MonoBehaviour
                 {
                     CurrentStageIndex = 3;
 
+                    JesterManager.Instance?.RecoverAfterRank(BossRank.King);
                 }
 
                 break;
@@ -374,10 +372,6 @@ public class BossManager : MonoBehaviour
 
                 break;
         }
-
-        SaveManager.Instance.SaveProgress(
-            CurrentStageIndex,
-            CurrentBossIndex);
     }
 
     public void TakeDamage(int damage)
