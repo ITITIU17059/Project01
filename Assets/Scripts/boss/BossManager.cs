@@ -76,6 +76,14 @@ public class BossManager : MonoBehaviour
             save.equippedRewards);
             PlayerReward.Instance.LoadTraitHasAdd(
     save.traitHasAdd);
+
+            if (JesterManager.Instance != null)
+            {
+                JesterManager.Instance.LoadData(
+                    save.jesterUnlocked,
+                    save.jesterResetCharges,
+                    save.jesterInstantKillCharges);
+            }
             TraitPoolManager.Instance.LoadPool(
                 BossRank.Jack,
                 save.jackTraitPool);
@@ -186,7 +194,6 @@ public class BossManager : MonoBehaviour
             PlayerReward.Instance.ResetAceHandBonus();
         }
 
-        // Reset trait của boss mới
         if (!CurrentBoss.isJoker)
         {
             CurrentBoss.currentTrait = null;
@@ -295,9 +302,6 @@ public class BossManager : MonoBehaviour
         if (deadBoss == null)
             return;
 
-        // A Jester Instant Kill and normal CheckBattle can both reach the
-        // death pipeline in the same frame. Never advance the boss sequence
-        // twice for the same BossSO.
         if (lastDefeatedBoss == deadBoss)
         {
             Debug.LogWarning(
@@ -335,6 +339,7 @@ public class BossManager : MonoBehaviour
                 if (defeatedJack == jackBosses.Count)
                 {
                     CurrentStageIndex = 1;
+                    JesterManager.Instance?.RecoverAfterRank(BossRank.Jack);
                 }
 
                 break;
@@ -346,6 +351,7 @@ public class BossManager : MonoBehaviour
                 {
                     CurrentStageIndex = 2;
 
+                    JesterManager.Instance?.RecoverAfterRank(BossRank.Queen);
                 }
 
                 break;
@@ -357,6 +363,7 @@ public class BossManager : MonoBehaviour
                 {
                     CurrentStageIndex = 3;
 
+                    JesterManager.Instance?.RecoverAfterRank(BossRank.King);
                 }
 
                 break;
@@ -365,10 +372,6 @@ public class BossManager : MonoBehaviour
 
                 break;
         }
-
-        SaveManager.Instance.SaveProgress(
-            CurrentStageIndex,
-            CurrentBossIndex);
     }
 
     public void TakeDamage(int damage)

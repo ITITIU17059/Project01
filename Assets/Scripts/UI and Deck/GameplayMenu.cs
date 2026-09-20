@@ -31,20 +31,15 @@ public class GameplayMenu : MonoBehaviour
         pausePanel.transform
             .DOScale(0f, 0.2f)
             .OnComplete(() =>
-        {
-            pausePanel.SetActive(false);
-            HandManager.Instance.SetInteractable(true);
-        });
+            {
+                pausePanel.SetActive(false);
+                HandManager.Instance.SetInteractable(true);
+            });
     }
 
     public void ExitGame()
     {
         Time.timeScale = 1f;
-
-        SaveManager.Instance.SaveProgress(
-            BossManager.Instance.CurrentStageIndex,
-            BossManager.Instance.CurrentBossIndex);
-
         LevelManager.instance.LoadMainMenu();
     }
 }

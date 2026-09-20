@@ -419,7 +419,9 @@ public class BattleManager : MonoBehaviour
             }
 
             bool jesterUnlockFlow =
-                (nextRank == BossRank.Queen || nextRank == BossRank.King) &&
+                (nextRank == BossRank.Queen ||
+                 nextRank == BossRank.King ||
+                 nextRank == BossRank.Joker) &&
                 JesterManager.Instance != null &&
                 PlayerReward.Instance != null &&
                 !PlayerReward.Instance.TraitHasAdd;
@@ -429,7 +431,7 @@ public class BattleManager : MonoBehaviour
                 if (nextRank == BossRank.Queen)
                     JesterManager.Instance.UnlockJesters();
 
-                if (nextRank == BossRank.King)
+                if (nextRank == BossRank.King || nextRank == BossRank.Joker)
                     JesterManager.Instance.RecoverAfterRank(nextRank);
 
                 if (JesterUnlockUI.Instance != null)
@@ -443,6 +445,13 @@ public class BattleManager : MonoBehaviour
                             !JesterUnlockUI.Instance.IsShowing
                     );
                 }
+            }
+
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.SaveProgress(
+                    BossManager.Instance.CurrentStageIndex,
+                    BossManager.Instance.CurrentBossIndex);
             }
 
             yield return StartCoroutine(
@@ -1101,6 +1110,30 @@ public class BattleManager : MonoBehaviour
         CardSO.Suit originalSuit = card.suit;
         CardSO.Suit bossResistance = boss.resistanceSuit;
 
+        // Only step in when the card's suit is actually being resisted.
+        // The previous version always rerolled the suit (and always
+        // excluded the original suit from the pool) even when there was
+        // nothing to dodge.
+        if (originalSuit != bossResistance)
+            return;
+
+        // Resistance only ever costs the suit's secondary effect (heal/
+        // draw/etc. in ResolveEffects) and the Club x2 multiplier — it
+        // never reduces base damage to 0. King "Royal Decree" boss
+        // disguise is different: playing the wrong suit there makes
+        // ResolveDamage return 0 damage outright. So if the boss is
+        // currently running that disguise and the played card already
+        // matches the required suit, we must never reroute away from
+        // it — losing a minor secondary effect is always a better
+        // outcome than losing all damage for the turn.
+        bool bossRequiresThisSuit =
+            boss.currentTrait != null &&
+            boss.currentTrait.traitID == TraitID.K_ROYAL_DECREE &&
+            originalSuit == boss.requiredSuit;
+
+        if (bossRequiresThisSuit)
+            return;
+
         List<CardSO.Suit> possibleSuits =
             new List<CardSO.Suit>();
 
@@ -1108,9 +1141,6 @@ public class BattleManager : MonoBehaviour
             System.Enum.GetValues(typeof(CardSO.Suit)))
         {
             if (suit == CardSO.Suit.None)
-                continue;
-
-            if (suit == originalSuit)
                 continue;
 
             if (suit == bossResistance)

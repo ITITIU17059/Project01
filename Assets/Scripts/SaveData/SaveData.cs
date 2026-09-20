@@ -9,6 +9,11 @@ public class SaveData
 
     public bool traitHasAdd;
 
+    // Jester state
+    public bool jesterUnlocked;
+    public int jesterResetCharges;
+    public int jesterInstantKillCharges;
+
     public List<string> bossSequence = new();
 
     public List<string> handCards = new();
