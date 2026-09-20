@@ -2781,7 +2781,7 @@ MonoBehaviour:
   m_text: "If you defeat the boss without using a trait, you will receive an additional
     reward:\n\t1. If you still have cards in hand, you will draw 2 cards at the start
     of your turn against the next boss.\n\t2. If you have no cards in hand, you will
-    draw 2 cards at the start of your turn against the next boss."
+    draw 8 cards at the start of your turn against the next boss."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5011,7 +5011,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Instantly defeat the current boss.
+  m_text: Instantly defeat the current boss. However, you will not recieve the reward
+    from the traits you choose
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -23577,7 +23578,7 @@ MonoBehaviour:
   tutorialName: {fileID: 1726130894}
   tutorialContent: {fileID: 424947984}
   renderTexture: {fileID: 8400000, guid: 0024b16767efe3f43bcee29e8c77325e, type: 2}
-  videoClip: {fileID: 32900000, guid: 8ee297f0f64f6d847b2f1111f8fbf59f, type: 3}
+  videoClip: {fileID: 32900000, guid: 9eab43c54ad385d45a0a32c98455b11d, type: 3}
   videoPlayer: {fileID: 516785169}
 --- !u!114 &1825160533
 MonoBehaviour:
