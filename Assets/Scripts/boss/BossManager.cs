@@ -88,6 +88,14 @@ public class BossManager : MonoBehaviour
                 BossRank.King,
                 save.kingTraitPool);
 
+            if (JesterManager.Instance != null)
+            {
+                JesterManager.Instance.LoadData(
+                    save.jesterUnlocked,
+                    save.jesterResetCharges,
+                    save.jesterInstantKillCharges);
+            }
+
             defeatedJack = Mathf.Min(CurrentBossIndex, jackBosses.Count);
 
             if (CurrentBossIndex >= jackBosses.Count)
@@ -103,6 +111,10 @@ public class BossManager : MonoBehaviour
             CurrentBossIndex = 0;
             CurrentStageIndex = 0;
             PlayerReward.Instance.ResetTraitHasAdd();
+
+            if (JesterManager.Instance != null)
+                JesterManager.Instance.ResetData();
+
             CreateQueue();
         }
 
@@ -295,9 +307,6 @@ public class BossManager : MonoBehaviour
         if (deadBoss == null)
             return;
 
-        // A Jester Instant Kill and normal CheckBattle can both reach the
-        // death pipeline in the same frame. Never advance the boss sequence
-        // twice for the same BossSO.
         if (lastDefeatedBoss == deadBoss)
         {
             Debug.LogWarning(

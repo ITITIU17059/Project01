@@ -419,7 +419,9 @@ public class BattleManager : MonoBehaviour
             }
 
             bool jesterUnlockFlow =
-                (nextRank == BossRank.Queen || nextRank == BossRank.King) &&
+                (nextRank == BossRank.Queen ||
+                 nextRank == BossRank.King ||
+                 nextRank == BossRank.Joker) &&
                 JesterManager.Instance != null &&
                 PlayerReward.Instance != null &&
                 !PlayerReward.Instance.TraitHasAdd;
@@ -429,7 +431,7 @@ public class BattleManager : MonoBehaviour
                 if (nextRank == BossRank.Queen)
                     JesterManager.Instance.UnlockJesters();
 
-                if (nextRank == BossRank.King)
+                if (nextRank == BossRank.King || nextRank == BossRank.Joker)
                     JesterManager.Instance.RecoverAfterRank(nextRank);
 
                 if (JesterUnlockUI.Instance != null)
@@ -443,6 +445,13 @@ public class BattleManager : MonoBehaviour
                             !JesterUnlockUI.Instance.IsShowing
                     );
                 }
+            }
+
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.SaveProgress(
+                    BossManager.Instance.CurrentStageIndex,
+                    BossManager.Instance.CurrentBossIndex);
             }
 
             yield return StartCoroutine(

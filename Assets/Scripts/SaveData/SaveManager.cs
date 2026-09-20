@@ -38,6 +38,15 @@ public class SaveManager : MonoBehaviour
 
             traitHasAdd = PlayerReward.Instance.TraitHasAdd,
 
+            jesterUnlocked = JesterManager.Instance != null &&
+                             JesterManager.Instance.IsUnlocked,
+            jesterResetCharges = JesterManager.Instance != null
+                ? JesterManager.Instance.ResetCharges
+                : 0,
+            jesterInstantKillCharges = JesterManager.Instance != null
+                ? JesterManager.Instance.InstantKillCharges
+                : 0,
+
             currentTraitSelection = TraitSelectionPanelUI.Instance.GetCurrentTraitNames(),
             jackTraitPool = TraitPoolManager.Instance.GetPoolSaveData(BossRank.Jack),
             queenTraitPool = TraitPoolManager.Instance.GetPoolSaveData(BossRank.Queen),

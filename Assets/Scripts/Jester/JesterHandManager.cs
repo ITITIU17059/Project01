@@ -332,7 +332,7 @@ public class JesterHandManager : MonoBehaviour
             if (interaction != null)
             {
                 interaction.isSelectedInCenter = false;
-                interaction.IsLocked = true;
+                interaction.IsLocked = ShouldLockJester(jester);
             }
 
             jester.transform.DOKill();
@@ -364,6 +364,23 @@ public class JesterHandManager : MonoBehaviour
         Refresh();
     }
 
+    private bool ShouldLockJester(GameObject jester)
+    {
+        if (jester == null)
+            return true;
+
+        if (JesterManager.Instance == null)
+            return true;
+
+        if (jester == resetJester)
+            return !JesterManager.Instance.CanUseReset;
+
+        if (jester == instantKillJester)
+            return !JesterManager.Instance.CanUseInstantKill;
+
+        return true;
+    }
+
     private void LockUsedJester(GameObject jester)
     {
         if (jester == null)
@@ -383,7 +400,7 @@ public class JesterHandManager : MonoBehaviour
         if (interaction != null)
         {
             interaction.isSelectedInCenter = false;
-            interaction.IsLocked = true;
+            interaction.IsLocked = ShouldLockJester(jester);
         }
 
         Debug.Log(
