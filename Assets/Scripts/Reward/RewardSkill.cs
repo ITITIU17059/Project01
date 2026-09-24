@@ -259,7 +259,7 @@ public static class RewardSkill
     private static void JackGreedyTribute_PlayerTurnReward()
     {
 
-        BattleManager.Instance.DrawBonusCards(1);
+        BattleManager.Instance.DrawMoreCards(1);
     }
 
     private static void JackWitheredBlessing_DiscardReward()

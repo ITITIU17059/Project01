@@ -318,7 +318,7 @@ public static class CardResolver
                 TraitManager.Instance.ModifyRewardDrawAmount(
                     drawValue);
 
-            BattleManager.Instance.DrawBonusCards(
+            BattleManager.Instance.DrawMoreCards(
                 drawValue);
         }
 
