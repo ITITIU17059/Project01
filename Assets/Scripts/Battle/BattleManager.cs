@@ -449,11 +449,11 @@ public class BattleManager : MonoBehaviour
                 }
             }
 
-            if (nextRank == BossRank.Joker)
-            {
-                JesterHandManager.Instance.resetJester.SetActive(false);
-                JesterHandManager.Instance.instantKillJester.SetActive(false);
-            }
+            // if (nextRank == BossRank.Joker)
+            // {
+            //     JesterHandManager.Instance.resetJester.SetActive(false);
+            //     JesterHandManager.Instance.instantKillJester.SetActive(false);
+            // }
 
             yield return StartCoroutine(
                 StageManager.Instance.ChangeStage(nextRank));
