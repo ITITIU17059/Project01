@@ -273,6 +273,9 @@ public class BattleManager : MonoBehaviour
             if (handlingBossDeath)
                 return;
 
+            handWasEmptyAfterPlay =
+            handManager.handCards.Count == 0;
+
             StartCoroutine(HandleBossDeath());
             return;
         }
@@ -420,8 +423,7 @@ public class BattleManager : MonoBehaviour
 
             bool jesterUnlockFlow =
                 (nextRank == BossRank.Queen ||
-                 nextRank == BossRank.King ||
-                 nextRank == BossRank.Joker) &&
+                 nextRank == BossRank.King) &&
                 JesterManager.Instance != null &&
                 PlayerReward.Instance != null &&
                 !PlayerReward.Instance.TraitHasAdd;
@@ -431,7 +433,7 @@ public class BattleManager : MonoBehaviour
                 if (nextRank == BossRank.Queen)
                     JesterManager.Instance.UnlockJesters();
 
-                if (nextRank == BossRank.King || nextRank == BossRank.Joker)
+                if (nextRank == BossRank.King)
                     JesterManager.Instance.RecoverAfterRank(nextRank);
 
                 if (JesterUnlockUI.Instance != null)
@@ -447,11 +449,10 @@ public class BattleManager : MonoBehaviour
                 }
             }
 
-            if (SaveManager.Instance != null)
+            if (nextRank == BossRank.Joker)
             {
-                SaveManager.Instance.SaveProgress(
-                    BossManager.Instance.CurrentStageIndex,
-                    BossManager.Instance.CurrentBossIndex);
+                JesterHandManager.Instance.resetJester.SetActive(false);
+                JesterHandManager.Instance.instantKillJester.SetActive(false);
             }
 
             yield return StartCoroutine(
@@ -462,6 +463,14 @@ public class BattleManager : MonoBehaviour
             yield return StartCoroutine(
                 StageManager.Instance.ChangeStage(deadBoss.rank));
         }
+
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.SaveProgress(
+                BossManager.Instance.CurrentStageIndex,
+                BossManager.Instance.CurrentBossIndex);
+        }
+
 
         if (!BossManager.Instance.LoadNextBoss(
             showTraitSelection: false))
@@ -511,8 +520,6 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-
-
         bool drawBonusUnlocked =
            PlayerReward.Instance != null &&
            !PlayerReward.Instance.TraitHasAdd;
@@ -521,18 +528,17 @@ public class BattleManager : MonoBehaviour
         {
             if (handWasEmptyAfterPlay)
             {
-                DrawBonusCards(8);
+                yield return StartCoroutine(DrawBonusCards(8));
             }
             else
             {
-                DrawBonusCards(2);
+                yield return StartCoroutine(DrawBonusCards(2));
             }
         }
         else if (handManager.handCards.Count == 0 &&
                  deckManager.allCards.Count > 0)
         {
-
-            DrawBonusCards(1);
+            yield return StartCoroutine(DrawBonusCards(1));
         }
 
         if (jesterInstantKill)
@@ -558,6 +564,13 @@ public class BattleManager : MonoBehaviour
         // The flag only applies to this boss.
         jesterInstantKill = false;
 
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.SaveProgress(
+                BossManager.Instance.CurrentStageIndex,
+                BossManager.Instance.CurrentBossIndex);
+        }
+
         if (handManager.handCards.Count == 0 && !HasUsableJester())
         {
             ChangeState(
@@ -572,7 +585,6 @@ public class BattleManager : MonoBehaviour
             BossChatBalloon.Instance.SetUp(nextBoss.bossSpawnText, 4f);
             ChangeState(BattleState.PlayerTurn);
         }
-
     }
 
 
@@ -585,9 +597,6 @@ public class BattleManager : MonoBehaviour
             waitingExtraAttack = false;
 
         handManager.SetInteractable(false);
-
-        handWasEmptyAfterPlay =
-            handManager.handCards.Count == 0;
 
         List<CardSO> cards = new();
 
@@ -812,9 +821,14 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void DrawBonusCards(int amount)
+    public void DrawMoreCards(int amount)
     {
         StartCoroutine(DrawCardRoutine(amount));
+    }
+
+    public IEnumerator DrawBonusCards(int amount)
+    {
+        yield return StartCoroutine(DrawCardRoutine(amount));
     }
 
     private IEnumerator DrawCardRoutine(int amount)
@@ -1003,6 +1017,8 @@ public class BattleManager : MonoBehaviour
         foreach (GameObject bar in bars) bar.SetActive(false);
         GameObject[] buttons = GameObject.FindGameObjectsWithTag("Button");
         foreach (GameObject button in buttons) button.SetActive(false);
+        JesterHandManager.Instance.resetJester.SetActive(false);
+        JesterHandManager.Instance.instantKillJester.SetActive(false);
         InteractConfirmButton(false);
 
         if (handManager != null)
