@@ -317,6 +317,9 @@ public class BattleManager : MonoBehaviour
                 PlayerReward.Instance != null &&
                 PlayerReward.Instance.TraitHasAdd;
 
+            SoundManager.instance.PlaySound2D(deadBoss.bossDeathSound);
+            yield return StartCoroutine(BossChatBalloon.Instance.TurnOnChatBox(deadBoss.bossDeathText, 1.5f));
+            yield return new WaitForSeconds(2.8f);
 
             ChangeState(BattleState.Victory);
             yield break;

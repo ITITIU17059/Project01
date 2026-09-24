@@ -21,11 +21,6 @@ public class StageManager : MonoBehaviour
     [SerializeField] private VideoClip kingBackground;
     [SerializeField] private VideoClip jokerBackground;
     [SerializeField] private VideoClip victoryBackground;
-    [SerializeField] private RenderTexture jackTextture;
-    [SerializeField] private RenderTexture queenTextture;
-    [SerializeField] private RenderTexture kingTextture;
-    [SerializeField] private RenderTexture jokerTextture;
-    [SerializeField] private RenderTexture victoryTextture;
     [SerializeField] private VideoPlayer videoPlayer;
     private List<string> JackThemeList;
     private List<string> QueenThemeList;
@@ -55,9 +50,7 @@ public class StageManager : MonoBehaviour
         {
             case BossRank.Jack:
 
-                background.texture = jackTextture;
                 videoPlayer.clip = jackBackground;
-                videoPlayer.targetTexture = jackTextture;
                 randomTheme = Random.Range(0, JackThemeList.Count);
                 MusicManager.instance.PlayMusic(JackThemeList[randomTheme]);
                 JackThemeList.Remove(JackThemeList[randomTheme]);
@@ -65,9 +58,7 @@ public class StageManager : MonoBehaviour
 
             case BossRank.Queen:
 
-                background.texture = queenTextture;
                 videoPlayer.clip = queenBackground;
-                videoPlayer.targetTexture = queenTextture;
                 randomTheme = Random.Range(0, QueenThemeList.Count);
                 MusicManager.instance.PlayMusic(QueenThemeList[randomTheme]);
                 QueenThemeList.Remove(QueenThemeList[randomTheme]);
@@ -75,9 +66,7 @@ public class StageManager : MonoBehaviour
 
             case BossRank.King:
 
-                background.texture = kingTextture;
                 videoPlayer.clip = kingBackground;
-                videoPlayer.targetTexture = kingTextture;
                 randomTheme = Random.Range(0, KingThemeList.Count);
                 MusicManager.instance.PlayMusic(KingThemeList[randomTheme]);
                 KingThemeList.Remove(KingThemeList[randomTheme]);
@@ -85,9 +74,7 @@ public class StageManager : MonoBehaviour
 
             case BossRank.Joker:
 
-                background.texture = jokerTextture;
                 videoPlayer.clip = jokerBackground;
-                videoPlayer.targetTexture = jokerTextture;
                 MusicManager.instance.PlayMusic("JokerTheme");
                 break;
         }
@@ -105,10 +92,7 @@ public class StageManager : MonoBehaviour
             .DOFade(1, 0.5f)
             .WaitForCompletion();
 
-        background.texture = victoryTextture;
         videoPlayer.clip = victoryBackground;
-        videoPlayer.targetTexture = victoryTextture;
-
         MusicManager.instance.PlayMusic("VictoryTheme");
 
         background.transform.SetAsFirstSibling();
@@ -124,36 +108,28 @@ public class StageManager : MonoBehaviour
         switch (stageIndex)
         {
             case 0:
-                background.texture = jackTextture;
                 videoPlayer.clip = jackBackground;
-                videoPlayer.targetTexture = jackTextture;
                 randomTheme = Random.Range(0, JackThemeList.Count);
                 MusicManager.instance.PlayMusic(JackThemeList[randomTheme]);
                 JackThemeList.Remove(JackThemeList[randomTheme]);
                 break;
 
             case 1:
-                background.texture = queenTextture;
                 videoPlayer.clip = queenBackground;
-                videoPlayer.targetTexture = queenTextture;
                 randomTheme = Random.Range(0, QueenThemeList.Count);
                 MusicManager.instance.PlayMusic(QueenThemeList[randomTheme]);
                 QueenThemeList.Remove(QueenThemeList[randomTheme]);
                 break;
 
             case 2:
-                background.texture = kingTextture;
                 videoPlayer.clip = kingBackground;
-                videoPlayer.targetTexture = kingTextture;
                 randomTheme = Random.Range(0, KingThemeList.Count);
                 MusicManager.instance.PlayMusic(KingThemeList[randomTheme]);
                 KingThemeList.Remove(KingThemeList[randomTheme]);
                 break;
 
             case 3:
-                background.texture = jokerTextture;
                 videoPlayer.clip = jokerBackground;
-                videoPlayer.targetTexture = jokerTextture;
                 MusicManager.instance.PlayMusic("JokerTheme");
                 break;
         }
