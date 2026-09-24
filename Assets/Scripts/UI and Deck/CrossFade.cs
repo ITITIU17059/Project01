@@ -5,15 +5,24 @@ using UnityEngine;
 public class CrossFade : SceneTransition
 {
     public CanvasGroup crossFade;
+
     public override IEnumerator AnimateTransitionIn()
     {
-        var tweener = crossFade.DOFade(1f, 1f);
-        yield return tweener.WaitForCompletion();
+        crossFade.transform.SetAsLastSibling();
+
+        yield return crossFade
+            .DOFade(1f, 1f)
+            .SetEase(Ease.Linear)
+            .WaitForCompletion();
     }
 
     public override IEnumerator AnimateTransitionOut()
     {
-        var tweener = crossFade.DOFade(0f, 1f);
-        yield return tweener.WaitForCompletion();
+        crossFade.transform.SetAsLastSibling();
+
+        yield return crossFade
+            .DOFade(0f, 1f)
+            .SetEase(Ease.Linear)
+            .WaitForCompletion();
     }
 }

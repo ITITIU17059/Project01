@@ -69,11 +69,17 @@ public class LevelManager : MonoBehaviour
         SceneTransition transition =
             transitions.First(t => t.name == "CrossFade");
 
+        // Fade scene hiện tại thành đen
         yield return transition.AnimateTransitionIn();
 
+        // Cho Unity render ít nhất 1 frame đen
+        yield return new WaitForEndOfFrame();
+
+        // Load LoadingScene khi màn hình vẫn đang đen
         yield return SceneManager.LoadSceneAsync("LoadingScene");
 
-        yield return transition.AnimateTransitionOut();
+        // KHÔNG FadeOut ở đây
+        // LoadingSceneManager sẽ điều khiển CrossFade
 
         isLoadingScene = false;
     }

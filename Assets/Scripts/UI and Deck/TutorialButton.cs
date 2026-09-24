@@ -13,7 +13,6 @@ public class TutorialButton : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tutorialContentText;
     [SerializeField] private TextMeshProUGUI tutorialName;
     [SerializeField] private TextMeshProUGUI tutorialContent;
-    [SerializeField] private RenderTexture renderTexture;
     [SerializeField] private VideoClip videoClip;
     [SerializeField] private VideoPlayer videoPlayer;
 
@@ -43,10 +42,7 @@ public class TutorialButton : MonoBehaviour
     private void SetUpVideo()
     {
         videoContainer.SetActive(true);
-        RawImage rawImage = videoContainer.GetComponentInChildren<RawImage>();
-        rawImage.texture = renderTexture;
         videoPlayer.clip = videoClip;
-        videoPlayer.targetTexture = renderTexture;
     }
 
     private void SetUpText()

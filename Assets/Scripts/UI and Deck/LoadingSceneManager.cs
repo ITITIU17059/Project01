@@ -19,13 +19,16 @@ public class LoadingSceneManager : MonoBehaviour
         StartCoroutine(LoadNextScene());
     }
 
-    IEnumerator LoadNextScene()
+    private IEnumerator LoadNextScene()
     {
-        AsyncOperation operation =
-            SceneManager.LoadSceneAsync(LevelManager.instance.sceneTransName);
-
         SceneTransition transition =
-            LevelManager.instance.transitions.First(t => t.name == "CrossFade");
+            LevelManager.instance.transitions
+            .First(t => t.name == "CrossFade");
+
+        AsyncOperation operation =
+            SceneManager.LoadSceneAsync(
+                LevelManager.instance.sceneTransName
+            );
 
         operation.allowSceneActivation = false;
 
@@ -42,7 +45,8 @@ public class LoadingSceneManager : MonoBehaviour
             displayProgress = Mathf.MoveTowards(
                 displayProgress,
                 target,
-                Time.deltaTime * 0.6f);
+                Time.deltaTime * 0.6f
+            );
 
             progressBar.value = displayProgress;
 
@@ -55,11 +59,29 @@ public class LoadingSceneManager : MonoBehaviour
 
             yield return null;
         }
+
+        // LoadingScene vẫn đang nhìn thấy bình thường ở đây.
+        // Bây giờ mới che nó bằng màu đen.
         yield return transition.AnimateTransitionIn();
 
-        operation.allowSceneActivation = true;
-    }
+        // Đảm bảo CrossFade đã render đen
+        yield return new WaitForEndOfFrame();
 
+        // Cho Scene mới activate
+        operation.allowSceneActivation = true;
+
+        // Chờ Scene mới thực sự hoàn thành
+        while (!operation.isDone)
+        {
+            yield return null;
+        }
+
+        // Cho Scene mới có 1 frame để khởi tạo
+        yield return null;
+
+        // Mở màn hình
+        yield return transition.AnimateTransitionOut();
+    }
     IEnumerator AnimateLoadingText()
     {
         string text = "Loading";

@@ -6921,7 +6921,7 @@ VideoPlayer:
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: 0024b16767efe3f43bcee29e8c77325e, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 51ac89c178355024ca2cfb1a317a1ed6, type: 2}
   m_TimeReference: 0
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: <noninit>
@@ -10016,7 +10016,7 @@ VideoPlayer:
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 0024b16767efe3f43bcee29e8c77325e, type: 2}
   m_TimeReference: 0
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: <noninit>
@@ -14796,7 +14796,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: 0024b16767efe3f43bcee29e8c77325e, type: 2}
+  m_Texture: {fileID: 8400000, guid: 51ac89c178355024ca2cfb1a317a1ed6, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -17275,7 +17275,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 8400000, guid: 0024b16767efe3f43bcee29e8c77325e, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -26092,11 +26092,6 @@ MonoBehaviour:
   kingBackground: {fileID: 32900000, guid: a3c420c7f455dd04ca6de2484f35b733, type: 3}
   jokerBackground: {fileID: 32900000, guid: 6a43ddab52b25334295bf2bfce3521da, type: 3}
   victoryBackground: {fileID: 32900000, guid: 25c032b2788386e43bbc1f7c9df8885a, type: 3}
-  jackTextture: {fileID: 8400000, guid: 0d69b3c1fe04ac24fbf0a1897c874ef9, type: 2}
-  queenTextture: {fileID: 8400000, guid: 14c631bd65625a8479db945089fcdd5f, type: 2}
-  kingTextture: {fileID: 8400000, guid: f9513e92ca7b22047a962c075ac4392a, type: 2}
-  jokerTextture: {fileID: 8400000, guid: c906cd98f0e2f08438a86ddb39a0fa8c, type: 2}
-  victoryTextture: {fileID: 8400000, guid: fddae91c3985b6347a8678c8f5728acc, type: 2}
   videoPlayer: {fileID: 714688375}
 --- !u!1 &2028856996
 GameObject:
