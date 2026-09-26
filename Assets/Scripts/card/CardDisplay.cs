@@ -44,7 +44,8 @@ public class CardDisplay : MonoBehaviour
     {
         if (cardScriptableObject != null && cardSpriteRenderer != null)
         {
-            cardSpriteRenderer.sprite = cardScriptableObject.cardSprite;
+            cardSpriteRenderer.sprite =
+                isHidden ? cardBackSprite : cardScriptableObject.cardSprite;
         }
     }
     private void OnDestroy()

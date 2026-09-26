@@ -534,6 +534,29 @@ public class HandManager : MonoBehaviour
 
             AddCardToHand(card);
         }
+
+        ReapplyHiddenStateForCurrentTrait();
+    }
+
+    public void ReapplyHiddenStateForCurrentTrait()
+    {
+        if (BossManager.Instance == null)
+            return;
+
+        BossSO boss = BossManager.Instance.CurrentBoss;
+
+        if (boss == null || boss.currentTrait == null)
+            return;
+
+        if (boss.currentTrait.traitID == TraitID.K_BLIND_FATE)
+        {
+            RefreshHiddenCards();
+        }
+        else if (boss.currentTrait.traitID == TraitID.JOKER)
+        {
+
+            HideNextCardIfNeeded();
+        }
     }
     public void LockHighestCard()
     {
