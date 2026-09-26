@@ -128,6 +128,11 @@ public class TraitSelectionPanelUI : MonoBehaviour
 
         BossManager.Instance.RefreshBossInfo();
 
+        if (selectedTrait != null &&
+            selectedTrait.traitID == TraitID.K_BLIND_FATE)
+        {
+            hand.RefreshHiddenCards();
+        }
 
         if (JesterUnlockUI.Instance != null)
             JesterUnlockUI.Instance.SetKeepHandsHiddenAfterClose(false);
