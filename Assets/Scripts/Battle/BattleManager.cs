@@ -47,6 +47,8 @@ public class BattleManager : MonoBehaviour
     private BossTraitSO jesterResetDisabledTrait;
     private CardSO.Suit jesterResetDisabledResistance;
     private BossSO jesterResetBoss;
+    private bool isTraiAdd = false;
+    private bool isBadEnding = false;
 
     public void ContinueFromInventory()
     {
@@ -59,6 +61,13 @@ public class BattleManager : MonoBehaviour
             {
                 JesterManager.Instance.RevokeJesters();
             }
+
+            isTraiAdd = true;
+            isBadEnding = true;
+        }
+        else
+        {
+            PlayerReward.Instance.ResetTraitHasAdd();
         }
 
         waitingForInventory = false;
@@ -290,6 +299,7 @@ public class BattleManager : MonoBehaviour
         handManager.UnlockCard();
         handManager.SetInteractable(false);
         handManager.RevealAllHiddenCards();
+        bool isDrawBonus = PlayerReward.Instance.TraitHasAdd;
 
         BossSO deadBoss =
             BossManager.Instance.CurrentBoss;
@@ -315,7 +325,7 @@ public class BattleManager : MonoBehaviour
 
             pendingBadEnding =
                 PlayerReward.Instance != null &&
-                PlayerReward.Instance.TraitHasAdd;
+                isBadEnding;
 
             SoundManager.instance.PlaySound2D(deadBoss.bossDeathSound);
             yield return StartCoroutine(BossChatBalloon.Instance.TurnOnChatBox(deadBoss.bossDeathText, 1.5f));
@@ -429,7 +439,7 @@ public class BattleManager : MonoBehaviour
                  nextRank == BossRank.King) &&
                 JesterManager.Instance != null &&
                 PlayerReward.Instance != null &&
-                !PlayerReward.Instance.TraitHasAdd;
+                !isTraiAdd;
 
             if (jesterUnlockFlow)
             {
@@ -437,7 +447,13 @@ public class BattleManager : MonoBehaviour
                     JesterManager.Instance.UnlockJesters();
 
                 if (nextRank == BossRank.King)
-                    JesterManager.Instance.RecoverAfterRank(nextRank);
+                {
+                    if (JesterManager.Instance.IsUnlocked == true)
+                    {
+                        JesterManager.Instance.RecoverAfterRank(nextRank);
+                    }
+                    else JesterManager.Instance.UnlockJesters();
+                }
 
                 if (JesterUnlockUI.Instance != null)
                 {
@@ -450,6 +466,7 @@ public class BattleManager : MonoBehaviour
                             !JesterUnlockUI.Instance.IsShowing
                     );
                 }
+
             }
 
             // if (nextRank == BossRank.Joker)
@@ -457,6 +474,11 @@ public class BattleManager : MonoBehaviour
             //     JesterHandManager.Instance.resetJester.SetActive(false);
             //     JesterHandManager.Instance.instantKillJester.SetActive(false);
             // }
+
+            if (isTraiAdd)
+            {
+                isTraiAdd = false;
+            }
 
             yield return StartCoroutine(
                 StageManager.Instance.ChangeStage(nextRank));
@@ -525,7 +547,7 @@ public class BattleManager : MonoBehaviour
 
         bool drawBonusUnlocked =
            PlayerReward.Instance != null &&
-           !PlayerReward.Instance.TraitHasAdd;
+           !isDrawBonus;
 
         if (drawBonusUnlocked)
         {
