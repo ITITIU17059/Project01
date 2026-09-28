@@ -89,7 +89,12 @@ public class CutsceneManager : MonoBehaviour
 
         if (MusicManager.instance != null)
         {
-            MusicManager.instance.SetMusicMultiplier(0.8f);
+            if (introMusicName == "IntroTheme")
+            {
+                MusicManager.instance.SetMusicMultiplier(0.2f);
+            }
+            else MusicManager.instance.SetMusicMultiplier(0.8f);
+
             MusicManager.instance.PlayMusic(introMusicName, 1f);
         }
 
